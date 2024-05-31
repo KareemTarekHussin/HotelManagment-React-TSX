@@ -1,10 +1,10 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import AuthLayout from './Modules/SharedModule/components/AuthLayout/AuthLayout';
-import NotFound from './Modules/SharedModule/components/NotFound/NotFound';
-import Login from './Modules/AuthenticationModule/components/Login/Login';
-import Register from './Modules/AuthenticationModule/components/Register/Register';
-import ForgetPass from './Modules/AuthenticationModule/components/ForgetPass/ForgetPass';
-import ResetPass from './Modules/AuthenticationModule/components/ResetPass/ResetPass';
+import AuthLayout from "./Modules/SharedModule/components/AuthLayout/AuthLayout";
+import NotFound from "./Modules/SharedModule/components/NotFound/NotFound";
+import Login from "./Modules/AuthenticationModule/components/Login/Login";
+import Register from "./Modules/AuthenticationModule/components/Register/Register";
+import ForgetPass from "./Modules/AuthenticationModule/components/ForgetPass/ForgetPass";
+import ResetPass from "./Modules/AuthenticationModule/components/ResetPass/ResetPass";
 import MasterLayout from "./Modules/SharedModule/components/MasterLayout/MasterLayout";
 import Dashboard from "./Modules/DashboardModule/components/Dashboard/Dashboard";
 import RoomsList from "./Modules/RoomsModule/components/RoomsList/RoomsList";
@@ -13,7 +13,8 @@ import FacilitiesList from "./Modules/FacilitiesModule/components/FacilitiesList
 import FacilitiesData from "./Modules/FacilitiesModule/components/FacilitiesData/FacilitiesData";
 import UsersList from "./Modules/UsersModule/components/UsersList/UsersList";
 import ADSList from "./Modules/ADSModule/components/ADSList/ADSList";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const routes = createBrowserRouter([
@@ -33,7 +34,7 @@ function App() {
       path: "DashBoard",
       element: (
         // <ProtectedRoute>
-          <MasterLayout />
+        <MasterLayout />
         // </ProtectedRoute>
       ),
       errorElement: <NotFound />,
@@ -50,8 +51,9 @@ function App() {
   ]);
   return (
     <div className="App">
+      <ToastContainer />
       <RouterProvider router={routes} />
     </div>
   );
 }
-export default App
+export default App;
