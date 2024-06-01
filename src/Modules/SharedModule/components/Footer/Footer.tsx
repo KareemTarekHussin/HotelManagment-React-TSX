@@ -1,124 +1,117 @@
-import React from 'react'
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import FolderIcon from '@mui/icons-material/Folder';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Paper from '@mui/material/Paper';
-import { Stack } from '@mui/material';
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import { styled } from "@mui/material/styles";
 
 export default function Footer() {
   const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
     padding: theme.spacing(1),
-    textAlign: 'center',
+    textAlign: "center",
     color: theme.palette.text.secondary,
-  }));
-  const Demo = styled('div')(({ theme }) => ({
-    backgroundColor: theme.palette.background.paper,
   }));
   
 
-  const [dense, setDense] = React.useState(false);
-  const [secondary, setSecondary] = React.useState(false);
-  function generate(element: React.ReactElement) {
-    return [0, 1, 2].map((value) =>
-      React.cloneElement(element, {
-        key: value,
-      }),
-    );
-  }
+ 
 
   return (
     <div>
       <hr />
-        <Grid container  spacing={2}>
-    <Grid item xs={4}>
-    <Stack >
-  <Item>Item 1</Item>
-  <Item>Item 1</Item>
-  <Item>Item 2</Item>
-  <Item>Item 3</Item>
-</Stack>
-    </Grid>
-    <Grid item xs={2}>
-    <Grid item xs={12} md={6}>
-        <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-       For Beginners
-        </Typography>
-        <Demo>
-          <List dense={dense}>
-            {generate(
-              <ListItem>
-                <ListItemText
-                  primary="Single-line item"
-                  secondary={secondary ? 'Secondary text' : null}
-                />
-              </ListItem>,
-            )}
-          </List>
-        </Demo>
-      </Grid> 
-    </Grid>
-    <Grid item xs={2}>
-    <Grid item xs={12} md={6}>
-        <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-          Text only
-        </Typography>
-        <Demo>
-          <List dense={dense}>
-            {generate(
-              <ListItem>
-                <ListItemText
-                  primary="Single-line item"
-                  secondary={secondary ? 'Secondary text' : null}
-                />
-              </ListItem>,
-            )}
-          </List>
-        </Demo>
-      </Grid> 
-    </Grid>
-    <Grid item xs={2}>
-    <Grid item xs={12} md={6}>
-        <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-          Text only
-        </Typography>
-        <Demo>
-          <List dense={dense}>
-            {generate(
-              <ListItem>
-                <ListItemText
-                  primary="Single-line item"
-                  secondary={secondary ? 'Secondary text' : null}
-                />
-              </ListItem>,
-            )}
-          </List>
-        </Demo>
-      </Grid> 
-    </Grid>
-  </Grid>
-  <Grid item xs={12} md={6}>
-        <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-       For Beginners
-        </Typography>
+      <Grid container spacing={12}>
+        <Grid item xs={3}>
+          <Grid item xs={12} md={10}>
+            <Typography sx={{ mt: 3, mb: 2 }} variant="h6" component="div">
+              <Typography
+                sx={{ color: "#152C5B", fontWeight: 500, fontSize: 26 }}
+              >
+                <Typography
+                  sx={{
+                    display: "inline-block",
+                    color: "#3252DF",
+                    fontWeight: 500,
+                    fontSize: 26,
+                  }}
+                >
+                  <b>Stay</b>
+                </Typography>
+                <b>cation.</b>
+              </Typography>
+            </Typography>
+            <Typography sx={{ mt: 2, mb: 2, color: "#B0B0B0" }} component="div">
+              We kaboom your beauty holiday instantly and memorable.
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Grid item xs={3}>
+
+          <Grid item xs={12} md={12}>
+            <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+              For Beginners
+            </Typography>
+            <Typography sx={{ mt:1, mb: 2, color: "#B0B0B0" }} component="div">
+             New Account  
+             {/* TODO:Link Register  */}
+            </Typography>
+            <Typography sx={{ mt:1, mb: 2 , color: "#B0B0B0"}} component="div">
+             Start Booking a Room
+              {/* TODO:Go to Booking  */}
+            </Typography>
+            <Typography sx={{ mt:1, mb: 2 , color: "#B0B0B0"}} component="div">
+              Use Payments
+               {/* TODO:Go to Payments  */}
+            </Typography>
+
+
+          </Grid>
+        </Grid>
+        <Grid item xs={3}>
+
+          <Grid item xs={12} md={12}>
+            <Typography sx={{ mt: 4, mb: 2 ,color:"#152C5B",fontWeight:500,}} variant="h6" component="div">
+            Explore Us
+            </Typography>
+            <Typography sx={{ mt:1, mb: 2, color: "#B0B0B0" }} component="div">
+          Our Careers 
+            </Typography>
+            <Typography sx={{ mt:1, mb: 2 , color: "#B0B0B0"}} component="div">
+Privacy            </Typography>
+            <Typography sx={{ mt:1, mb: 2 , color: "#B0B0B0"}} component="div">
+Terms & Conditions            </Typography>
+
+
+          </Grid>
+        </Grid>
+        <Grid item xs={3}>
+
+          <Grid item xs={12} md={12}>
+            <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+              Connect with Us
+            </Typography>
+            <Typography sx={{ mt:1, mb: 2, color: "#B0B0B0" }} component="div">
+            support@staycation.id 
+            </Typography>
+            <Typography sx={{ mt:1, mb: 2 , color: "#B0B0B0"}} component="div">
+            021 - 2208 - 1996
+            </Typography>
+            <Typography sx={{ mt:1, mb: 2 , color: "#B0B0B0"}} component="div">
+            Staycation, Kemang, Jakarta
+            </Typography>
+
+
+          </Grid>
+        </Grid>
+
        
-      </Grid> 
+      
+      </Grid>
+      <Grid item xs={12} md={12}>
+        <Typography sx={{ mt: 2, textAlign: "center",color: "#B0B0B0",fontSize:16 }} component="div">
+        Copyright 2019 • All rights reserved • Staycation
+        </Typography>
+      </Grid>
     </div>
-  
-  )}
+  );
+}
 // }
- 
