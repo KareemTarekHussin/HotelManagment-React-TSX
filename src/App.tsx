@@ -1,11 +1,11 @@
 import React from 'react'
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import AuthLayout from './Modules/SharedModule/components/AuthLayout/AuthLayout';
-import NotFound from './Modules/SharedModule/components/NotFound/NotFound';
-import Login from './Modules/AuthenticationModule/components/Login/Login';
-import Register from './Modules/AuthenticationModule/components/Register/Register';
-import ForgetPass from './Modules/AuthenticationModule/components/ForgetPass/ForgetPass';
-import ResetPass from './Modules/AuthenticationModule/components/ResetPass/ResetPass';
+import AuthLayout from "./Modules/SharedModule/components/AuthLayout/AuthLayout";
+import NotFound from "./Modules/SharedModule/components/NotFound/NotFound";
+import Login from "./Modules/AuthenticationModule/components/Login/Login";
+import Register from "./Modules/AuthenticationModule/components/Register/Register";
+import ForgetPass from "./Modules/AuthenticationModule/components/ForgetPass/ForgetPass";
+import ResetPass from "./Modules/AuthenticationModule/components/ResetPass/ResetPass";
 import MasterLayout from "./Modules/SharedModule/components/MasterLayout/MasterLayout";
 import Dashboard from "./Modules/DashboardModule/components/Dashboard/Dashboard";
 import RoomsList from "./Modules/RoomsModule/components/RoomsList/RoomsList";
@@ -24,7 +24,8 @@ const theme = createTheme({
     fontFamily: "Poppins, sans-serif", // Replace 'YourCustomFont' with your desired font
   },
 });
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
 
@@ -64,10 +65,11 @@ function App() {
     <ThemeProvider theme={theme}>
       <AuthContextProvider>
         <div className="App">
-          <RouterProvider router={routes} />
+          <ToastContainer />
+      <RouterProvider router={routes} />
         </div>
       </AuthContextProvider>
     </ThemeProvider>
   );
 }
-export default App
+export default App;
