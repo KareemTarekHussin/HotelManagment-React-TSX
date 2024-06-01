@@ -1,15 +1,28 @@
+import { Button } from '@mui/material'
 import { Box, Button, Modal } from "@mui/material";
 import { useState } from "react";
 import ChangePass from "../../../AuthenticationModule/components/ChangePass/ChangePass";
 
+import { useNavigate } from 'react-router-dom';
 
 export default function SideBar() {
+  const navigate = useNavigate();
+
+  const logout = ()=>{
+    localStorage.removeItem('token');
+    navigate('/login');
+
+  }
+
+
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   
   return (
-    <div>
+    <>
+      <div>
       <Modal
         open={open}
         onClose={handleClose}
@@ -34,5 +47,9 @@ export default function SideBar() {
       </Modal>
       <Button onClick={handleOpen}>Change Password</Button>
     </div>
+      <Button onClick={logout}>
+        Logout
+      </Button>
+    </>
   );
 }
