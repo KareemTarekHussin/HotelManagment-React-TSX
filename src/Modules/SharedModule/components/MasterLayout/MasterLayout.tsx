@@ -2,7 +2,11 @@ import React from 'react'
 import Navbar from '../Navbar/Navbar'
 import SideBar from '../SideBar/SideBar'
 import { Outlet } from 'react-router-dom'
-export default function MasterLayout() {
+// import { useAuth } from '../../../Context/AuthContext'
+
+
+const MasterLayout: React.FC = () => {
+
   return (
     <div className="d-flex font-main">
         <Navbar/>
@@ -14,4 +18,6 @@ export default function MasterLayout() {
         </div>
       </div>
   )
-}
+};
+
+export default MasterLayout;
