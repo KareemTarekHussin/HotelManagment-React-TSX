@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Box, Drawer, List, ListItem, ListItemText, Toolbar } from '@mui/material';
+import { Box, Button, Modal } from "@mui/material";
+import { useState } from "react";
+import ChangePass from "../../../AuthenticationModule/components/ChangePass/ChangePass";
+
 
 export default function SideBar() {
 
@@ -70,108 +74,35 @@ export default function SideBar() {
   
 
   // *========================================><=============================================//
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  
   return (
-    
-    <>
-
-<Drawer
-      variant="permanent"
-      sx={{
-        // width: drawerWidth,
-        flexShrink: 0,
-        // [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
-      }}
-    >
-      <Toolbar />
-      <Box sx={{ overflow: 'auto' }}>
-        <List>
-          {['Home', 'Users', 'Projects', 'Tasks', 'Change Password', 'Logout'].map((text) => (
-            <ListItem button key={text}>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-    </Drawer>
-       
-      {/* <Sidebar 
-          collapsed={isCollapse} 
-          style={{ backgroundColor: '#1F263E' }}
-          // breakPoint={breakPoint}
-          collapsedWidth={collapsedWidth}
-          className='border-0 bg-danger'
-          >
-          <Menu className='my-5 py-5'>
-
-            <MenuItem
-              className='text-center d-none d-md-block'
-              onClick={handleCollapse}
-            >
-              <div className="icon-container bg-warnin p-2 rounded-3" style={isCollapse? { transform: `scaleX(${iconRotation})` }: { transform: `scaleX(${iconRotation})` }}>
-                <i className="fa-solid fa-arrow-right"></i>
-              </div>
-            </MenuItem>
-            
-            <MenuItem 
-              className='mt-4 mb-2'
-              component={<Link to="" />} 
-              icon={<i className="fa-solid fa-house"></i>}
-            >
-              <span>Home</span>
-            </MenuItem>
-
-  <MenuItem 
-            className="mb-2"
-              component={<Link to="users" />} 
-              icon={<i className="fa-solid fa-users"></i>}
-            >
-              Users
-            </MenuItem>
-          
-
-            <MenuItem 
-            className="mb-2"
-              component={<Link to="projects" />} 
-              icon={<i className="fa-solid fa-bars-progress"></i>}
-            >
-            Projects
-            </MenuItem>
-
-            <MenuItem 
-            className="mb-2"
-              component={<Link to="tasks" />} 
-              icon={<i className="fa-solid fa-tasks"></i>}
-            >
-            Tasks
-            </MenuItem>
-
-            <MenuItem 
-            className="mb-2"
-              onClick={handleShow}
-              icon={<i className="fa-solid fa-unlock"></i>}
-            >
-              Change Password
-            </MenuItem>
-
-            <MenuItem 
-            className="mb-2"
-              // onClick={logout}
-              icon={<i className="fa-solid fa-circle-left"></i>}
-            >
-              Logout
-            </MenuItem>
-
-            
-
-          </Menu>
-        </Sidebar>         */}
-
-      {/* TODO:modal mui */}
-     
-
-
-      
-
-    </>
-  )
+    <div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            width: 400,
+            bgcolor: "white",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            px: 3,
+            py: 5,
+            borderRadius: 2
+          }}
+        >
+          <ChangePass />
+        </Box>
+      </Modal>
+      <Button onClick={handleOpen}>Change Password</Button>
+    </div>
+  );
 }
