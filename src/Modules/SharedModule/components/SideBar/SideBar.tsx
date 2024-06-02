@@ -72,11 +72,22 @@ export default function SideBar() {
   
 
   // *========================================><=============================================//
+  const navigate = useNavigate();
+
+  const logout = ()=>{
+    localStorage.removeItem('token');
+    navigate('/login');
+
+  }
+
+
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   
   return (
-    <div>
+    <>
+      <div>
       <Modal
         open={open}
         onClose={handleClose}
@@ -101,5 +112,9 @@ export default function SideBar() {
       </Modal>
       <Button onClick={handleOpen}>Change Password</Button>
     </div>
+      <Button onClick={logout}>
+        Logout
+      </Button>
+    </>
   );
 }

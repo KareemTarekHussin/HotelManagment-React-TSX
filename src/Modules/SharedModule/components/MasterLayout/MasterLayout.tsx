@@ -20,4 +20,6 @@ export default function MasterLayout() {
     </Box>
     
   )
-}
+};
+
+export default MasterLayout;

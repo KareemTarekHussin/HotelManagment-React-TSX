@@ -1,4 +1,13 @@
-export interface ChangePasswordProps {
+
+
+export default interface AuthInterface {
+  loginData?:{}|null,
+  baseUrl?:string,
+  requestHeaders:{
+    Authorization: string,
+  },
+  getUserData : ()=>void,
+}export interface ChangePasswordProps {
   oldPassword: string;
   newPassword: string;
   confirmPassword: string;
