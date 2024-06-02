@@ -16,6 +16,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useToast } from "../../../Context/ToastContext";
+import { getErrorMessage } from "../../../../utils/error";
 type Input = {
   email: string;
   password: string;
@@ -23,11 +25,11 @@ type Input = {
   confirmPassword: string;
 };
 export default function ResetPass() {
+  const { showToast } = useToast();
+
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-
- 
 
   const navigate = useNavigate();
   let {
@@ -36,28 +38,27 @@ export default function ResetPass() {
     formState: { errors },
   } = useForm<Input>();
   const onSubmit: SubmitHandler<Input> = async (data) => {
-
     try {
       const response = await axios.post(
         "https://upskilling-egypt.com:3000/api/v0/admin/users/reset-password",
         data
       );
-      console.log(response);
+      showToast("success", response.data.message);
       navigate("/login");
+
     } catch (error: any) {
-      console.log(error.response.data.message);
-    }
+      const err = getErrorMessage(error);
+      showToast("error", err);    }
   };
   return (
     <>
-      <Grid container>
-        <Grid
-          item
-          xs={12}
-          md={6}
-          sm={12}
-          sx={{ height: "100vh", ml: "50px"}}
-        >
+      <Grid
+        container
+        display="flex"
+        justifyContent="center"
+        
+      >
+        <Grid item xs={12} md={6} sm={12} sx={{ ml: "50px" }}>
           <Typography sx={{ m: "15px", color: "#152C5B", fontWeight: 700 }}>
             <Typography
               sx={{
@@ -97,7 +98,6 @@ export default function ResetPass() {
             sx={{
               width: "60%",
               mx: "100px",
-             
             }}
           >
             <label style={{ color: "#3252DF" }}>Email</label>
@@ -221,6 +221,7 @@ export default function ResetPass() {
             height: "100vh",
             position: "relative",
             zIndex: 0,
+            padding: "25px",
           }}
         >
           <img src={forgetImg} style={{ width: "100%", height: "100%" }} />

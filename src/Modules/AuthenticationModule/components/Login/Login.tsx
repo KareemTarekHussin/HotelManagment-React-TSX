@@ -7,7 +7,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CircularProgress from '@mui/material/CircularProgress';
 import { FieldError, SubmitHandler, useForm } from 'react-hook-form';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../Context/AuthContext';
 import { useState } from 'react';
 type AuthInputs = {
@@ -168,9 +168,9 @@ export default function Login() {
                               }}>
                                 {(errors.password as FieldError)?.message || <span>&nbsp;</span>}
                               </Typography>
-                              <Typography sx={{ fontSize: 14, fontWeight: 300, color: '#4D4D4D' }}>
+                              <Link to={"/forgetpass"} style={{ fontSize: 14, fontWeight: 300, color: '#4D4D4D',textDecoration:"none" }}>
                                 Forget Password?
-                              </Typography>
+                              </Link>
                             </Box>
                         </Box>
 

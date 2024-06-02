@@ -1,4 +1,3 @@
-import { Button } from '@mui/material'
 import { Box, Button, Modal } from "@mui/material";
 import { useState } from "react";
 import ChangePass from "../../../AuthenticationModule/components/ChangePass/ChangePass";
