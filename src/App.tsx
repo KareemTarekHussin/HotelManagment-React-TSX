@@ -1,4 +1,3 @@
-import React from 'react'
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import AuthLayout from "./Modules/SharedModule/components/AuthLayout/AuthLayout";
 import NotFound from "./Modules/SharedModule/components/NotFound/NotFound";

@@ -7,7 +7,6 @@ import ChangePass from "../../../AuthenticationModule/components/ChangePass/Chan
 
 export default function SideBar() {
 
-  const navigate = useNavigate();
  
   
   const [show, setShow] = useState(false);
