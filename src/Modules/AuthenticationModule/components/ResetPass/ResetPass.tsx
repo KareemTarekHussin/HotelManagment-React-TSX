@@ -16,6 +16,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useToast } from "../../../Context/ToastContext";
+import { getErrorMessage } from "../../../../utils/error";
 type Input = {
   email: string;
   password: string;
@@ -23,6 +25,8 @@ type Input = {
   confirmPassword: string;
 };
 export default function ResetPass() {
+  const { showToast } = useToast();
+
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -39,11 +43,12 @@ export default function ResetPass() {
         "https://upskilling-egypt.com:3000/api/v0/admin/users/reset-password",
         data
       );
-      console.log(response);
+      showToast("success", response.data.message);
       navigate("/login");
+
     } catch (error: any) {
-      console.log(error.response.data.message);
-    }
+      const err = getErrorMessage(error);
+      showToast("error", err);    }
   };
   return (
     <>

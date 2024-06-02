@@ -5,11 +5,15 @@ import Alert from "@mui/material/Alert";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
+import { useToast } from "../../../Context/ToastContext";
+import { getErrorMessage } from "../../../../utils/error";
 
 type Input = {
   email: string;
 };
 export default function ForgetPass() {
+  const { showToast } = useToast();
+
   const navigate = useNavigate();
   let {
     register,
@@ -22,11 +26,12 @@ export default function ForgetPass() {
         "https://upskilling-egypt.com:3000/api/v0/admin/users/forgot-password",
         data
       );
-
+      showToast("success", response.data.message);
       navigate("/resetpass");
+
     } catch (error: any) {
-      console.log(error.response);
-    }
+      const err = getErrorMessage(error);
+      showToast("error", err);    }
   };
   return (
     <>
