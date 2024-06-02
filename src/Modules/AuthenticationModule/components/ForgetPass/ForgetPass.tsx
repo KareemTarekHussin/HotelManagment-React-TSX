@@ -6,36 +6,43 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 
-
 type Input = {
   email: string;
 };
 export default function ForgetPass() {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   let {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Input>();
   const onSubmit: SubmitHandler<Input> = async (data) => {
-    
     try {
       const response = await axios.post(
-        "https://upskilling-egypt.com:3000/api/v0/admin/users/forgot-password",data
+        "https://upskilling-egypt.com:3000/api/v0/admin/users/forgot-password",
+        data
       );
-      
-      navigate("/resetpass")
 
-    } catch (error:any) {
+      navigate("/resetpass");
+    } catch (error: any) {
       console.log(error.response);
-      
     }
   };
   return (
     <>
-      <Grid container>
-        <Grid item xs={12} md={6} sm={12} sx={{ height: "100vh", ml: "50px" }}>
+      <Grid
+        container
+        display="flex"
+        justifyContent="center"
+        
+      >
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sm={12}
+          sx={{  ml: "50px"}}
+        >
           <Typography sx={{ m: "15px", color: "#152C5B", fontWeight: 700 }}>
             <Typography
               sx={{
@@ -75,7 +82,7 @@ export default function ForgetPass() {
             sx={{
               width: "60%",
               mx: "100px",
-              my:"100px"
+              my: "100px",
             }}
           >
             <label style={{ color: "#3252DF" }}>Email</label>
@@ -115,9 +122,9 @@ export default function ForgetPass() {
           md={5}
           sm={12}
           sx={{
-            height: "100vh",
             position: "relative",
             zIndex: 0,
+            padding:"25px"
           }}
         >
           <img src={forgetImg} style={{ width: "100%", height: "100%" }} />
@@ -148,5 +155,5 @@ export default function ForgetPass() {
         </Grid>
       </Grid>
     </>
-  )
+  );
 }

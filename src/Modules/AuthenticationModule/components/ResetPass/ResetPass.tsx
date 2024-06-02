@@ -27,8 +27,6 @@ export default function ResetPass() {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
- 
-
   const navigate = useNavigate();
   let {
     register,
@@ -36,7 +34,6 @@ export default function ResetPass() {
     formState: { errors },
   } = useForm<Input>();
   const onSubmit: SubmitHandler<Input> = async (data) => {
-
     try {
       const response = await axios.post(
         "https://upskilling-egypt.com:3000/api/v0/admin/users/reset-password",
@@ -50,14 +47,13 @@ export default function ResetPass() {
   };
   return (
     <>
-      <Grid container>
-        <Grid
-          item
-          xs={12}
-          md={6}
-          sm={12}
-          sx={{ height: "100vh", ml: "50px"}}
-        >
+      <Grid
+        container
+        display="flex"
+        justifyContent="center"
+        
+      >
+        <Grid item xs={12} md={6} sm={12} sx={{ ml: "50px" }}>
           <Typography sx={{ m: "15px", color: "#152C5B", fontWeight: 700 }}>
             <Typography
               sx={{
@@ -97,7 +93,6 @@ export default function ResetPass() {
             sx={{
               width: "60%",
               mx: "100px",
-             
             }}
           >
             <label style={{ color: "#3252DF" }}>Email</label>
@@ -221,6 +216,7 @@ export default function ResetPass() {
             height: "100vh",
             position: "relative",
             zIndex: 0,
+            padding: "25px",
           }}
         >
           <img src={forgetImg} style={{ width: "100%", height: "100%" }} />
