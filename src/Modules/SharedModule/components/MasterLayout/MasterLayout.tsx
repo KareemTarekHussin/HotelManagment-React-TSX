@@ -22,4 +22,3 @@ export default function MasterLayout() {
   )
 };
 
-export default MasterLayout;
