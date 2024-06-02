@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Box, Drawer, List, ListItem, ListItemText, Toolbar } from '@mui/material';
-import { Box, Button, Modal } from "@mui/material";
-import { useState } from "react";
+import { Box, Drawer, List, ListItem, ListItemText, Toolbar,Button, Modal } from '@mui/material';
 import ChangePass from "../../../AuthenticationModule/components/ChangePass/ChangePass";
 
 
@@ -76,7 +74,6 @@ export default function SideBar() {
   // *========================================><=============================================//
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   
   return (
     <div>
