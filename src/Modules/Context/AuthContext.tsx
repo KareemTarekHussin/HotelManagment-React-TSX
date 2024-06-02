@@ -26,7 +26,7 @@ export default function AuthContextProvider(props: PropsWithChildren){
   let baseUrl = "https://upskilling-egypt.com:3000/api/v0";
 
   let requestHeaders = {
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    Authorization: `${localStorage.getItem("token")}`,
   };
 
 
