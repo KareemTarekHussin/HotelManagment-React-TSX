@@ -177,7 +177,8 @@ export default function AnchorTemporaryDrawer() {
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
           <Drawer
-            variant={isLargeScreen? 'permanent' : 'temporary'}
+            variant={ 'temporary'}
+            // variant={isLargeScreen? 'permanent' : 'temporary'}
             anchor={anchor}
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}

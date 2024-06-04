@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import deleteImg from "../../../../assets/Images/deleteImg.png";
-import Header from '../../../SharedModule/components/Header/Header';
 import { AuthContext } from '../../../Context/AuthContext';
 import axios from 'axios';
 import Paper from '@mui/material/Paper';
@@ -96,6 +95,7 @@ export default function FacilitiesList() {
   const [editingFacility, setEditingFacility] = useState<Facility | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false); // State for delete confirmation modal
   const [selectedRow, setSelectedRow] = useState<Facility | null>(null);
+  const [loading, setLoading] = useState(true); 
 //function for opening modal
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -115,8 +115,10 @@ export default function FacilitiesList() {
       console.log('Response data:', response.data.data.facilities);
       setFacilitiesList(response.data.data.facilities);
       setTotalCount(response.data.data.totalCount); // Set total count from response
+      setLoading(false);
     } catch (error) {
       console.error('API call error:', error);
+      setLoading(false);
     }
   };
 
@@ -206,11 +208,7 @@ export default function FacilitiesList() {
 
   return (
     <div>
-      {/* <Header title='Facilities' buttonName='Facility'> */}
-       
-    
-
-      {/* </Header> */}
+ 
       <Grid container spacing={1} sx={{mt: 2, mb: 5 }}>
         <Grid item xs={8} md={10}>
           <Typography variant="h5" color="initial">
@@ -225,78 +223,91 @@ export default function FacilitiesList() {
       
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', overflow: 'auto' }}>
         <Paper sx={{ width: '100%', maxWidth: 1200, overflow: 'hidden' }}>
-          <TableContainer sx={{ maxHeight: 440 }}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      align={column.align}
-                      style={{ minWidth: column.minWidth }}
-                      sx={{ backgroundColor: '#E2E5EB' }}
-                    >
-                      {column.label}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {facilitiesList
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((facility) => (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={facility._id}>
-                      {columns.map((column) => {
-                        const value = formatCellValue(column, facility);
-                        if (column.id === 'actions') {
-                          return (
-                            <TableCell key={column.id} align={column.align}>
-                              <IconButton
-                                onClick={(event) => handleClick(event, facility)}
-                              >
-                                <MoreHorizIcon />
-                              </IconButton>
-                              <Menu
-                                anchorEl={anchorEl}
-                                open={Boolean(anchorEl) && selectedRow?._id === facility._id}
-                                onClose={handleCloseMenu}
-                              >
-                                <MenuItem onClick={() => handleAction('View')}>
-                                  <VisibilityIcon sx={{ mr: 1, color: '#00e5ff' }} />
-                                  View
-                                </MenuItem>
-                                <MenuItem onClick={() => handleAction('Edit')}>
-                                  <EditIcon sx={{ mr: 1, color: '#ffd600' }} />
-                                  Edit
-                                </MenuItem>
-                                <MenuItem onClick={() => handleAction('Delete')}>
-                                  <DeleteIcon sx={{ mr: 1, color: '#d50000' }} />
-                                  Delete
-                                </MenuItem>
-                              </Menu>
-                            </TableCell>
-                          );
-                        }
+        {loading ? (
+          <Box sx={{ width: '100%' }}>
+            <Skeleton variant="rectangular" width="100%" height={100} />
+            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+          </Box>
+        ) : (
+        <>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                    sx={{ backgroundColor: '#E2E5EB' }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {facilitiesList
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((facility) => (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={facility._id}>
+                    {columns.map((column) => {
+                      const value = formatCellValue(column, facility);
+                      if (column.id === 'actions') {
                         return (
                           <TableCell key={column.id} align={column.align}>
-                            {value}
+                            <IconButton
+                              onClick={(event) => handleClick(event, facility)}
+                            >
+                              <MoreHorizIcon />
+                            </IconButton>
+                            <Menu
+                              anchorEl={anchorEl}
+                              open={Boolean(anchorEl) && selectedRow?._id === facility._id}
+                              onClose={handleCloseMenu}
+                            >
+                              <MenuItem onClick={() => handleAction('View')}>
+                                <VisibilityIcon sx={{ mr: 1, color: '#00e5ff' }} />
+                                View
+                              </MenuItem>
+                              <MenuItem onClick={() => handleAction('Edit')}>
+                                <EditIcon sx={{ mr: 1, color: '#ffd600' }} />
+                                Edit
+                              </MenuItem>
+                              <MenuItem onClick={() => handleAction('Delete')}>
+                                <DeleteIcon sx={{ mr: 1, color: '#d50000' }} />
+                                Delete
+                              </MenuItem>
+                            </Menu>
                           </TableCell>
                         );
-                      })}
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={facilitiesList.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+                      }
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {value}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={facilitiesList.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+        </>
+      )}
+          
         </Paper>
       </Box>
 
