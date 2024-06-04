@@ -223,83 +223,82 @@ export default function FacilitiesList() {
         </Grid>
       </Grid>
       
-      <Paper sx={{ width: '100%', overflow: 'hidden'}}>
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                    sx={{ backgroundColor: '#E2E5EB' }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-
-
-            <TableBody>
-              {facilitiesList
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((facility) => (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={facility._id}>
-                    {columns.map((column) => {
-                      const value = formatCellValue(column, facility);
-                      if (column.id === 'actions') {
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', overflow: 'auto' }}>
+        <Paper sx={{ width: '100%', maxWidth: 1200, overflow: 'hidden' }}>
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ minWidth: column.minWidth }}
+                      sx={{ backgroundColor: '#E2E5EB' }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {facilitiesList
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((facility) => (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={facility._id}>
+                      {columns.map((column) => {
+                        const value = formatCellValue(column, facility);
+                        if (column.id === 'actions') {
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              <IconButton
+                                onClick={(event) => handleClick(event, facility)}
+                              >
+                                <MoreHorizIcon />
+                              </IconButton>
+                              <Menu
+                                anchorEl={anchorEl}
+                                open={Boolean(anchorEl) && selectedRow?._id === facility._id}
+                                onClose={handleCloseMenu}
+                              >
+                                <MenuItem onClick={() => handleAction('View')}>
+                                  <VisibilityIcon sx={{ mr: 1, color: '#00e5ff' }} />
+                                  View
+                                </MenuItem>
+                                <MenuItem onClick={() => handleAction('Edit')}>
+                                  <EditIcon sx={{ mr: 1, color: '#ffd600' }} />
+                                  Edit
+                                </MenuItem>
+                                <MenuItem onClick={() => handleAction('Delete')}>
+                                  <DeleteIcon sx={{ mr: 1, color: '#d50000' }} />
+                                  Delete
+                                </MenuItem>
+                              </Menu>
+                            </TableCell>
+                          );
+                        }
                         return (
                           <TableCell key={column.id} align={column.align}>
-                            <IconButton
-                              onClick={(event) => handleClick(event, facility)}
-                            >
-                              <MoreHorizIcon />
-                            </IconButton>
-                            <Menu
-                              anchorEl={anchorEl}
-                              open={Boolean(anchorEl) && selectedRow?._id === facility._id}
-                              onClose={handleCloseMenu}
-                            >
-                              <MenuItem onClick={() => handleAction('View')}>
-                                <VisibilityIcon sx={{ mr: 1,color:'#00e5ff' }} />
-                                View
-                              </MenuItem>
-                              <MenuItem onClick={() => handleAction('Edit')}>
-                                <EditIcon sx={{ mr: 1 ,color:'#ffd600'}} />
-                                Edit
-                              </MenuItem>
-                              <MenuItem onClick={() => handleAction('Delete')}>
-                                <DeleteIcon sx={{ mr: 1, color:'#d50000'}} />
-                                Delete
-                              </MenuItem>
-                            </Menu>
+                            {value}
                           </TableCell>
                         );
-                      }
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))}
-            </TableBody>
-
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={totalCount} // Use total count for pagination
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+                      })}
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={facilitiesList.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </Box>
 
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
