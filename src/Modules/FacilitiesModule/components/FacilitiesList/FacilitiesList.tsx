@@ -12,7 +12,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
+import Menu from '@mui/material/Menu';  
 import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -24,6 +24,11 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Grid, Typography } from '@mui/material';
+import { userRequest } from "../../../../utils/request";
+import Skeleton from '@mui/material/Skeleton';
+
+
+
 
 interface Column {
   id: 'name' | 'createdBy' | 'createdAt' | 'updatedAt' | 'actions';
@@ -46,26 +51,26 @@ interface FormData {
 }
 
 const columns: readonly Column[] = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'createdBy', label: 'Created By', minWidth: 170 },
+  { id: 'name', label: 'Name', minWidth: 50 },
+  { id: 'createdBy', label: 'Created By', minWidth: 50 },
   {
     id: 'createdAt',
     label: 'Created At',
-    minWidth: 170,
+    minWidth: 50,
     align: 'right',
     format: (value: string | Date) => new Date(value).toLocaleString(),
   },
   {
     id: 'updatedAt',
     label: 'Updated At',
-    minWidth: 170,
+    minWidth: 50,
     align: 'right',
     format: (value: string | Date) => new Date(value).toLocaleString(),
   },
   {
     id: 'actions',
     label: 'Actions',
-    minWidth: 170,
+    minWidth: 50,
     align: 'right',
   },
 ];
@@ -104,8 +109,8 @@ export default function FacilitiesList() {
 
   const getFacilitiesList = async () => {
     try {
-      let response = await axios.get(`${baseUrl}/admin/room-facilities`, {
-        headers: requestHeaders,
+      let response = await userRequest.get(`${baseUrl}/admin/room-facilities`, {
+       
       });
       console.log('Response data:', response.data.data.facilities);
       setFacilitiesList(response.data.data.facilities);
@@ -203,6 +208,8 @@ export default function FacilitiesList() {
     <div>
       {/* <Header title='Facilities' buttonName='Facility'> */}
        
+    
+
       {/* </Header> */}
       <Grid container spacing={1} sx={{mt: 2, mb: 5 }}>
         <Grid item xs={8} md={10}>
@@ -216,7 +223,7 @@ export default function FacilitiesList() {
         </Grid>
       </Grid>
       
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      <Paper sx={{ width: '100%', overflow: 'hidden'}}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -233,6 +240,8 @@ export default function FacilitiesList() {
                 ))}
               </TableRow>
             </TableHead>
+
+
             <TableBody>
               {facilitiesList
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -278,6 +287,7 @@ export default function FacilitiesList() {
                   </TableRow>
                 ))}
             </TableBody>
+
           </Table>
         </TableContainer>
         <TablePagination
