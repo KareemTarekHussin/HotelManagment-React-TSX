@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react'
 import Grid from '@mui/material/Grid'; 
 import loginImg from "../../../../assets/Images/login.png";
 import { Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
@@ -6,8 +5,10 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CircularProgress from '@mui/material/CircularProgress';
 import { FieldError, SubmitHandler, useForm } from 'react-hook-form';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { userRequest } from "../../../../utils/request";
+// import { getErrorMessage } from "../../../../utils/error";
+import { useToast } from "../../../Context/ToastContext";
 import { useAuth } from '../../../Context/AuthContext';
 import { useState } from 'react';
 type AuthInputs = {
@@ -18,28 +19,30 @@ type AuthInputs = {
 export default function Login() {
   
   const navigate = useNavigate();
-  // const { loginData } = useAuth();
-  const { getUserData, baseUrl } = useAuth();
+  const { showToast } = useToast();
+  const { getUserData } = useAuth();
   const [showPass, setShowPass] = useState(true);
   const [loading, setLoading] = useState(false);
   let {register, handleSubmit, formState:{errors}} = useForm<AuthInputs>();
+  // const timeoutRef = useRef<number | null>(null);
+  // const { loginData } = useAuth();
 
  
   const onSubmit: SubmitHandler<AuthInputs> = async (data)=>{
     try{
       setLoading(true);
-      const response = await axios.post(
-        `${baseUrl}/admin/users/login`,
+      const response = await userRequest.post(
+        '/admin/users/login',
         data,
       );
       localStorage.setItem('token',response.data.data.token);
-      console.log('token',response.data.data.token);
       getUserData();
       navigate('/DashBoard');
-      console.log(response);
+      
       
     } catch (error:any){
-      console.error(error.response?.data?.message || 'An error occurred during login');
+      // const err = getErrorMessage(error);
+      showToast("error", error.response.data.message);
 
     } finally {
       setLoading(false);
@@ -190,10 +193,11 @@ export default function Login() {
                             '&.Mui-disabled': {
                               backgroundColor: '#273ea8', 
                               color: '#888888', 
+                              boxShadow: '0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)',
                           },
                           }}
                         >
-                          {loading ? <CircularProgress sx={{color:'white'}} size={24} /> : 'Login'}
+                          {loading ? <CircularProgress sx={{color:'white'}} size={20} /> : 'Login'}
                         </Button>
                     </Box>
 
