@@ -1,22 +1,39 @@
-import React from 'react'
-import Navbar from '../Navbar/Navbar'
-import SideBar from '../SideBar/SideBar'
+// import Navbar from '../Navbar/Navbar'
 import { Outlet } from 'react-router-dom'
+import { Box, Typography } from '@mui/material'
+import MiniDrawer from '../Drawer/MiniDrawer';
 // import { useAuth } from '../../../Context/AuthContext'
 
 
-const MasterLayout: React.FC = () => {
+const MasterLayout = () => {
 
   return (
-    <div className="d-flex font-main">
-        <Navbar/>
-        <div>
-          <SideBar/>
-        </div>
-        <div className="w-100 vh-100 p-2 px-md-5 py-md-4 overflow-y-auto">
-          <Outlet/>
-        </div>
-      </div>
+    
+    <>
+    <Box display="flex" className="font-main">
+      <Box>
+        <MiniDrawer/>
+      </Box>
+      <Box 
+        flex="1" 
+        height="100vh" 
+        p={2} 
+        px={{ md: 5 }} 
+        py={{ md: 4 }} 
+        overflow="auto"
+      >
+        <Outlet />
+        <Box sx={{backgroundColor:'greenYellow'}}>
+            {/* <Typography variant="h4">Hello</Typography>
+            <Typography variant="h4">Hello</Typography>
+            <Typography variant="h4">Hello</Typography>
+            <Typography variant="h4">Hello</Typography> */}
+
+        </Box>
+      </Box>
+    </Box>
+    
+    </>
   )
 };
 

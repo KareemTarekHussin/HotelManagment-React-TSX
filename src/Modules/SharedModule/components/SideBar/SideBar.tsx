@@ -1,28 +1,31 @@
-import { Button } from '@mui/material'
-import { Box, Button, Modal } from "@mui/material";
+import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
+import { Box, Button, CircularProgress, Modal } from "@mui/material";
 import { useState } from "react";
 import ChangePass from "../../../AuthenticationModule/components/ChangePass/ChangePass";
-
+import { useToast } from "../../../Context/ToastContext";
 import { useNavigate } from 'react-router-dom';
 
 export default function SideBar() {
   const navigate = useNavigate();
-
-  const logout = ()=>{
-    localStorage.removeItem('token');
-    navigate('/login');
-
-  }
-
-
-
+  const { showToast } = useToast();
+  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const logout = ()=>{
+    setLoading(true);
+    setTimeout(() => {
+      localStorage.removeItem('token');
+      navigate('/login');
+      showToast("success", 'Logged out successfully');
+      setLoading(false);
+    }, 1000);
+  }
   
   return (
     <>
-      <div>
+  
       <Modal
         open={open}
         onClose={handleClose}
@@ -45,11 +48,42 @@ export default function SideBar() {
           <ChangePass />
         </Box>
       </Modal>
-      <Button onClick={handleOpen}>Change Password</Button>
-    </div>
-      <Button onClick={logout}>
-        Logout
-      </Button>
+      
+    {/* <Box>
+      <Sidebar>
+        <Menu>
+
+          <MenuItem onClick={handleOpen}> 
+            <Button
+              sx={{
+                '&:hover': {
+                  backgroundColor: 'transparent',
+                }
+              }}
+            >
+              Change Password
+            </Button>
+          </MenuItem>
+
+          <MenuItem> 
+              <Button 
+                onClick={logout} 
+                disabled={loading}
+                sx={{
+                  '&:hover': {
+                    backgroundColor: 'transparent',
+                  }
+                }}
+                >
+                {loading ? <CircularProgress size={20} /> : "Logout"}
+              </Button>
+          </MenuItem>
+          
+        </Menu>
+      </Sidebar>
+
+    </Box> */}
+      
     </>
   );
 }

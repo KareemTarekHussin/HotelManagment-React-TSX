@@ -1,8 +1,5 @@
 import axios from "axios";
 
-
-
-
 export const userRequest = axios.create({
   baseURL: "https://upskilling-egypt.com:3000/api/v0",
   headers: {
@@ -10,4 +7,4 @@ export const userRequest = axios.create({
   }
 });
 
-console.log(userRequest);
+// console.log(userRequest);
