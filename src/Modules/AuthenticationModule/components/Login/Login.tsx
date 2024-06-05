@@ -37,9 +37,10 @@ export default function Login() {
       );
       localStorage.setItem('token',response.data.data.token);
       getUserData();
+      showToast("success", 'Logged In Successfully');
       navigate('/DashBoard');
-      
-      
+      setLoading(false);
+     
     } catch (error:any){
       // const err = getErrorMessage(error);
       showToast("error", error.response.data.message);

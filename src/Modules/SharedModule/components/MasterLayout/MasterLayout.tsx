@@ -1,4 +1,4 @@
-// import Navbar from '../Navbar/Navbar'
+import Navbar from '../Navbar/Navbar'
 import { Outlet } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
 import SideBar from '../SideBar/SideBar';
@@ -26,6 +26,7 @@ const MasterLayout = () => {
         py={{ md: 0 }} 
         overflow="auto"
       >
+        <Navbar></Navbar>
         <Outlet />
      
       </Box>
