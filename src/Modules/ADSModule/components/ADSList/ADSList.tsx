@@ -382,7 +382,7 @@ export default function ADSList() {
                                   >
                                     <EditIcon
                                       sx={{ mx: 1, color: "#ffd600" }}
-                                    />{" "}
+                                    />
                                     Edit
                                   </MenuItem>
                                   <MenuItem
