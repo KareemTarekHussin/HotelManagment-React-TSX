@@ -4,11 +4,8 @@ import { useEffect, useState } from "react";
 import ChangePass from "../../../AuthenticationModule/components/ChangePass/ChangePass";
 import { useToast } from "../../../Context/ToastContext";
 import { Link, useNavigate } from 'react-router-dom';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
-import LogoutIcon from '@mui/icons-material/Logout';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import GroupIcon from '@mui/icons-material/Group';
 import AppsIcon from '@mui/icons-material/Apps';
@@ -84,7 +81,10 @@ export default function SideBar() {
       </Modal>
 
       <div className="sidebar-container">
-        <Sidebar collapsed={collapsed} collapsedWidth={collapsedWidth}>
+        <Sidebar 
+          collapsed={collapsed} 
+          collapsedWidth={collapsedWidth}
+          >
           <Menu style={{ backgroundColor: "orang", marginTop: 100 }}>
             <MenuItem
               onClick={handleCollapse}
