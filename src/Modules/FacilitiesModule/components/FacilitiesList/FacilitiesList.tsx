@@ -110,6 +110,7 @@ export default function FacilitiesList() {
   const getFacilitiesList = async () => {
     try {
       let response = await userRequest.get(`${baseUrl}/admin/room-facilities`, {
+     
        
       });
       console.log('Response data:', response.data.data.facilities);
@@ -222,7 +223,7 @@ export default function FacilitiesList() {
       </Grid>
       
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', overflow: 'auto' }}>
-        <Paper sx={{ width: '100%', maxWidth: 1200, overflow: 'hidden' }}>
+        <Paper sx={{ width: '100%',  overflow: 'hidden' }}>
         {loading ? (
           <Box sx={{ width: '100%' }}>
             <Skeleton variant="rectangular" width="100%" height={100} />

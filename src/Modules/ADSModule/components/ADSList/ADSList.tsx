@@ -1,12 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { styled } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
   Alert,
   Box,
@@ -17,21 +12,25 @@ import {
   MenuItem,
   Modal,
   Select,
+  Skeleton,
   TablePagination,
   TextField,
   Typography,
 } from "@mui/material";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import axios from "axios";
-import { AuthContext } from "../../../Context/AuthContext";
-import SliderValueLabel from "@mui/material/Slider/SliderValueLabel";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import deleteImg from "../../../../assets/Images/deleteImg.png";
-import { useToast } from "../../../Context/ToastContext";
-import { getErrorMessage } from "../../../../utils/error";
+import React, { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import deleteImg from "../../../../assets/Images/deleteImg.png";
+import { getErrorMessage } from "../../../../utils/error";
+import { AuthContext } from "../../../Context/AuthContext";
+import { useToast } from "../../../Context/ToastContext";
 
 interface Column {
   id:
@@ -143,7 +142,7 @@ export default function ADSList() {
   const [editDiscount, setEditDiscout] = useState<ADS | number>(0);
   const [editActive, setEditActive] = useState<ADS | boolean>(false);
   const [action, setAction] = useState<ADS | null>(null);
-
+  const [loading, setLoading] = useState(true); 
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [editAds, setEditAds] = React.useState<Form | boolean>(false);
@@ -217,8 +216,10 @@ export default function ADSList() {
       });
       console.log(response.data.data.rooms);
       setRoomsList(response.data.data.rooms);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   const formatCellValue = (column: Column, ads: ADS) => {
@@ -322,7 +323,20 @@ export default function ADSList() {
           overflow: "auto",
         }}
       >
+
+
+        
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
+
+        {loading ? (
+          <Box sx={{ width: '100%' }}>
+            <Skeleton variant="rectangular" width="100%" height={100} />
+            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+          </Box>
+        ) : (
+          <>
           <TableContainer>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
@@ -412,12 +426,15 @@ export default function ADSList() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 15]}
             component="div"
-            // count={rows.length}
+            count={adsList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
+          </>
+)}
+          
         </Paper>
       </Box>
       <Modal
