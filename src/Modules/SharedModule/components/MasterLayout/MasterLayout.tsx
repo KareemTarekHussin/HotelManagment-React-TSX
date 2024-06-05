@@ -1,7 +1,6 @@
 // import Navbar from '../Navbar/Navbar'
 import { Outlet } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
-import MiniDrawer from '../Drawer/MiniDrawer';
 import SideBar from '../SideBar/SideBar';
 // import NewSideBar from '../Drawer/NewSideBar';
 // import { NewSideBar } from '../Drawer/NewSideBar';
@@ -28,12 +27,7 @@ const MasterLayout = () => {
         overflow="auto"
       >
         <Outlet />
-        <Box sx={{backgroundColor:'greenYellow'}}>
-            <Typography variant="h4">Hello</Typography>
-            <Typography variant="h4">Hello</Typography>
-            <Typography variant="h4">Hello</Typography>
-
-        </Box>
+     
       </Box>
         
         

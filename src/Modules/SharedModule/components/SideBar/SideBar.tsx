@@ -3,14 +3,17 @@ import { Box, CircularProgress, Modal } from "@mui/material";
 import { useEffect, useState } from "react";
 import ChangePass from "../../../AuthenticationModule/components/ChangePass/ChangePass";
 import { useToast } from "../../../Context/ToastContext";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-
+import GroupIcon from '@mui/icons-material/Group';
+import AppsIcon from '@mui/icons-material/Apps';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import HomeIcon from '@mui/icons-material/Home';
 
 export default function SideBar() {
   const navigate = useNavigate();
@@ -57,7 +60,6 @@ export default function SideBar() {
   
   return (
     <>
-  
       <Modal
         open={open}
         onClose={handleClose}
@@ -74,49 +76,107 @@ export default function SideBar() {
             transform: "translate(-50%, -50%)",
             px: 3,
             py: 5,
-            borderRadius: 2
+            borderRadius: 2,
           }}
         >
           <ChangePass />
         </Box>
       </Modal>
-      
-    <div className='sidebar-container' >
-      <Sidebar collapsed={collapsed} collapsedWidth={collapsedWidth}>
-        <Menu style={{backgroundColor:'orang', marginTop:100}}>
 
-
-          <MenuItem onClick={handleCollapse} style={{textAlign:'center',marginBottom:15}} > 
-            <button
-              className={`collapse-button ${collapsed ? '' : 'expanded'}`}
+      <div className="sidebar-container">
+        <Sidebar collapsed={collapsed} collapsedWidth={collapsedWidth}>
+          <Menu style={{ backgroundColor: "orang", marginTop: 100 }}>
+            <MenuItem
+              onClick={handleCollapse}
+              style={{ textAlign: "center", marginBottom: 15 }}
             >
-              <ArrowForwardIcon sx={{marginTop:1,marginRight:{xs:2,lg:0}}}/>
-            </button>
-          </MenuItem>
+              <button
+                className={`collapse-button ${collapsed ? "" : "expanded"}`}
+              >
+                <ArrowForwardIcon
+                  sx={{ marginTop: 1, marginRight: { xs: 2, lg: 0 } }}
+                />
+              </button>
+            </MenuItem>
 
-
-          <MenuItem onClick={handleOpen} icon={<LockOpenIcon sx={{color:'white',marginRight:{xs:2,lg:0}}}/>}> 
-            <button
+            <MenuItem
+              component={<Link to="" />}
+              icon={
+                <HomeIcon
+                  sx={{ color: "white", marginRight: { xs: 2, lg: 0 } }}
+                />
+              }
             >
-              Change Password
-            </button>
-          </MenuItem>
+              <button>Home</button>
+            </MenuItem>
+            <MenuItem
+              component={<Link to="users" />}
+              icon={
+                <GroupIcon
+                  sx={{ color: "white", marginRight: { xs: 2, lg: 0 } }}
+                />
+              }
+            >
+              <button>Users</button>
+            </MenuItem>
 
+            <MenuItem
+              component={<Link to="rooms" />}
+              icon={
+                <AppsIcon
+                  sx={{ color: "white", marginRight: { xs: 2, lg: 0 } }}
+                />
+              }
+            >
+              <button>Rooms</button>
+            </MenuItem>
+            <MenuItem
+              component={<Link to="adslist" />}
+              icon={
+                <CalendarMonthIcon
+                  sx={{ color: "white", marginRight: { xs: 2, lg: 0 } }}
+                />
+              }
+            >
+              <button>ADS</button>
+            </MenuItem>
+            <MenuItem
+              component={<Link to="facilities" />}
+              icon={
+                <AppsIcon
+                  sx={{ color: "white", marginRight: { xs: 2, lg: 0 } }}
+                />
+              }
+            >
+              <button>Facilities</button>
+            </MenuItem>
 
-          <MenuItem onClick={logout} icon={<ExitToAppIcon sx={{color:'white',marginRight:{xs:2,lg:0}}}/>} > 
-              <button 
-                
-                disabled={loading}
-                >
+            <MenuItem
+              onClick={handleOpen}
+              icon={
+                <LockOpenIcon
+                  sx={{ color: "white", marginRight: { xs: 2, lg: 0 } }}
+                />
+              }
+            >
+              <button>Change Password</button>
+            </MenuItem>
+
+            <MenuItem
+              onClick={logout}
+              icon={
+                <ExitToAppIcon
+                  sx={{ color: "white", marginRight: { xs: 2, lg: 0 } }}
+                />
+              }
+            >
+              <button disabled={loading}>
                 {loading ? <CircularProgress size={20} /> : "Logout"}
               </button>
-          </MenuItem>
-          
-        </Menu>
-      </Sidebar>
-
-    </div>
-      
+            </MenuItem>
+          </Menu>
+        </Sidebar>
+      </div>
     </>
   );
 }
