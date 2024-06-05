@@ -27,7 +27,9 @@ export default function Login() {
   // const timeoutRef = useRef<number | null>(null);
   // const { loginData } = useAuth();
 
- 
+//  const gotoregister()=>{
+
+//  }
   const onSubmit: SubmitHandler<AuthInputs> = async (data)=>{
     try{
       setLoading(true);

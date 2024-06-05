@@ -51,6 +51,7 @@ export default function Register() {
 
 
       const response = await axios.post(
+        // TODO:make it user not admin
         "https://upskilling-egypt.com:3000/api/v0/admin/users",
         data
       );
