@@ -20,6 +20,7 @@ import {
   TablePagination,
   TextField,
   Typography,
+  InputLabel,
 } from "@mui/material";
 import axios from "axios";
 import { AuthContext } from "../../../Context/AuthContext";
@@ -141,32 +142,33 @@ export default function ADSList() {
   };
   const [editId, setEditId] = useState<ADS | string>("");
   const [editDiscount, setEditDiscout] = useState<ADS | number>(0);
-  const [editActive, setEditActive] = useState<ADS | boolean>(false);
+  const [editActive, setEditActive] = useState<Form | boolean>(false);
   const [action, setAction] = useState<ADS | null>(null);
 
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [editAds, setEditAds] = React.useState<Form | boolean>(false);
-  const handleOpen = () => setOpen(true);
   const handleEdit = (
     _id: ADS | string,
     discount: ADS | number,
-    active: ADS | boolean
+    active: Form | boolean
   ) => {
     setEditId(_id);
     setEditDiscout(discount);
     setEditActive(active);
     setOpenEdit(true);
   };
-  const handleClose = () => {
-    setOpen(false);
-    
-  };
   const handleEditClose = () => {
     setOpenEdit(false);
     setEditAds(false);
-    reset();
+    // reset();
   };
+  const handleOpen = () => setOpen(true);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  
 
   const [openDelete, setDeleteOpen] = React.useState(false);
   const handleDeleteOpen = () => setDeleteOpen(true);
@@ -215,7 +217,6 @@ export default function ADSList() {
       const response = await axios.get(`${baseUrl}/admin/rooms`, {
         headers: requestHeaders,
       });
-      console.log(response.data.data.rooms);
       setRoomsList(response.data.data.rooms);
     } catch (error) {
       console.log(error);
@@ -246,37 +247,37 @@ export default function ADSList() {
     return value;
   };
   const onEditSubmit: SubmitHandler<Form> = async (data) => {
-      try {
-        const response = await axios.put(
-          `${baseUrl}/admin/ads/${editId}`,
-          data,
-          {
-            headers: requestHeaders,
-          }
-        );
-        console.log(response);
+    console.log("daaataaaa", data);
+    // try {
+    //   const response = await axios.put(
+    //     `${baseUrl}/admin/ads/${editId}`,
+    //     data,
+    //     {
+    //       headers: requestHeaders,
+    //     }
+    //   );
+    //   console.log(response);
 
-        showToast("success", response.data.message);
-        handleEditClose();
-        getAdsList();
-      } catch (error) {
-        console.log(error);
-      }
-    } 
-    const onSubmit: SubmitHandler<Form> = async (data) => {
-
-      try {
-        const response = await axios.post(`${baseUrl}/admin/ads`, data, {
-          headers: requestHeaders,
-        });
-        showToast("success", response.data.message);
-        handleClose();
-        getAdsList();
-      } catch (error) {
-        console.log(error);
-      }
+    //   showToast("success", response.data.message);
+    //   handleEditClose();
+    //   getAdsList();
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  };
+  const onSubmit: SubmitHandler<Form> = async (data) => {
+    try {
+      const response = await axios.post(`${baseUrl}/admin/ads`, data, {
+        headers: requestHeaders,
+      });
+      showToast("success", response.data.message);
+      handleClose();
+      getAdsList();
+    } catch (error) {
+      console.log(error);
     }
-  
+  };
+
   const onDeleteSubmit = async () => {
     if (action) {
       try {
@@ -295,6 +296,7 @@ export default function ADSList() {
       }
     }
   };
+
   useEffect(() => {
     getAdsList();
     getRoomsList();
@@ -431,7 +433,10 @@ export default function ADSList() {
             Ads
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)}>
+            <InputLabel id="demo-simple-select-label">Room Name</InputLabel>
+
             <Select
+              labelId="demo-simple-select-label"
               sx={{ width: "100%", backgroundColor: "#F7F7F7", mt: 1 }}
               label="Room Name"
               {...register("room", { required: "Room is required" })}
@@ -452,7 +457,6 @@ export default function ADSList() {
               label="Discount"
               sx={{ width: "100%", backgroundColor: "#F7F7F7", mt: 1 }}
               {...register("discount", { required: "Discount is required" })}
-              defaultValue={editAds ? editDiscount : ""}
             />
             {errors.discount && (
               <Alert sx={{ my: 1 }} variant="filled" severity="error">
@@ -463,13 +467,8 @@ export default function ADSList() {
               sx={{ width: "100%", backgroundColor: "#F7F7F7", mt: 1 }}
               label="Active"
               {...register("isActive", { required: "Active is required" })}
-              defaultValue={editAds ? editActive : ""}
             >
-              {adsList.map((ads) => (
-                <MenuItem value={ads.isActive.toString()}>
-                  {ads.isActive.toString()}
-                </MenuItem>
-              ))}
+             
             </Select>
             {errors.isActive && (
               <Alert sx={{ my: 1 }} variant="filled" severity="error">
@@ -502,7 +501,6 @@ export default function ADSList() {
             Ads
           </Typography>
           <form onSubmit={handleSubmit(onEditSubmit)}>
-        
             <TextField
               type="number"
               label="Discount"
@@ -521,11 +519,9 @@ export default function ADSList() {
               {...register("isActive", { required: "Active is required" })}
               defaultValue={editAds ? editActive : ""}
             >
-              {adsList.map((ads) => (
-                <MenuItem value={ads.isActive.toString()}>
-                  {ads.isActive.toString()}
-                </MenuItem>
-              ))}
+              <MenuItem value={true}>true</MenuItem>
+
+              <MenuItem value={false}>false</MenuItem>
             </Select>
             {errors.isActive && (
               <Alert sx={{ my: 1 }} variant="filled" severity="error">
