@@ -3,22 +3,15 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
-// import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
-// import LogoutIcon from '@mui/icons-material/Logout';
-// import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-// import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-// import InboxIcon from '@mui/icons-material/MoveToInbox';
-// import MailIcon from '@mui/icons-material/Mail';
-// import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
-import { AppBar, CircularProgress, Modal, Toolbar, useMediaQuery, useTheme } from '@mui/material';
-import { Dehaze, LockOpenOutlined } from '@mui/icons-material';
+import { AppBar, CircularProgress, IconButton, Modal, Toolbar, useMediaQuery, useTheme } from '@mui/material';
+import { ChevronLeft, ChevronRight, Dehaze, LockOpenOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../../Context/ToastContext';
 import { useState } from 'react';
@@ -34,10 +27,14 @@ export default function AnchorTemporaryDrawer() {
   const handleClose = () => setOpen(false);
   
   
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  // const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'));
+  const handleDrawerToggle = () => { //*=======================//
+    setDrawerOpen(!drawerOpen);
+  };
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    // const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+    const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'));
+    const [drawerOpen, setDrawerOpen] = useState(isLargeScreen ? false: true); //*=======================//
   
 
   const logout = ()=>{
@@ -74,48 +71,85 @@ export default function AnchorTemporaryDrawer() {
   const list = (anchor: Anchor) => (
     <Box
       sx={{ 
-        width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 
-        isSmallScreen ? 250 : 
-        300,
+        width: anchor === 'top' || anchor === 'bottom' ? 'auto' : isSmallScreen ? 250 : drawerOpen ? 300 : 75,
         backgroundColor:'#203FC7',
         height:'100%',
-        color:'white'
+        color:'white',
+        transition: 'width 0.3s',
+        boxSizing: 'border-box',
+        overflowX: 'hidden' // Prevent horizontal overflow
        }}
       role="presentation"
       // onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List sx={{backgroundColor:'greenyello', marginTop:{xs:10}}}>  
+      <List sx={{backgroundColor:'greenyello', marginTop:{xs:10},display:'flex', flexDirection:'column', gap:0}}>  
 
-        <ListItem key="Home" disablePadding>
+
+        <ListItem 
+          disablePadding 
+          onClick={handleDrawerToggle} 
+          sx={{backgroundColor:'orang',marginBottom:3,display:{xs:'none',md:'flex'},justifyContent:'center'}}
+          >
           <ListItemButton>
-            <ListItemIcon sx={{color:'white'}}>
+            <IconButton  
+              sx={{ 
+                color: 'white', marginLeft: drawerOpen ? 'auto' : 0,
+                '&:hover': {
+                  backgroundColor: 'transparent'
+                }
+               }}>
+              {drawerOpen ? <ChevronLeft /> : <ChevronRight />}
+            </IconButton>
+
+          </ListItemButton>
+        </ListItem>
+
+
+        <ListItem key="TEST" disablePadding sx={{backgroundColor:'orang',height:50,marginLeft:0}}>
+          <ListItemButton>
+            <ListItemIcon sx={{color:'white',paddingLeft:1}}>
               <HomeOutlinedIcon />
             </ListItemIcon>
-            <ListItemText primary="Home" />
+            {drawerOpen && <ListItemText primary="TEST" sx={{ 
+              whiteSpace: 'nowrap', 
+              overflow: 'hidden', 
+              textOverflow: 'ellipsis',
+               }}  />}
           </ListItemButton>
         </ListItem>
 
-        <ListItem key="Users" disablePadding>
+        <ListItem key="Home" disablePadding sx={{backgroundColor:'orang',height:50,marginLeft:0}}>
           <ListItemButton>
-            <ListItemIcon sx={{color:'white'}}>
+            <ListItemIcon sx={{color:'white',paddingLeft:1}}>
+              <HomeOutlinedIcon />
+            </ListItemIcon>
+            {drawerOpen && <ListItemText primary="Home" sx={{ transition: 'all 0.3s', width: drawerOpen ? 'auto' : 0, opacity: drawerOpen ? 1 : 0 }}  />}
+          </ListItemButton>
+        </ListItem>
+
+
+        <ListItem key="Users" disablePadding sx={{backgroundColor:'orang',height:50,marginLeft:0}}>
+          <ListItemButton>
+            <ListItemIcon sx={{color:'white',paddingLeft:1}}>
               <PeopleOutlineIcon />
             </ListItemIcon>
-            <ListItemText primary="Users" />
+            {drawerOpen && <ListItemText primary="Users" />}
           </ListItemButton>
         </ListItem>
 
-        <ListItem key="Change Password" disablePadding onClick={handleOpen}>
+
+        <ListItem key="Change Password" disablePadding onClick={handleOpen} sx={{width:400,backgroundColor:'orang',height:50,marginLeft:0}}>
           <ListItemButton>
-            <ListItemIcon sx={{color:'white'}}>
+            <ListItemIcon sx={{color:'white',paddingLeft:1}}>
               <LockOpenOutlined />
             </ListItemIcon>
-            <ListItemText primary="Change Password" />
+            {drawerOpen && <ListItemText primary="Change Password" sx={{ transition: 'opacity 3s', opacity: drawerOpen ? 1 : 0 }} />}
           </ListItemButton>
         </ListItem>
 
 
-        <ListItem key="Send email" disablePadding>
+        <ListItem key="Send email" disablePadding sx={{backgroundColor:'orang',height:50}}>
           <ListItemButton 
             onClick={logout} 
             disabled={loading} 
@@ -123,13 +157,19 @@ export default function AnchorTemporaryDrawer() {
               '&.Mui-disabled': {
                 backgroundColor: '#273ea8', 
                 color: '#fff', 
+
             },
             }}
             >
-              <ListItemIcon sx={{color:'white',marginLeft:0}}>
+              <ListItemIcon sx={{color:'white',paddingLeft:1}}>
                 <ExitToAppIcon />
               </ListItemIcon>
-              <ListItemText primary={loading ? <CircularProgress size={14} sx={{ color: 'white', marginTop:0  }} /> : 'Logout'} />
+              {drawerOpen && (loading ? (
+                <CircularProgress size={14} sx={{ color: 'white', marginTop: 0 }} />
+              ) : (
+                <ListItemText primary="Logout"  />
+              ))}
+              {/* <ListItemText primary={loading ? <CircularProgress size={14} sx={{ color: 'white', marginTop:0  }} /> : 'Logout'} /> */}
               {/* <Typography sx={{backgroundColor:'gol'}}>{loading ? <CircularProgress size={16} sx={{ color: 'white', marginTop:0  }} /> : 'Logout'}</Typography> */}
 
           </ListItemButton>
@@ -175,15 +215,19 @@ export default function AnchorTemporaryDrawer() {
       )} */}
       {(['left'] as const).map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
+          {/* <Button onClick={toggleDrawer(anchor, true)} sx={{backgroundColor:'green'}}>{anchor}</Button> */}
           <Drawer
             variant={isLargeScreen? 'permanent' : 'temporary'}
             anchor={anchor}
-            open={state[anchor]}
+            open={isLargeScreen ? drawerOpen : state[anchor]}
             onClose={toggleDrawer(anchor, false)}
           >
             {list(anchor)}
           </Drawer>
+          {/* Button to toggle the drawer only on small screens */}
+          {!isLargeScreen && (
+            <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
+          )}
         </React.Fragment>
       ))}
     </div>
