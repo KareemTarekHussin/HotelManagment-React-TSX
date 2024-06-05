@@ -33,3 +33,22 @@ export interface ToastTypeProps {
     message: string
   ) => void;
 }
+
+// ?==============>Useres<==============
+export interface User {
+  country: string;
+  email: string;
+  creationDate: string;
+  id: number;
+  imagePath: string | undefined;
+  isActivated: boolean;
+  userName: string;
+  status: string;
+  phoneNumber: string;
+}
+
+export interface ActiveUserData {
+  activatedEmployeeCount: number;
+  deactivatedEmployeeCount: number;
+}
+// ?==============>End Useres<==============

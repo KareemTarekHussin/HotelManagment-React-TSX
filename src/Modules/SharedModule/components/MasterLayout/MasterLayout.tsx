@@ -21,9 +21,9 @@ const MasterLayout = () => {
         flex="1" 
         className='Content'
         height="100vh" 
-        p={0} 
-        px={{ md: 0 }} 
-        py={{ md: 0 }} 
+        p={{xs:1,md:3}} 
+        px={{ md: 5 }} 
+        py={{ md: 4 }} 
         overflow="auto"
       >
         <Outlet />
