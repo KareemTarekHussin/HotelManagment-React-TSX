@@ -80,3 +80,4 @@ export interface Inputs {
   discount: string;
   facilities: string[];
 }
+

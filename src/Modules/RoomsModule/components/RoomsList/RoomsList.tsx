@@ -66,7 +66,7 @@ export default function RoomsList() {
       setLoading(false);
     }
   };
-
+console.log(roomsList);
   const handleDelete = async () => {
     setSpinner(true);
     try {
@@ -245,7 +245,12 @@ export default function RoomsList() {
                               <DeleteIcon color="error" />
                             </IconButton>
                             <IconButton>
-                              <EditNoteIcon color="warning" />
+                              <Link
+                                to={`/dashboard/roomsedit/${room._id}`}
+                                state={{ roomData: room, state: "edit" }}
+                              >
+                                <EditNoteIcon color="warning" />
+                              </Link>
                             </IconButton>
                             <IconButton>
                               <VisibilityIcon color="primary" />
