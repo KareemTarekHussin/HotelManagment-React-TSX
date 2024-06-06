@@ -237,7 +237,7 @@ export default function ADSList() {
       value = ads.createdBy.userName;
     }
     if (column.id === "isActive") {
-      value = ads?.isActive.toString();
+      value = ads?.isActive;
     }
 
     if (column.id === "roomNumber") {
@@ -437,6 +437,7 @@ export default function ADSList() {
           
         </Paper>
       </Box>
+      
       <Modal
         open={open}
         onClose={handleClose}
@@ -582,7 +583,7 @@ export default function ADSList() {
           />
           <Typography
             fontWeight={600}
-            textAlign="center"
+            textAlign="center"  
             variant="h6"
             id="modal-modal-description"
             sx={{ mt: 2 }}
