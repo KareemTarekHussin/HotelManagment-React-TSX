@@ -22,7 +22,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function Dashboard() {
-  const [room, setRooms] = useState([])
+  const [room, setRooms] = useState(null)
   const { requestHeaders }: any = useContext(AuthContext);
 
 
@@ -62,7 +62,7 @@ export default function Dashboard() {
             color: "#fff"
           }}>
             <div className='title-rooms'>
-              100
+             const listItems = numbers.map((number) =>  <li>{number}</li>);
 
             </div>
             <div className='title-rooms'>

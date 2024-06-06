@@ -15,18 +15,18 @@ export let AuthContext = createContext<AuthInterface>({
 export const useAuth = () => {
   return useContext(AuthContext);
 };
- 
+
 
 //?=================================================================> */
-export default function AuthContextProvider(props: PropsWithChildren){
-//?=================================================================> */
+export default function AuthContextProvider(props: PropsWithChildren) {
+  //?=================================================================> */
 
   let [loginData, setLoginData] = useState(null);
-  
+
   let baseUrl = "https://upskilling-egypt.com:3000/api/v0";
 
   let requestHeaders = {
-Authorization: `${localStorage.getItem("token")}`,
+    Authorization: `${localStorage.getItem("token")}`,
   };
 
 
@@ -51,7 +51,7 @@ Authorization: `${localStorage.getItem("token")}`,
   //   }
   // }, []);
 
-  let getUserData = ()=>{
+  let getUserData = () => {
     let encodedToken: any = localStorage.getItem('token');
     let decodedToken: any = jwtDecode(encodedToken);
     console.log(decodedToken);
