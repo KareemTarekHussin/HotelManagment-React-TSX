@@ -16,6 +16,7 @@ import {
   TablePagination,
   TextField,
   Typography,
+  InputLabel,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -29,8 +30,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import deleteImg from "../../../../assets/Images/deleteImg.png";
 import { getErrorMessage } from "../../../../utils/error";
-import { AuthContext } from "../../../Context/AuthContext";
-import { useToast } from "../../../Context/ToastContext";
+import { SubmitHandler, useForm } from "react-hook-form";
+import UpdateForm from "../UpdateForm";
 
 interface Column {
   id:
@@ -105,11 +106,13 @@ interface Rooms {
 }
 interface Form {
   _id: string;
-
   room: String;
   discount: number;
   isActive: boolean;
   roomNumber: string;
+  isActiveUpdate: boolean;
+  discountUpdate: number;
+  onEditSubmit: any;
 }
 
 export default function ADSList() {
@@ -118,19 +121,22 @@ export default function ADSList() {
   const [adsList, setAdsList] = useState<ADS[]>([]);
   const [roomsList, setRoomsList] = useState<Rooms[]>([]);
   const { requestHeaders, baseUrl }: any = useContext(AuthContext);
+
   const { showToast } = useToast();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const handleClick = (event: React.MouseEvent<HTMLElement>, menuItem: ADS) => {
+  const [selectedRow, setSelectedRow] = useState<ADS | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>, row: ADS) => {
     setAnchorEl(event.currentTarget);
-    setAction(menuItem);
+    setSelectedRow(row);
   };
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setAction(null);
+    setSelectedRow(null);
   };
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -138,37 +144,42 @@ export default function ADSList() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  const [editId, setEditId] = useState<ADS | string>("");
-  const [editDiscount, setEditDiscout] = useState<ADS | number>(0);
-  const [editActive, setEditActive] = useState<ADS | boolean>(false);
-  const [action, setAction] = useState<ADS | null>(null);
-  const [loading, setLoading] = useState(true); 
+  const [adsId, setAdsId] = useState<string>("");
+  const [adsDiscount, setAdsDiscout] = useState<number>(0);
+  const [isActive, setIsActive] = useState<boolean>(false);
+
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
-  const [editAds, setEditAds] = React.useState<Form | boolean>(false);
-  const handleOpen = () => setOpen(true);
-  const handleEdit = (
-    _id: ADS | string,
-    discount: ADS | number,
-    active: ADS | boolean
-  ) => {
-    setEditId(_id);
-    setEditDiscout(discount);
-    setEditActive(active);
+  const handleEdit = (_id: string, discount: number, active: boolean) => {
+    setAdsId(_id);
+    setAdsDiscout(discount);
+    setIsActive(active);
     setOpenEdit(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-    
   };
   const handleEditClose = () => {
     setOpenEdit(false);
-    setEditAds(false);
-    reset();
+  };
+  const handleOpen = () => setOpen(true);
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const [openDelete, setDeleteOpen] = React.useState(false);
-  const handleDeleteOpen = () => setDeleteOpen(true);
+  const handleDeleteOpen = (_id: string) => {
+    setAdsId(_id);
+
+    setDeleteOpen(true);
+  };
+
+  const handleAction = (action: string) => {
+    if (action === "Edit") {
+      setOpenEdit(true);
+    } else if (action === "Delete") {
+      setDeleteOpen(true);
+    }
+    handleMenuClose();
+  };
 
   const handleDeleteClose = () => setDeleteOpen(false);
   const style = {
@@ -184,29 +195,18 @@ export default function ADSList() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<Form>();
-
-  const handleAction = (action: string) => {
-    if (action === "Delete") {
-      handleDeleteOpen();
-    } else if (action === "Edit") {
-      setEditAds(true);
-      setOpenEdit(true);
-    }
-    handleMenuClose();
-  };
 
   const getAdsList = async () => {
     try {
       const response = await axios.get(`${baseUrl}/admin/ads`, {
         headers: requestHeaders,
       });
-      console.log(response.data.data.ads);
       setAdsList(response.data.data.ads);
     } catch (error) {
-      console.log(error);
+      const err = getErrorMessage(error);
+      showToast("error", err);
     }
   };
   const getRoomsList = async () => {
@@ -214,12 +214,11 @@ export default function ADSList() {
       const response = await axios.get(`${baseUrl}/admin/rooms`, {
         headers: requestHeaders,
       });
-      console.log(response.data.data.rooms);
       setRoomsList(response.data.data.rooms);
       setLoading(false);
     } catch (error) {
-      console.log(error);
-      setLoading(false);
+      const err = getErrorMessage(error);
+      showToast("error", err);
     }
   };
   const formatCellValue = (column: Column, ads: ADS) => {
@@ -247,55 +246,49 @@ export default function ADSList() {
     return value;
   };
   const onEditSubmit: SubmitHandler<Form> = async (data) => {
-      try {
-        const response = await axios.put(
-          `${baseUrl}/admin/ads/${editId}`,
-          data,
-          {
-            headers: requestHeaders,
-          }
-        );
-        console.log(response);
+    try {
+      const response = await axios.put(`${baseUrl}/admin/ads/${adsId}`, data, {
+        headers: requestHeaders,
+      });
 
-        showToast("success", response.data.message);
-        handleEditClose();
-        getAdsList();
-      } catch (error) {
-        console.log(error);
-      }
-    } 
-    const onSubmit: SubmitHandler<Form> = async (data) => {
-
-      try {
-        const response = await axios.post(`${baseUrl}/admin/ads`, data, {
-          headers: requestHeaders,
-        });
-        showToast("success", response.data.message);
-        handleClose();
-        getAdsList();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  
-  const onDeleteSubmit = async () => {
-    if (action) {
-      try {
-        const response = await axios.delete(
-          `${baseUrl}/admin/ads/${action._id}`,
-          {
-            headers: requestHeaders,
-          }
-        );
-        showToast("success", response.data.message);
-        handleDeleteClose();
-        getAdsList();
-      } catch (error) {
-        const err = getErrorMessage(error);
-        showToast("error", err);
-      }
+      showToast("success", response.data.message);
+      handleEditClose();
+      getAdsList();
+    } catch (error) {
+      const err = getErrorMessage(error);
+      showToast("error", err);
     }
   };
+
+  const onSubmit: SubmitHandler<Form> = async (data) => {
+    try {
+      const response = await axios.post(`${baseUrl}/admin/ads`, data, {
+        headers: requestHeaders,
+      });
+      showToast("success", response.data.message);
+      handleClose();
+      getAdsList();
+    } catch (error) {
+      const err = getErrorMessage(error);
+      showToast("error", err);
+    }
+  };
+
+  const onDeleteSubmit = async () => {
+    try {
+      const response = await axios.delete(`${baseUrl}/admin/ads/${adsId}`, {
+        headers: requestHeaders,
+      });
+
+      showToast("success", response.data.message);
+      handleDeleteClose();
+      getAdsList();
+    } catch (error) {
+      const err = getErrorMessage(error);
+      showToast("error", err);
+    }
+  };
+
   useEffect(() => {
     getAdsList();
     getRoomsList();
@@ -372,16 +365,15 @@ export default function ADSList() {
                                 <Menu
                                   anchorEl={anchorEl}
                                   open={
-                                    Boolean(anchorEl) && action?._id === ads._id
+                                    Boolean(anchorEl) &&
+                                    selectedRow?._id === ads._id
                                   }
                                   onClose={handleMenuClose}
                                 >
-                                  <MenuItem
-                                    onClick={() => handleAction("View")}
-                                  >
+                                  <MenuItem>
                                     <VisibilityIcon
                                       sx={{ mx: 1, color: "#00e5ff" }}
-                                    />{" "}
+                                    />
                                     View
                                   </MenuItem>
                                   <MenuItem
@@ -400,7 +392,10 @@ export default function ADSList() {
                                     Edit
                                   </MenuItem>
                                   <MenuItem
-                                    onClick={() => handleAction("Delete")}
+                                    onClick={() => [
+                                      handleDeleteOpen(ads._id),
+                                      handleAction("Delete"),
+                                    ]}
                                   >
                                     <DeleteIcon
                                       sx={{ mx: 1, color: "#d50000" }}
@@ -445,13 +440,20 @@ export default function ADSList() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h5" component="h2">
-            Ads
+          <Typography
+            marginBlock={2}
+            id="modal-modal-title"
+            variant="h5"
+            component="h2"
+          >
+            Add Ads
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)}>
+            <InputLabel id="demo-simple-select-label">Room Name</InputLabel>
+
             <Select
-              sx={{ width: "100%", backgroundColor: "#F7F7F7", mt: 1 }}
-              label="Room Name"
+              labelId="demo-simple-select-label"
+              sx={{ width: "100%", backgroundColor: "#F7F7F7", my: 1 }}
               {...register("room", { required: "Room is required" })}
               error={!!errors.room}
             >
@@ -465,29 +467,27 @@ export default function ADSList() {
                 {errors.room.message}
               </Alert>
             )}
+            <InputLabel id="demo-simple-select-label">Discount</InputLabel>
+
             <TextField
               type="number"
-              label="Discount"
-              sx={{ width: "100%", backgroundColor: "#F7F7F7", mt: 1 }}
+              sx={{ width: "100%", backgroundColor: "#F7F7F7", my: 1 }}
               {...register("discount", { required: "Discount is required" })}
-              defaultValue={editAds ? editDiscount : ""}
             />
             {errors.discount && (
               <Alert sx={{ my: 1 }} variant="filled" severity="error">
                 {errors.discount.message}
               </Alert>
             )}
+            <InputLabel id="demo-simple-select-label">Active?</InputLabel>
+
             <Select
-              sx={{ width: "100%", backgroundColor: "#F7F7F7", mt: 1 }}
-              label="Active"
+              sx={{ width: "100%", backgroundColor: "#F7F7F7", my: 1 }}
               {...register("isActive", { required: "Active is required" })}
-              defaultValue={editAds ? editActive : ""}
             >
-              {adsList.map((ads) => (
-                <MenuItem value={ads.isActive.toString()}>
-                  {ads.isActive.toString()}
-                </MenuItem>
-              ))}
+              <MenuItem value="true">true</MenuItem>
+
+              <MenuItem value="false">false</MenuItem>
             </Select>
             {errors.isActive && (
               <Alert sx={{ my: 1 }} variant="filled" severity="error">
@@ -516,53 +516,19 @@ export default function ADSList() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h5" component="h2">
-            Ads
+          <Typography
+            marginBlock={2}
+            id="modal-modal-title"
+            variant="h5"
+            component="h2"
+          >
+            Edit Ads
           </Typography>
-          <form onSubmit={handleSubmit(onEditSubmit)}>
-        
-            <TextField
-              type="number"
-              label="Discount"
-              sx={{ width: "100%", backgroundColor: "#F7F7F7", mt: 1 }}
-              {...register("discount", { required: "Discount is required" })}
-              defaultValue={editAds ? editDiscount : ""}
-            />
-            {errors.discount && (
-              <Alert sx={{ my: 1 }} variant="filled" severity="error">
-                {errors.discount.message}
-              </Alert>
-            )}
-            <Select
-              sx={{ width: "100%", backgroundColor: "#F7F7F7", mt: 1 }}
-              label="Active"
-              {...register("isActive", { required: "Active is required" })}
-              defaultValue={editAds ? editActive : ""}
-            >
-              {adsList.map((ads) => (
-                <MenuItem value={ads.isActive.toString()}>
-                  {ads.isActive.toString()}
-                </MenuItem>
-              ))}
-            </Select>
-            {errors.isActive && (
-              <Alert sx={{ my: 1 }} variant="filled" severity="error">
-                {errors.isActive.message}
-              </Alert>
-            )}
-            <Box display="flex" justifyContent="end" gap={2} padding={2}>
-              <Button
-                onClick={() => {
-                  handleEditClose();
-                }}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" variant="contained">
-                Save
-              </Button>
-            </Box>
-          </form>
+          <UpdateForm
+            isActiveUpdate={isActive}
+            discountUpdate={adsDiscount}
+            onEditSubmit={onEditSubmit}
+          />
         </Box>
       </Modal>
       <Modal
