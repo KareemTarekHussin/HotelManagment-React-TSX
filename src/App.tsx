@@ -25,6 +25,7 @@ const theme = createTheme({
 });
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import BookingList from "./Modules/BookingModule/BookingList";
 
 function App() {
 
@@ -57,6 +58,7 @@ function App() {
         { path: "facilitiesdata", element: <FacilitiesData /> },
         { path: "adslist", element: <ADSList /> },
         { path: "users", element: <UsersList /> },
+        { path: "booking", element: <BookingList /> },
       ],
     },
   ]);

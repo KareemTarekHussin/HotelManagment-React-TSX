@@ -1,6 +1,6 @@
 import Grid from '@mui/material/Grid'; 
 import loginImg from "../../../../assets/Images/login.png";
-import { Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import { Box, Button, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -38,16 +38,13 @@ export default function Login() {
       localStorage.setItem('token',response.data.data.token);
       getUserData();
       navigate('/DashBoard');
-      
-      
     } catch (error:any){
-      // const err = getErrorMessage(error);
       showToast("error", error.response.data.message);
-
     } finally {
       setLoading(false);
     }
   }
+
 
   return (
     <>
@@ -102,10 +99,24 @@ export default function Login() {
                       If you don’t have an account registered
                     </Typography>
 
-                    <Box   >
-                      <Typography sx={{fontSize:{md:14,lg:16}, display: 'inline'}}>You can</Typography>
+                    <Box>
+                      <Typography sx={{backgroundColor:'orang',fontSize:{md:14,lg:16}, display: 'inline'}}>You can</Typography>
                       {' '}
-                      <Typography sx={{fontSize:{md:14,lg:16}, fontWeight:600 ,display: 'inline',color:'#152c5b' }}>Register here !</Typography>
+                      <Link
+                        onClick={() => navigate('/register')}
+                        underline="hover"
+                        sx={{
+                          fontSize:{md:14,lg:16}, 
+                          fontWeight:600 ,
+                          display: 'inline',
+                          color:'#152c5b',
+                          '&:hover':{
+                            cursor:'pointer',
+                          }
+                        }}
+                        >
+                        Register here !
+                      </Link>
                     </Box>  
                   </Box> 
 
@@ -171,9 +182,20 @@ export default function Login() {
                               }}>
                                 {(errors.password as FieldError)?.message || <span>&nbsp;</span>}
                               </Typography>
-                              <Typography sx={{ fontSize: 14, fontWeight: 300, color: '#4D4D4D' }}>
+                              <Link
+                                underline="hover" 
+                                onClick={() => navigate('/forgetpass')}
+                                sx={{ 
+                                  fontSize: 14, 
+                                  fontWeight: 300, 
+                                  color: '#4D4D4D',
+                                  '&:hover':{
+                                    cursor:'pointer',
+                                  } 
+                                }}
+                                >
                                 Forget Password?
-                              </Typography>
+                              </Link>
                             </Box>
                         </Box>
 
