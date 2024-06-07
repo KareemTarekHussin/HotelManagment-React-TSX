@@ -27,11 +27,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
 import deleteImg from "../../../../assets/Images/deleteImg.png";
 import { getErrorMessage } from "../../../../utils/error";
 import { SubmitHandler, useForm } from "react-hook-form";
 import UpdateForm from "../UpdateForm";
+import { AuthContext } from "../../../Context/AuthContext";
+import { useToast } from "../../../Context/ToastContext";
 
 interface Column {
   id:
@@ -147,6 +148,7 @@ export default function ADSList() {
   const [adsId, setAdsId] = useState<string>("");
   const [adsDiscount, setAdsDiscout] = useState<number>(0);
   const [isActive, setIsActive] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true); 
 
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
