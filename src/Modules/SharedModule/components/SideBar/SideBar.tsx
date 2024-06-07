@@ -11,6 +11,8 @@ import GroupIcon from '@mui/icons-material/Group';
 import AppsIcon from '@mui/icons-material/Apps';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import HomeIcon from '@mui/icons-material/Home';
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 
 export default function SideBar() {
   const navigate = useNavigate();
@@ -85,7 +87,7 @@ export default function SideBar() {
           collapsed={collapsed} 
           collapsedWidth={collapsedWidth}
           >
-          <Menu style={{ backgroundColor: "orang", marginTop: 100 }}>
+          <Menu style={{ backgroundColor: "orang", marginTop: 80 }}>
             <MenuItem
               onClick={handleCollapse}
               style={{ textAlign: "center", marginBottom: 15 }}
@@ -94,7 +96,7 @@ export default function SideBar() {
                 className={`collapse-button ${collapsed ? "" : "expanded"}`}
               >
                 <ArrowForwardIcon
-                  sx={{ marginTop: 1, marginRight: { xs: 2, lg: 0 } }}
+                  sx={{ marginTop: 1, marginRight: { xs: 2, sm: 0 } }}
                 />
               </button>
             </MenuItem>
@@ -103,7 +105,7 @@ export default function SideBar() {
               component={<Link to="" />}
               icon={
                 <HomeIcon
-                  sx={{ color: "white", marginRight: { xs: 2, lg: 0 } }}
+                  sx={{ color: "white", marginRight: { xs: 2, sm: 0 } }}
                 />
               }
             >
@@ -113,7 +115,7 @@ export default function SideBar() {
               component={<Link to="users" />}
               icon={
                 <GroupIcon
-                  sx={{ color: "white", marginRight: { xs: 2, lg: 0 } }}
+                  sx={{ color: "white", marginRight: { xs: 2, sm: 0 } }}
                 />
               }
             >
@@ -123,8 +125,8 @@ export default function SideBar() {
             <MenuItem
               component={<Link to="rooms" />}
               icon={
-                <AppsIcon
-                  sx={{ color: "white", marginRight: { xs: 2, lg: 0 } }}
+                <MeetingRoomIcon
+                  sx={{ color: "white", marginRight: { xs: 2, sm: 0 } }}
                 />
               }
             >
@@ -134,7 +136,7 @@ export default function SideBar() {
               component={<Link to="adslist" />}
               icon={
                 <CalendarMonthIcon
-                  sx={{ color: "white", marginRight: { xs: 2, lg: 0 } }}
+                  sx={{ color: "white", marginRight: { xs: 2, sm: 0 } }}
                 />
               }
             >
@@ -144,18 +146,28 @@ export default function SideBar() {
               component={<Link to="facilities" />}
               icon={
                 <AppsIcon
-                  sx={{ color: "white", marginRight: { xs: 2, lg: 0 } }}
+                  sx={{ color: "white", marginRight: { xs: 2, sm: 0 } }}
                 />
               }
             >
               <button>Facilities</button>
+            </MenuItem>
+            <MenuItem
+              component={<Link to="booking" />}
+              icon={
+                <BookmarkBorderIcon
+                  sx={{ color: "white", marginRight: { xs: 2, sm: 0 } }}
+                />
+              }
+            >
+              <button>Booking</button>
             </MenuItem>
 
             <MenuItem
               onClick={handleOpen}
               icon={
                 <LockOpenIcon
-                  sx={{ color: "white", marginRight: { xs: 2, lg: 0 } }}
+                  sx={{ color: "white", marginRight: { xs: 2, sm: 0 } }}
                 />
               }
             >
@@ -164,14 +176,10 @@ export default function SideBar() {
 
             <MenuItem
               onClick={logout}
-              icon={
-                <ExitToAppIcon
-                  sx={{ color: "white", marginRight: { xs: 2, lg: 0 } }}
-                />
-              }
+              icon={ loading ? <CircularProgress size={20} sx={{color:'white'}} /> : < ExitToAppIcon sx={{ color: "white", marginRight: { xs: 2, sm: 0 } }}/> }
             >
               <button disabled={loading}>
-                {loading ? <CircularProgress size={20} /> : "Logout"}
+                Logout
               </button>
             </MenuItem>
           </Menu>
