@@ -115,7 +115,7 @@ export default function FacilitiesList() {
       });
       console.log('Response data:', response.data.data.facilities);
       setFacilitiesList(response.data.data.facilities);
-      setTotalCount(response.data.data.totalCount); // Set total count from response
+      setTotalCount(response.data.totalCount); // Set total count from response
       setLoading(false);
     } catch (error) {
       console.error('API call error:', error);
@@ -157,8 +157,13 @@ export default function FacilitiesList() {
         });
         getFacilitiesList();
         handleCloseDeleteModal();
+        setSelectedRow(null);
       } catch (error) {
-        console.error(error);
+        if (axios.isAxiosError(error)) {
+          console.error('Delete API error:', error.response?.data || error.message);
+        } else {
+          console.error('Unexpected error:', error);
+        }
       }
     }
   };
@@ -189,13 +194,13 @@ export default function FacilitiesList() {
   const handleAction = (action: string) => {
     if (action === 'Edit') {
       setEditingFacility(selectedRow);
+      reset({ name: selectedRow?.name || '' }); 
       setOpen(true);
     } else if (action === 'Delete') {
       handleOpenDeleteModal();
     }
     handleCloseMenu();
   };
-
   const formatCellValue = (column: Column, facility: Facility) => {
     let value: any = facility[column.id as keyof Facility];
     if (column.id === 'createdBy') {

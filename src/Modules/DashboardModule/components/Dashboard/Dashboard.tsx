@@ -152,6 +152,8 @@ export default function Dashboard() {
         <Grid item xs={8} md={6}>
           <Item sx={{ backgroundColor: "#e53935", padding: 10 }}>
             {/* TODO:implement Chart of Bookings */}
+
+            
             Chart of Bookings
           </Item>
         </Grid>
