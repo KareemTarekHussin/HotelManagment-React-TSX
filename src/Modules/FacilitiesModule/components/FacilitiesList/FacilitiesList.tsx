@@ -310,6 +310,7 @@ export default function FacilitiesList() {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          sx={{backgroundColor:'#E2E5EB',display:'flex', justifyContent:'center'}}
         />
         </>
       )}
