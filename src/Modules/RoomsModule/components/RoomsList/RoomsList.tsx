@@ -59,6 +59,7 @@ export default function RoomsList() {
     setLoading(true);
     try {
       const { data } = await userRequest.get(`/admin/rooms?page=1&size=10`);
+      console.log(data.data.rooms);
       setRoomsList(data.data.rooms);
       setLoading(false);
     } catch (error) {
@@ -67,7 +68,7 @@ export default function RoomsList() {
       setLoading(false);
     }
   };
-console.log(roomsList);
+  console.log(roomsList);
   const handleDelete = async () => {
     setSpinner(true);
     try {
@@ -232,7 +233,12 @@ console.log(roomsList);
                           <img
                             src={room.images[0]}
                             alt=""
-                            style={{ width: 50, height: 50, borderRadius: 5 }}
+                            style={{
+                              width: 50,
+                              height: 50,
+                              borderRadius: 5,
+                              objectFit: "cover",
+                            }}
                           />
                         </TableCell>
                         <TableCell align="right">{room.price}</TableCell>

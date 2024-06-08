@@ -11,6 +11,7 @@ import {
   Checkbox,
   ListItemText,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -19,12 +20,15 @@ import { userRequest } from "../../../../utils/request";
 import { useEffect, useRef, useState } from "react";
 import { getErrorMessage } from "../../../../utils/error";
 import { useToast } from "../../../Context/ToastContext";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function RoomsData() {
   const [facilitiesList, setFacilitiesList] = useState([]);
-  const [facilitesEdit, setFacilitesEdit] = useState([]);
-  const [images, setImages] = useState<string[] | FileList | null | []>([]);
+  const [loading, setLoading] = useState(false);
+  const [images, setImages] = useState<{ file: File; previewUrl: string }[]>(
+    []
+  );
+  const [imgUpload, setImgUpload] = useState<FileList | null | []>([]);
 
   const location = useLocation();
   const roomId = location.pathname.split("/")[3];
@@ -37,11 +41,22 @@ export default function RoomsData() {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<Inputs>();
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setImages(e?.target.files);
+    const files = e.target.files;
+    setImgUpload(files);
+    if (files) {
+      const newImages: { file: File; previewUrl: string }[] = Array.from(
+        files
+      ).map((file) => ({
+        file,
+        previewUrl: URL.createObjectURL(file),
+      }));
+      setImages(newImages);
+    }
   };
 
   const getFacilitiesList = async () => {
@@ -55,6 +70,7 @@ export default function RoomsData() {
   };
 
   const appendToFormData = (data: Inputs) => {
+    console.log(data);
     const formData = new FormData();
     formData.append("roomNumber", data?.roomNumber);
     formData.append("price", data?.price);
@@ -65,17 +81,18 @@ export default function RoomsData() {
         formData.append("facilities[]", facility)
       );
     }
-    if (!images || images.length === 0) {
+    if (!imgUpload || imgUpload.length === 0) {
       return false;
     }
-    for (let i = 0; i < images.length; i++) {
-      formData.append("imgs", images[i]);
+    for (let i = 0; i < imgUpload.length; i++) {
+      formData.append("imgs", imgUpload[i]);
     }
 
     return formData;
   };
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    setLoading(true);
     const addFormData = appendToFormData(data);
     try {
       const res = await userRequest({
@@ -84,12 +101,14 @@ export default function RoomsData() {
         data: addFormData,
       });
       showToast("success", res.data.message);
-
+      setLoading(false);
       timeoutRef.current = setTimeout(() => {
         navigate("/dashboard/rooms");
       }, 1500);
     } catch (error) {
-      console.log(error);
+      setLoading(false);
+      const err = getErrorMessage(error);
+      showToast("error", err);
     }
   };
 
@@ -97,15 +116,21 @@ export default function RoomsData() {
     getFacilitiesList();
 
     if (state === "edit" && roomData) {
-      setFacilitesEdit(roomData.facilities);
+      setValue("roomNumber", roomData.roomNumber);
+      setValue("price", roomData.price);
+      setValue("capacity", roomData.capacity);
+      setValue("discount", roomData.discount);
+      setValue(
+        "facilities",
+        roomData.facilities.map((item: { _id: string }) => item?._id)
+      );
     }
 
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, []);
+  }, [roomData, setValue]);
 
-  console.log(facilitesEdit);
   return (
     <Container>
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -117,7 +142,6 @@ export default function RoomsData() {
               {...register("roomNumber", {
                 required: "Room Number is required",
               })}
-              defaultValue={roomData?.roomNumber}
               fullWidth
             />
             {errors.roomNumber && (
@@ -134,7 +158,6 @@ export default function RoomsData() {
               {...register("price", {
                 required: "Price is required",
               })}
-              defaultValue={roomData?.price}
               fullWidth
             />
             {errors.price && (
@@ -150,7 +173,6 @@ export default function RoomsData() {
               {...register("capacity", {
                 required: "capacity is required",
               })}
-              defaultValue={roomData?.capacity}
               fullWidth
             />
             {errors.capacity && (
@@ -166,7 +188,6 @@ export default function RoomsData() {
               {...register("discount", {
                 required: "discount is required",
               })}
-              defaultValue={roomData?.discount}
               fullWidth
             />
             {errors.discount && (
@@ -187,15 +208,16 @@ export default function RoomsData() {
                 sx={{ width: "100%" }}
                 renderValue={(selected) => (
                   <div>
-                    {selected.map((id: string) => (
-                      <span style={{ margin: "8px" }} key={id}>
-                        {
-                          facilitiesList.find(
-                            (facility: FacilitiesProps) => facility._id === id
-                          )?.name
-                        }
-                      </span>
-                    ))}
+                    {selected.map((id: string) => {
+                      const facility = facilitiesList.find(
+                        (facility: FacilitiesProps) => facility._id === id
+                      );
+                      return (
+                        <span style={{ margin: "8px" }} key={id}>
+                          {facility ? facility?.name : "Facility not found"}
+                        </span>
+                      );
+                    })}
                   </div>
                 )}
               >
@@ -239,22 +261,20 @@ export default function RoomsData() {
           </Grid>
         </Grid>
         <Grid container mt={2} spacing={1}>
-          {Array.from(images).map((img: Blob | MediaSource) => (
-            <Grid item  key={img} md={2}>
-              <img
-                src={img && URL.createObjectURL(img)}
-                alt=""
-                style={{ width: "100%" }}
-              />
+          {images.map((img) => (
+            <Grid item key={img.previewUrl} md={2}>
+              <img src={img.previewUrl} alt="" style={{ width: "100%" }} />
             </Grid>
           ))}
         </Grid>
         <Box sx={{ mt: 2, textAlign: "right" }}>
-          <Button variant="outlined" sx={{ mr: 4 }}>
-            Cancle
-          </Button>
+          <Link to={"/dashboard/rooms"}>
+            <Button variant="outlined" sx={{ mr: 4 }}>
+              Cancle
+            </Button>
+          </Link>
           <Button variant="contained" type="submit">
-            Save
+            {loading ? <CircularProgress color="primary" size={24} /> : "Save"}
           </Button>
         </Box>
       </Box>

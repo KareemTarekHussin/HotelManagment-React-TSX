@@ -100,3 +100,6 @@ export interface Inputs {
   facilities: string[];
 }
 
+export interface ImageFile extends File {
+  name: string;
+}
