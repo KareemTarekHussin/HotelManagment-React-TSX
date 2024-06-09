@@ -131,11 +131,15 @@ export default function Login() {
 
                         <Box sx={{ width: '100%',height:60,display:'flex', flexDirection:'column' }}>
                           <TextField  
-                             
                             label="Email" 
                             variant="filled"
                             size='small'
                             fullWidth
+                            sx={{
+                              '& .MuiFilledInput-root': {
+                                backgroundColor: '#F5F6F8', // Remove the gray background
+                              }
+                            }}
                             {...register('email',{
                               required:'* Email is required',
                               pattern:{
@@ -161,6 +165,11 @@ export default function Login() {
                             variant="filled"
                             size='small'
                             fullWidth
+                            sx={{
+                              '& .MuiFilledInput-root': {
+                                backgroundColor: '#F5F6F8', // Remove the gray background
+                              }
+                            }}
                             {...register('password',{
                               required:'* Password is required',
                               pattern:{

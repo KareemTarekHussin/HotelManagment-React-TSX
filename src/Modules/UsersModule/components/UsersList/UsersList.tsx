@@ -13,6 +13,8 @@ import TableRow from '@mui/material/TableRow';
 import { Box, Button, Grid, IconButton, Input, Modal, Skeleton, TextField, Typography } from '@mui/material';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useForm } from 'react-hook-form';
+import hotelImg from '../../../../assets/Images/hotel.jpg'
+import { BorderAllRounded, RoundedCorner } from '@mui/icons-material';
 
 interface Column {
   id: 'profileImage' | 'userName' | 'email' | 'phoneNumber' | 'country' | 'createdAt' | 'updatedAt' | 'actions';
@@ -48,7 +50,8 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: {xs:350,lg:400},
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  // border: '2px solid #000',
+  borderRadius: 4, 
   boxShadow: 24,
   p: {xs:3},
 };
@@ -170,7 +173,7 @@ const addUser = () => {
   return (
     <>
 
-      <Modal
+      {/* <Modal
         open={openAdd}
         onClose={handleCloseAddModal}
         aria-labelledby="modal-modal-title"
@@ -240,16 +243,16 @@ const addUser = () => {
               value={formData.role}
               onChange={handleChange}
             />
-            {/* <input
+            <input
               type="file"
               name="profileImage"
               onChange={handleFileChange}
               style={{ marginTop: '16px',backgroundColor:'orange' }}
-            /> */}
+            />
             <Input type='file'>
             
             </Input>
-             {/* <div style={{ marginTop: '16px' }}>
+             <div style={{ marginTop: '16px' }}>
               <Input
                 type="file"
                 name="profileImage"
@@ -271,15 +274,15 @@ const addUser = () => {
                   Upload File
                 </Button>
               </label>
-            </div> */}
-            {/* {imagePreview && (
+            </div>
+            {imagePreview && (
               <img src={imagePreview} alt="Profile Preview" style={{ marginTop: '16px', maxWidth: '100%', height: 'auto' }} />
-            )} */}
+            )}
             </Grid>
           </Grid>
           <Button onClick={addUser}>Add</Button>
         </Box>
-      </Modal>
+      </Modal> */}
 
     <Modal
         open={open}
@@ -338,92 +341,92 @@ const addUser = () => {
 
     <Box sx={{backgroundColor:'orang'}}>
       
-    <Grid 
-      container
-      sx={{mt: 3, mb: 5,p:2.5 , backgroundColor:'#E2E5EB',borderRadius:2, display:'flex',justifyContent:{xs:'center',sm:'space-between'},alignItems:'center',gap:2, boxShadow: '0px 2px 1px -3px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)' }}
-      >
-        <Grid item>
-          <Typography variant="h5" color="initial" sx={{fontWeight:500}}>
-            Users Table Details
-          </Typography>
-          <Typography color="initial" sx={{textAlign:{xs:'center',sm:'left'}}}>You can check all details</Typography>
+      <Grid 
+        container
+        sx={{mt: 3, mb: 5,p:2.5 , backgroundColor:'#E2E5EB',borderRadius:2, display:'flex',justifyContent:{xs:'center',sm:'space-between'},alignItems:'center',gap:2, boxShadow: '0px 2px 1px -3px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)'}}
+        >
+          <Grid item>
+            <Typography variant="h5" color="initial" sx={{fontWeight:500}}>
+              Users Table Details
+            </Typography>
+            <Typography color="initial" sx={{textAlign:{xs:'center',sm:'left'}}}>You can check all details</Typography>
+          </Grid>
+          <Grid item>
+            {/* <Button variant="contained" onClick={handleOpenAddModal}>Add New User</Button> */}
+          </Grid>
         </Grid>
-        <Grid item>
-          {/* <Button variant="contained" onClick={handleOpenAddModal}>Add New User</Button> */}
-        </Grid>
-      </Grid>
 
-
-    <Paper sx={{ width: '100%', overflow: 'hidden',borderRadius:2 }}>
-      <TableContainer sx={{ maxHeight: 440, backgroundColor:'greenyello' }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                  sx={{backgroundColor:'#E2E5EB'}}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {loading ? (
-              [...Array(rowsPerPage)].map((_, index) => (
-                <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                  <TableCell colSpan={columns.length}>
-                    <Skeleton variant="rectangular" height={30} sx={{borderRadius:1}} />
+      <Paper sx={{ width: '100%', overflow: 'hidden',borderRadius:2 }}>
+        <TableContainer sx={{ maxHeight: 440, backgroundColor:'greenyello' }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                    sx={{backgroundColor:'#E2E5EB'}}
+                  >
+                    {column.label}
                   </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              usersList
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => (
+                ))}
+              </TableRow>
+            </TableHead>
+
+            <TableBody>
+              {loading ? (
+                [...Array(rowsPerPage)].map((_, index) => (
                   <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align} sx={{ backgroundColor: 'orang', paddingBlock: 1 }}>
-                        {column.id === 'profileImage' ? (
-                          <img src={value as string} alt={row.userName} style={{ width: '50px', height: '50px', borderRadius: '50px' }} />
-                        ) : column.id === 'actions' ? (
-                          <IconButton  
-                            onClick={() => handleOpen(row)}
-                            sx={{
-                              minWidth: 'auto',
-                            }}
-                            >
-                            <VisibilityIcon/>
-                          </IconButton>
-                        ): (
-                          value
-                        )}
-                      </TableCell>
-                      );
-                    })}
+                    <TableCell colSpan={columns.length}>
+                      <Skeleton variant="rectangular" height={30} sx={{borderRadius:1}} />
+                    </TableCell>
                   </TableRow>
                 ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5,10, 25, 100]}
-        component="div"
-        count={usersList.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        sx={{backgroundColor:'#E2E5EB',display:'flex', justifyContent:'center'}}
-      />
-    </Paper>
+              ) : (
+                usersList
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                      {columns.map((column) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align} sx={{ backgroundColor: 'orang', paddingBlock: 1 }}>
+                          {column.id === 'profileImage' ? (
+                            <img src={value as string} alt={row.userName} style={{ width: '50px', height: '50px', borderRadius: '50px' }} />
+                          ) : column.id === 'actions' ? (
+                            <IconButton  
+                              onClick={() => handleOpen(row)}
+                              sx={{
+                                minWidth: 'auto',
+                              }}
+                              >
+                              <VisibilityIcon/>
+                            </IconButton>
+                          ): (
+                            value
+                          )}
+                        </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ))
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5,10, 25, 100]}
+          component="div"
+          count={usersList.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          sx={{backgroundColor:'#E2E5EB',display:'flex', justifyContent:'center'}}
+        />
+      </Paper>
+      
     </Box>
     </>
   );

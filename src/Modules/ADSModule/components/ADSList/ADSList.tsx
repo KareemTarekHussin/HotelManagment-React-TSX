@@ -297,143 +297,152 @@ export default function ADSList() {
   }, []);
   return (
     <>
-      <Grid container spacing={1} sx={{ my: 3 }}>
-        <Grid item md={10} sm={8} xs={12}>
-          <Typography variant="h6">ADS Table Details</Typography>
-          <Typography>You can check all details</Typography>
-        </Grid>
-        <Grid item md={2} sm={4} xs={12}>
+      <Grid
+       container
+       sx={{mt: 3, mb: 5,p:2.5 , backgroundColor:'#E2E5EB',borderRadius:2, display:'flex',justifyContent:{xs:'center',sm:'space-between'},alignItems:'center',gap:2, boxShadow: '0px 2px 1px -3px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)'}}
+       >
+
+          <Grid item>
+            <Typography variant="h5" color="initial" sx={{fontWeight:500}}>
+              Ads. Table Details
+            </Typography>
+            <Typography color="initial" sx={{textAlign:{xs:'center',sm:'left'}}}>You can check all details</Typography>
+          </Grid>
+
+        <Grid item >
           <Button onClick={() => handleOpen()} variant="contained">
             Add New Ads
           </Button>
         </Grid>
+
+
       </Grid>
-      <Box
+      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+
+      {loading ? (
+        <Box sx={{ width: '100%' }}>
+          <Skeleton variant="rectangular" width="100%" height={100} />
+          <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+          <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+          <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+        </Box>
+      ) : (
+        <>
+        <TableContainer>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                    sx={{ backgroundColor: "#E2E5EB" }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {adsList
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((ads) => {
+                  return (
+                    <TableRow role="checkbox" tabIndex={-1} key={ads._id}>
+                      {columns.map((column) => {
+                        const value = formatCellValue(column, ads);
+                        if (column.id === "action") {
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              <IconButton
+                                onClick={(event) => handleClick(event, ads)}
+                              >
+                                <MoreHorizIcon />
+                              </IconButton>
+                              <Menu
+                                anchorEl={anchorEl}
+                                open={
+                                  Boolean(anchorEl) &&
+                                  selectedRow?._id === ads._id
+                                }
+                                onClose={handleMenuClose}
+                              >
+                                <MenuItem>
+                                  <VisibilityIcon
+                                    sx={{ mx: 1, color: "#00e5ff" }}
+                                  />
+                                  View
+                                </MenuItem>
+                                <MenuItem
+                                  onClick={() => [
+                                    handleEdit(
+                                      ads._id,
+                                      ads.room.discount,
+                                      ads.isActive
+                                    ),
+                                    handleAction("Edit"),
+                                  ]}
+                                >
+                                  <EditIcon
+                                    sx={{ mx: 1, color: "#ffd600" }}
+                                  />
+                                  Edit
+                                </MenuItem>
+                                <MenuItem
+                                  onClick={() => [
+                                    handleDeleteOpen(ads._id),
+                                    handleAction("Delete"),
+                                  ]}
+                                >
+                                  <DeleteIcon
+                                    sx={{ mx: 1, color: "#d50000" }}
+                                  />
+                                  Delete
+                                </MenuItem>
+                              </Menu>
+                            </TableCell>
+                          );
+                        }
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {value}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 15]}
+          component="div"
+          count={adsList.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+        </>
+)}
+        
+      </Paper>
+      
+      {/* <Box
         padding={2}
-        marginTop={10}
         sx={{
-          display: "flex",
+          display: "fle",
           flexDirection: "column",
           alignItems: "center",
           overflow: "auto",
         }}
-      >
+      > */}
 
 
         
-        <Paper sx={{ width: "100%", overflow: "hidden" }}>
-
-        {loading ? (
-          <Box sx={{ width: '100%' }}>
-            <Skeleton variant="rectangular" width="100%" height={100} />
-            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-          </Box>
-        ) : (
-          <>
-          <TableContainer>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      align={column.align}
-                      style={{ minWidth: column.minWidth }}
-                      sx={{ backgroundColor: "#E2E5EB" }}
-                    >
-                      {column.label}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {adsList
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((ads) => {
-                    return (
-                      <TableRow role="checkbox" tabIndex={-1} key={ads._id}>
-                        {columns.map((column) => {
-                          const value = formatCellValue(column, ads);
-                          if (column.id === "action") {
-                            return (
-                              <TableCell key={column.id} align={column.align}>
-                                <IconButton
-                                  onClick={(event) => handleClick(event, ads)}
-                                >
-                                  <MoreHorizIcon />
-                                </IconButton>
-                                <Menu
-                                  anchorEl={anchorEl}
-                                  open={
-                                    Boolean(anchorEl) &&
-                                    selectedRow?._id === ads._id
-                                  }
-                                  onClose={handleMenuClose}
-                                >
-                                  <MenuItem>
-                                    <VisibilityIcon
-                                      sx={{ mx: 1, color: "#00e5ff" }}
-                                    />
-                                    View
-                                  </MenuItem>
-                                  <MenuItem
-                                    onClick={() => [
-                                      handleEdit(
-                                        ads._id,
-                                        ads.room.discount,
-                                        ads.isActive
-                                      ),
-                                      handleAction("Edit"),
-                                    ]}
-                                  >
-                                    <EditIcon
-                                      sx={{ mx: 1, color: "#ffd600" }}
-                                    />
-                                    Edit
-                                  </MenuItem>
-                                  <MenuItem
-                                    onClick={() => [
-                                      handleDeleteOpen(ads._id),
-                                      handleAction("Delete"),
-                                    ]}
-                                  >
-                                    <DeleteIcon
-                                      sx={{ mx: 1, color: "#d50000" }}
-                                    />
-                                    Delete
-                                  </MenuItem>
-                                </Menu>
-                              </TableCell>
-                            );
-                          }
-                          return (
-                            <TableCell key={column.id} align={column.align}>
-                              {value}
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 15]}
-            component="div"
-            count={adsList.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-          </>
-)}
-          
-        </Paper>
-      </Box>
+      {/* </Box> */}
       
       <Modal
         open={open}

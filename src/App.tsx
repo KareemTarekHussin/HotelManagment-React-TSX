@@ -18,6 +18,7 @@ import AuthContextProvider from "./Modules/Context/AuthContext";
 import ProtectedRoute from './Modules/SharedModule/components/ProtectedRoute/ProtectedRoute';
 
 
+
 const theme = createTheme({
   typography: {
     fontFamily: "Poppins, sans-serif", // Replace 'YourCustomFont' with your desired font
@@ -68,7 +69,7 @@ function App() {
       <AuthContextProvider>
         <div className="App">
           <ToastContainer />
-      <RouterProvider router={routes} />
+          <RouterProvider router={routes} />
         </div>
       </AuthContextProvider>
     </ThemeProvider>

@@ -213,22 +213,27 @@ export default function FacilitiesList() {
   };
 
   return (
-    <div>
+    <>
  
-      <Grid container spacing={1} sx={{mt: 2, mb: 5 }}>
-        <Grid item xs={8} md={10}>
-          <Typography variant="h5" color="initial">
-            Facilities Table Details
-          </Typography>
-          <Typography color="initial">You can check all details</Typography>
-        </Grid>
-        <Grid item xs={6} md={2}>
-          <Button variant="contained" onClick={handleOpen}>Add New Facility</Button>
-        </Grid>
-      </Grid>
       
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', overflow: 'auto' }}>
-        <Paper sx={{ width: '100%',  overflow: 'hidden' }}>
+      <Box>
+
+        <Grid
+        container
+        sx={{mt: 3, mb: 5,p:2.5 , backgroundColor:'#E2E5EB',borderRadius:2, display:'flex',justifyContent:{xs:'center',sm:'space-between'},alignItems:'center',gap:2, boxShadow: '0px 2px 1px -3px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)'}}
+        >
+          <Grid item>
+          <Typography variant="h5" color="initial" sx={{fontWeight:500}}>
+                Facilities Table Details
+              </Typography>
+              <Typography color="initial" sx={{textAlign:{xs:'center',sm:'left'}}}>You can check all details</Typography>
+          </Grid>
+          <Grid item>
+            <Button variant="contained" onClick={handleOpen}>Add New Facility</Button>
+          </Grid>
+        </Grid>
+
+        <Paper sx={{ width: '100%',  overflow: 'hidde' }}>
         {loading ? (
           <Box sx={{ width: '100%' }}>
             <Skeleton variant="rectangular" width="100%" height={100} />
@@ -315,6 +320,7 @@ export default function FacilitiesList() {
       )}
           
         </Paper>
+
       </Box>
 
       <Modal open={open} onClose={handleClose}>
@@ -359,7 +365,7 @@ export default function FacilitiesList() {
           </Box>
         </Box>
       </Modal>
-    </div>
+    </>
   );
 }
 

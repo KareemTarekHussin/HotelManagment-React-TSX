@@ -7,11 +7,14 @@ import App from "./App.tsx";
 // import '@fontsource/roboto/700.css';
 import ToastContextProvider from "./Modules/Context/ToastContext.tsx";
 import "./index.css";
+import { SidebarProvider } from './Modules/Context/SidebarContext';
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ToastContextProvider>
-      <App />
+      <SidebarProvider>
+        <App />
+      </SidebarProvider>
     </ToastContextProvider>
   </React.StrictMode>
 );
