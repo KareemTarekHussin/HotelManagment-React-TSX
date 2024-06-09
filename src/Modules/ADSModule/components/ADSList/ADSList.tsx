@@ -238,7 +238,7 @@ export default function ADSList() {
       value = ads.createdBy.userName;
     }
     if (column.id === "isActive") {
-      value = ads?.isActive;
+      value = ads?.isActive.toString();
     }
 
     if (column.id === "roomNumber") {
@@ -560,6 +560,14 @@ export default function ADSList() {
             Delete This Ads Room ?
           </Typography>
           <Box display="flex" justifyContent="center" gap={2} padding={2}>
+          <Button
+              onClick={() => {
+                handleDeleteClose();
+              }}
+              variant="contained"
+            >
+              Cancel
+            </Button>
             <Button
               onClick={() => {
                 onDeleteSubmit();
@@ -569,14 +577,7 @@ export default function ADSList() {
             >
               Delete
             </Button>
-            <Button
-              onClick={() => {
-                handleDeleteClose();
-              }}
-              variant="contained"
-            >
-              Cancel
-            </Button>
+        
           </Box>
         </Box>
       </Modal>
