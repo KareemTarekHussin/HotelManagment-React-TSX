@@ -10,22 +10,21 @@ import Dashboard from "./Modules/DashboardModule/components/Dashboard/Dashboard"
 import RoomsList from "./Modules/RoomsModule/components/RoomsList/RoomsList";
 import RoomsData from "./Modules/RoomsModule/components/RoomsData/RoomsData";
 import FacilitiesList from "./Modules/FacilitiesModule/components/FacilitiesList/FacilitiesList";
-import FacilitiesData from "./Modules/FacilitiesModule/components/FacilitiesData/FacilitiesData";
 import UsersList from "./Modules/UsersModule/components/UsersList/UsersList";
 import ADSList from "./Modules/ADSModule/components/ADSList/ADSList";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthContextProvider from "./Modules/Context/AuthContext";
 import ProtectedRoute from './Modules/SharedModule/components/ProtectedRoute/ProtectedRoute';
-
-
-const theme = createTheme({
-  typography: {
-    fontFamily: "Poppins, sans-serif", // Replace 'YourCustomFont' with your desired font
-  },
-});
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import BookingList from "./Modules/BookingModule/BookingList";
+
+const theme = createTheme({
+  typography: {
+    fontFamily: "Poppins, sans-serif", 
+  },
+});
+
 
 function App() {
 
@@ -56,7 +55,6 @@ function App() {
         { path: "roomsdata", element: <RoomsData /> },
         { path: "roomsedit/:id", element: <RoomsData /> },
         { path: "facilities", element: <FacilitiesList /> },
-        { path: "facilitiesdata", element: <FacilitiesData /> },
         { path: "adslist", element: <ADSList /> },
         { path: "users", element: <UsersList /> },
         { path: "booking", element: <BookingList /> },

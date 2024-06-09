@@ -179,7 +179,7 @@ export default function RoomsList() {
         </Box>
       </Modal>
 
-      <Container sx={{ maxWidth: 'lg' }}>
+    
         <Grid container spacing={1} sx={{ mt: 2, mb: 5 }}>
           <Grid item xs={8} md={10}>
             <Typography variant="h5" color="initial">
@@ -297,7 +297,7 @@ export default function RoomsList() {
             )}
           </Paper>
         </Box>
-      </Container>
+     
     </>
   );
 }
