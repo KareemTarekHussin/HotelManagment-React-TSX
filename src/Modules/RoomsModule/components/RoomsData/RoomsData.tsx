@@ -25,11 +25,7 @@ export default function RoomsData() {
 
   const [facilitiesList, setFacilitiesList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [images, setImages] = useState<{ file: File; previewUrl: string }[]>(
-    []
-  );
-  const [imgUpload, setImgUpload] = useState<FileList | null | []>([]);
-
+  const [spinner, setSpinner] = useState(false);
   const location = useLocation();
   const roomId = location.pathname.split("/")[3];
   const roomData = location.state?.roomData;
@@ -45,32 +41,20 @@ export default function RoomsData() {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    setImgUpload(files);
-    if (files) {
-      const newImages: { file: File; previewUrl: string }[] = Array.from(
-        files
-      ).map((file) => ({
-        file,
-        previewUrl: URL.createObjectURL(file),
-      }));
-      setImages(newImages);
-    }
-  };
-
   const getFacilitiesList = async () => {
+    setSpinner(true);
     try {
       const response = await userRequest.get(`/admin/room-facilities`);
       setFacilitiesList(response.data.data.facilities);
+      setSpinner(false);
     } catch (error) {
+      setSpinner(false);
       const err = getErrorMessage(error);
       showToast("error", err);
     }
   };
 
   const appendToFormData = (data: Inputs) => {
-    console.log(data);
     const formData = new FormData();
     formData.append("roomNumber", data?.roomNumber);
     formData.append("price", data?.price);
@@ -81,19 +65,20 @@ export default function RoomsData() {
         formData.append("facilities[]", facility)
       );
     }
-    if (!imgUpload || imgUpload.length === 0) {
-      return false;
-    }
-    for (let i = 0; i < imgUpload.length; i++) {
-      formData.append("imgs", imgUpload[i]);
+
+    for (let i = 0; i < data.imgs.length; i++) {
+      formData.append("imgs", data.imgs[i]);
     }
 
     return formData;
   };
 
+  // console.log(Array.from(watch("imgs")));
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setLoading(true);
     const addFormData = appendToFormData(data);
+
     try {
       const res = await userRequest({
         method: state === "edit" ? "put" : "post",
@@ -102,9 +87,8 @@ export default function RoomsData() {
       });
       showToast("success", res.data.message);
       setLoading(false);
-      timeoutRef.current = setTimeout(() => {
-        navigate("/dashboard/rooms");
-      }, 1500);
+
+      navigate("/dashboard/rooms");
     } catch (error) {
       setLoading(false);
       const err = getErrorMessage(error);
@@ -124,8 +108,12 @@ export default function RoomsData() {
         "facilities",
         roomData.facilities.map((item: { _id: string }) => item?._id)
       );
+      // console.log(roomData.images);
+      for (let i = 0; i < roomData.images.length; i++) {
+        setValue("imgs", [...roomData.images[i]]);
+      }
     }
-
+    // getUrl()
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
@@ -231,36 +219,36 @@ export default function RoomsData() {
                     <div>
                       {selected.map((id) => (
                         <span style={{ margin: "8px" }} key={id}>
-                          {facilitiesList.find((facility) => facility._id === id)?.name}
+                          {spinner ? "Loading..." : facility && facility?.name}
                         </span>
-                      ))}
-                    </div>
-                  )}
-                >
-                  {facilitiesList.map((item) => (
-                    <MenuItem key={item._id} value={item._id}>
-                      <Checkbox checked={watch("facilities")?.includes(item._id)} />
-                      <ListItemText primary={item.name} />
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              {errors.facilities && (
-                <Alert severity="error" sx={{ mt: 1 }}>
-                  {errors.facilities.message}
-                </Alert>
-              )}
-            </Grid>
-          </Grid>
-          
+                      );
+                    })}
+                  </div>
+                )}
+              >
+                {facilitiesList.map((item: FacilitiesProps) => (
+                  <MenuItem key={item._id} value={item?._id}>
+                    <Checkbox
+                      checked={watch("facilities")?.includes(item._id)}
+                    />
 
-          <Grid item xs={12} sx={{width:'100%'}}>
+                    <ListItemText primary={item?.name} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            {errors.facilities && (
+              <Alert severity="error" sx={{ mt: 1 }}>
+                {errors.facilities.message}
+              </Alert>
+            )}
+          </Grid>
+          <Grid item md={3}>
             <label htmlFor="imgs">
               <Button
                 size="large"
                 component="span"
-                role={undefined}
-                variant="outlined"
+                variant="contained"
                 tabIndex={-1}
                 startIcon={<CloudUploadIcon />}
                 sx={{width:'100%',paddingBlock:{lg:1.5}}}
@@ -274,8 +262,15 @@ export default function RoomsData() {
               id="imgs"
               style={{ display: "none" }}
               multiple
-              onChange={handleImageUpload}
+              {...register("imgs", {
+                required: "imgs is required",
+              })}
             />
+            {errors.imgs && (
+              <Alert severity="error" sx={{ mt: 1 }}>
+                {errors.imgs.message}
+              </Alert>
+            )}
           </Grid>
 
 
@@ -289,21 +284,23 @@ export default function RoomsData() {
         </Box>
           
         </Grid>
-        <Grid container mt={2} spacing={0}>
-          {Array.from(images).map((img: Blob | MediaSource, index: number) => (
-            <Grid item key={index} md={2}>
-              <img
-                src={img && URL.createObjectURL(img as Blob)}
-                alt=""
-                style={{ width: "100%" }}
-              />
+        <Grid container mt={2} spacing={1}>
+          {watch("imgs") && Array.from(watch("imgs")).map((img ,index) => (
+            <Grid item md={2} key={index}>
+              <img src={img?URL.createObjectURL(img): ""} style={{width:"100%"}} alt="" />
             </Grid>
           ))}
         </Grid>
-
-
-
-
+        <Box sx={{ mt: 2, textAlign: "right" }}>
+          <Link to={"/dashboard/rooms"}>
+            <Button variant="outlined" sx={{ mr: 4 }}>
+              Cancle
+            </Button>
+          </Link>
+          <Button disabled={loading} variant="contained" type="submit">
+            {loading ? <CircularProgress color="primary" size={24} /> : "Save"}
+          </Button>
+        </Box>
       </Box>
     </Container>
   );

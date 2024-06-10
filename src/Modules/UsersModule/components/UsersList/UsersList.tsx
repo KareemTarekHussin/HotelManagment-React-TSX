@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import { useEffect, useState } from "react";
 import { userRequest } from "../../../../utils/request";
 import Paper from '@mui/material/Paper';
@@ -17,20 +17,28 @@ import hotelImg from '../../../../assets/Images/hotel.jpg'
 import { BorderAllRounded, RoundedCorner } from '@mui/icons-material';
 
 interface Column {
-  id: 'profileImage' | 'userName' | 'email' | 'phoneNumber' | 'country' | 'createdAt' | 'updatedAt' | 'actions';
+  id:
+    | "profileImage"
+    | "userName"
+    | "email"
+    | "phoneNumber"
+    | "country"
+    | "createdAt"
+    | "updatedAt"
+    | "actions";
   label: string;
   minWidth?: number;
-  align?: 'right';
+  align?: "right";
 }
 const columns: readonly Column[] = [
-  { id: 'profileImage', label: 'Profile Image', minWidth: 140 },
-  { id: 'userName', label: 'User Name', minWidth: 140 },
-  { id: 'email', label: 'Email', minWidth: 170 },
-  { id: 'phoneNumber', label: 'Phone Number', minWidth: 170 },
-  { id: 'country', label: 'Country', minWidth: 100 },
-  { id: 'createdAt', label: 'Creation Date', minWidth: 170 },
-  { id: 'updatedAt', label: 'Last Update', minWidth: 170 },
-  { id: 'actions', label: 'Actions', minWidth: 170 },
+  { id: "profileImage", label: "Profile Image", minWidth: 140 },
+  { id: "userName", label: "User Name", minWidth: 140 },
+  { id: "email", label: "Email", minWidth: 170 },
+  { id: "phoneNumber", label: "Phone Number", minWidth: 170 },
+  { id: "country", label: "Country", minWidth: 100 },
+  { id: "createdAt", label: "Creation Date", minWidth: 170 },
+  { id: "updatedAt", label: "Last Update", minWidth: 170 },
+  { id: "actions", label: "Actions", minWidth: 170 },
 ];
 interface Data {
   userId: any;
@@ -53,22 +61,21 @@ const style = {
   // border: '2px solid #000',
   borderRadius: 4, 
   boxShadow: 24,
-  p: {xs:3},
+  p: { xs: 3 },
 };
 const styleForAdd = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: {xs:350,sm:700,lg:1000},
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: { xs: 350, sm: 700, lg: 1000 },
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
-  p: {xs:3},
+  p: { xs: 3 },
 };
 // *<=== === === === === === ===>> USERS LIST <<=== === === === === === === ===>
 export default function UsersList() {
-  
   const [usersList, setUsersList] = useState<Data[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
@@ -78,12 +85,17 @@ export default function UsersList() {
   const [openAdd, setOpenAdd] = React.useState(false);
   const handleOpenAddModal = () => setOpenAdd(true);
   const handleCloseAddModal = () => setOpenAdd(false);
-  let {register, handleSubmit, watch, formState:{errors}} = useForm();
-  
+  let {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
   const getUsersList = async () => {
     setLoading(true);
     try {
-      const response = await userRequest.get('admin/users?page=1&size=10');
+      const response = await userRequest.get("admin/users?page=1&size=10");
       const usersList = response.data.data.users.map((user: any) => ({
         profileImage: user.profileImage,
         userName: user.userName,
@@ -97,15 +109,15 @@ export default function UsersList() {
       setUsersList(usersList);
     } catch (error: any) {
       console.error(error);
-    } finally{
+    } finally {
       setLoading(false);
     }
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };
@@ -118,57 +130,57 @@ export default function UsersList() {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
 
-  const handleOpen = (user: Data) =>{
+  const handleOpen = (user: Data) => {
     setSelectedUser(user);
-    setOpen(true)
-   };
+    setOpen(true);
+  };
   const handleClose = () => {
-   setOpen(false)
-   setSelectedUser(null);
+    setOpen(false);
+    setSelectedUser(null);
   };
 
-// &=== === ===>> Adding New User <<=== === === === 
-const [imagePreview, setImagePreview] = useState('');
-const [formData, setFormData] = useState({
-  username: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-  phoneNumber: '',
-  country: '',
-  role: '',
-  profileImage: null,
-});
+  // &=== === ===>> Adding New User <<=== === === ===
+  const [imagePreview, setImagePreview] = useState("");
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    phoneNumber: "",
+    country: "",
+    role: "",
+    profileImage: null,
+  });
 
-const handleChange = (e:any) => {
-  const { name, value } = e.target;
-  setFormData((prevData) => ({ ...prevData, [name]: value }));
-};
-
-const handleFileChange = (e:any) => {
-  const file = e.target.files[0];
-  setFormData((prevData) => ({ ...prevData, profileImage: file }));
-
-  const reader = new FileReader();
-  reader.onloadend = () => {
-    if (typeof reader.result === 'string') {
-      setImagePreview(reader.result);
-    }
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-  reader.readAsDataURL(file);
-};
 
-const addUser = () => {
-  console.log(formData);
-};
-// &=== === === === === === === === === === === ===
+  const handleFileChange = (e: any) => {
+    const file = e.target.files[0];
+    setFormData((prevData) => ({ ...prevData, profileImage: file }));
 
-  
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (typeof reader.result === "string") {
+        setImagePreview(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const addUser = () => {
+    console.log(formData);
+  };
+  // &=== === === === === === === === === === === ===
 
   return (
     <>
@@ -183,40 +195,58 @@ const addUser = () => {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Add User Data
           </Typography>
-          <Grid container sx={{display:'flex', flexDirection:'row',justifyContent:'center',padding:2,gap:3}}>
-            <Grid item sx={{backgroundColor:'orang',display:'flex',flexDirection:'column',gap:3}} xs={5}>
-            <TextField
-              id="username"
-              label="Username"
-              variant="outlined"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-            />
-            <TextField
-              id="email"
-              label="Email"
-              variant="outlined"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-            />
-            <TextField
-              id="password"
-              label="Password"
-              variant="outlined"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-            />
-            <TextField
-              id="confirmPassword"
-              label="Confirm Password"
-              variant="outlined"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
+          <Grid
+            container
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              padding: 2,
+              gap: 3,
+            }}
+          >
+            <Grid
+              item
+              sx={{
+                backgroundColor: "orang",
+                display: "flex",
+                flexDirection: "column",
+                gap: 3,
+              }}
+              xs={5}
+            >
+              <TextField
+                id="username"
+                label="Username"
+                variant="outlined"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+              />
+              <TextField
+                id="email"
+                label="Email"
+                variant="outlined"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+              <TextField
+                id="password"
+                label="Password"
+                variant="outlined"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+              <TextField
+                id="confirmPassword"
+                label="Confirm Password"
+                variant="outlined"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+              />
             </Grid>
             <Grid item sx={{backgroundColor:'greenyello',display:'flex',flexDirection:'column',gap:3}} xs={5}>
             <TextField
@@ -284,60 +314,73 @@ const addUser = () => {
         </Box>
       </Modal> */}
 
-    <Modal
+      <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{display:'flex',alignItems:'center', justifyContent:'space-between'}}>
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             User Details
-            <Button 
+            <Button
               onClick={handleClose}
               sx={{
-                color: 'black',
+                color: "black",
                 padding: 0,
-                minWidth: 'auto',
-                '&:hover': {
-                  color: 'red',
-                  backgroundColor:'transparent'
+                minWidth: "auto",
+                "&:hover": {
+                  color: "red",
+                  backgroundColor: "transparent",
                 },
-                '& .MuiSvgIcon-root': {
-                  fontSize: '24px',
+                "& .MuiSvgIcon-root": {
+                  fontSize: "24px",
                   padding: 0,
                   margin: 0,
                 },
-              }} 
-              >
+              }}
+            >
               <HighlightOffIcon />
             </Button>
           </Typography>
           {selectedUser && (
             <Box>
-              <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
-                <img src={selectedUser.profileImage} alt={selectedUser.userName} style={{ width: '90px', height: '90px', borderRadius: '10%' }} />
+              <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
+                <img
+                  src={selectedUser.profileImage}
+                  alt={selectedUser.userName}
+                  style={{ width: "90px", height: "90px", borderRadius: "10%" }}
+                />
               </Box>
               <Typography>
-                <span style={{ fontWeight: 'bold'}}>User Name : </span> 
+                <span style={{ fontWeight: "bold" }}>User Name : </span>
                 {selectedUser.userName}
-                </Typography>
+              </Typography>
               <Typography>
-                <span style={{ fontWeight: 'bold'}}>Email : </span> 
-                 {selectedUser.email}
-                </Typography>
+                <span style={{ fontWeight: "bold" }}>Email : </span>
+                {selectedUser.email}
+              </Typography>
               <Typography>
-                <span style={{ fontWeight: 'bold'}}>Phone : </span> 
-                 {selectedUser.phoneNumber}
-                </Typography>
+                <span style={{ fontWeight: "bold" }}>Phone : </span>
+                {selectedUser.phoneNumber}
+              </Typography>
               <Typography>
-                <span style={{ fontWeight: 'bold'}}>Country : </span> 
-                 {selectedUser.country}
-                </Typography>
+                <span style={{ fontWeight: "bold" }}>Country : </span>
+                {selectedUser.country}
+              </Typography>
             </Box>
           )}
         </Box>
-    </Modal>
+      </Modal>
 
     <Box sx={{backgroundColor:'orang'}}>
       
