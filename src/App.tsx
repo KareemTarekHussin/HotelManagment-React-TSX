@@ -15,24 +15,15 @@ import ADSList from "./Modules/ADSModule/components/ADSList/ADSList";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthContextProvider from "./Modules/Context/AuthContext";
 import ProtectedRoute from './Modules/SharedModule/components/ProtectedRoute/ProtectedRoute';
-
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import BookingList from "./Modules/BookingModule/components/BookingList";
 
 const theme = createTheme({
   typography: {
     fontFamily: "Poppins, sans-serif", // Replace 'YourCustomFont' with your desired font
   },
 });
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import BookingList from "./Modules/BookingModule/BookingList";
-
-const theme = createTheme({
-  typography: {
-    fontFamily: "Poppins, sans-serif", 
-  },
-});
-
 
 function App() {
 
