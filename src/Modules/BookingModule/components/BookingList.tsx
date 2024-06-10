@@ -7,13 +7,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import Skeleton from '@mui/material/Skeleton';
 import axios from 'axios';
 import { Grid, Typography, IconButton, Modal, Box } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 // Define the columns to match booking data
 const columns = [
-  // { id: 'createdAt', label: 'Created At', minWidth: 170 },
   { id: 'room', label: 'Room', minWidth: 120 },
   { id: 'totalPrice', label: 'Total Price', minWidth: 150 },
   { id: 'status', label: 'Status', minWidth: 140 },
@@ -44,7 +44,8 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: {xs:350,lg:400},
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  // border: '2px solid #000',
+  borderRadius: 4, 
   boxShadow: 24,
   p: {xs:3},
 };
@@ -53,6 +54,7 @@ export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [bookingsList, setBookingsList] = React.useState<Booking[]>([]);
+  const [loading, setLoading] = React.useState(true); // Loading state
   const [selectedBooking, setSelectedBooking] = React.useState<Booking | null>(null);
   const [openModal, setOpenModal] = React.useState(false);
 
@@ -86,6 +88,8 @@ export default function StickyHeadTable() {
       }
     } catch (error) {
       console.error('Error fetching booking data:', error);
+    } finally {
+      setLoading(false); // Data has been fetched
     }
   };
 
@@ -150,36 +154,46 @@ export default function StickyHeadTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {bookingsList
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((booking) => {
-                  return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={booking._id}>
-                      {columns.map((column) => {
-                        let value;
-                        if (column.id === 'user') {
-                          value = booking.user._id;
-                        } else if (column.id === 'startDate' || column.id === 'endDate' || column.id === 'createdAt') {
-                          const fieldValue = booking[column.id as keyof Booking];
-                          value = typeof fieldValue === 'string' ? formatDate(fieldValue) : fieldValue;
-                        } else {
-                          value = booking[column.id as keyof Booking];
-                        }
-                        return (
-                          <TableCell key={column.id}>
-                            {column.id === 'actions' ? (
-                              <IconButton onClick={() => handleOpenModal(booking)}>
-                                <VisibilityIcon />
-                              </IconButton>
-                            ) : (
-                              typeof value === 'string' || typeof value === 'number' ? value : ''
-                            )}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  );
-                })}
+            {loading ? (
+                Array.from(new Array(rowsPerPage)).map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell colSpan={columns.length}>
+                      <Skeleton variant="rectangular" height={30} sx={{ borderRadius: 1 }} />
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                bookingsList
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((booking) => {
+                    return (
+                      <TableRow hover role="checkbox" tabIndex={-1} key={booking._id}>
+                        {columns.map((column) => {
+                          let value;
+                          if (column.id === 'user') {
+                            value = booking.user._id;
+                          } else if (column.id === 'startDate' || column.id === 'endDate' || column.id === 'createdAt') {
+                            const fieldValue = booking[column.id as keyof Booking];
+                            value = typeof fieldValue === 'string' ? formatDate(fieldValue) : fieldValue;
+                          } else {
+                            value = booking[column.id as keyof Booking];
+                          }
+                          return (
+                            <TableCell key={column.id}>
+                              {column.id === 'actions' ? (
+                                <IconButton onClick={() => handleOpenModal(booking)}>
+                                  <VisibilityIcon />
+                                </IconButton>
+                              ) : (
+                                typeof value === 'string' || typeof value === 'number' ? value : ''
+                              )}
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
+                    );
+                  })
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -196,12 +210,21 @@ export default function StickyHeadTable() {
       </Paper>
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box sx={style}>
-          <Typography variant="h6" color="initial">Booking Details</Typography>
+          <Typography variant="h6" color="initial" sx={{marginBottom:2}}>Booking Details</Typography>
           {selectedBooking && (
             <>
-              <Typography>Start Date: {formatDate(selectedBooking.startDate)}</Typography>
-              <Typography>End Date: {formatDate(selectedBooking.endDate)}</Typography>
-              <Typography>Total Price: {selectedBooking.totalPrice}</Typography>
+              <Typography>
+                <span style={{ fontWeight: 'bold'}}>Start Date : </span> 
+                 {formatDate(selectedBooking.startDate)}</Typography>
+
+              <Typography>
+                <span style={{ fontWeight: 'bold'}}>End Date : </span> 
+                 {formatDate(selectedBooking.endDate)}</Typography>
+
+              <Typography>
+                <span style={{ fontWeight: 'bold'}}>Total Price : </span> 
+                 {selectedBooking.totalPrice}</Typography>
+
             </>
           )}
         </Box>

@@ -262,111 +262,114 @@ export default function FacilitiesList() {
   };
 
   return (
-    <div>
-      <Grid container spacing={1} sx={{ mt: 2, mb: 5 , p: 2.5, 
-          backgroundColor: '#E2E5EB', 
-          borderRadius: 2, 
-         
-          
-         
-         }}>
-        <Grid item xs={8} md={10}>
-          <Typography variant="h5" color="initial">
-            Facilities Table Details
-          </Typography>
-          <Typography color="initial">You can check all details</Typography>
-        </Grid>
-        <Grid item xs={6} md={2}>
-          <Button variant="contained" onClick={handleOpen}>Add New Facility</Button>
-        </Grid>
-      </Grid>
+    <>
+ 
+      
+      <Box>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', overflow: 'auto' }}>
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-          {loading ? (
-            <Box sx={{ width: '100%' }}>
-              <Skeleton variant="rectangular" width="100%" height={100} />
-              <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-              <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-              <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-            </Box>
-          ) : (
-            <>
-              <TableContainer sx={{ maxHeight: 440 }}>
-                <Table stickyHeader aria-label="sticky table">
-                  <TableHead>
-                    <TableRow>
-                      {columns.map((column) => (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}
-                          style={{ minWidth: column.minWidth }}
-                          sx={{ backgroundColor: '#E2E5EB' }}
-                        >
-                          {column.label}
+        <Grid
+        container
+        sx={{mt: 3, mb: 5,p:2.5 , backgroundColor:'#E2E5EB',borderRadius:2, display:'flex',justifyContent:{xs:'center',sm:'space-between'},alignItems:'center',gap:2, boxShadow: '0px 2px 1px -3px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)'}}
+        >
+          <Grid item>
+          <Typography variant="h5" color="initial" sx={{fontWeight:500}}>
+                Facilities Table Details
+              </Typography>
+              <Typography color="initial" sx={{textAlign:{xs:'center',sm:'left'}}}>You can check all details</Typography>
+          </Grid>
+          <Grid item>
+            <Button variant="contained" onClick={handleOpen}>Add New Facility</Button>
+          </Grid>
+        </Grid>
+
+        <Paper sx={{ width: '100%',  overflow: 'hidde' }}>
+        {loading ? (
+          <Box sx={{ width: '100%' }}>
+            <Skeleton variant="rectangular" width="100%" height={100} />
+            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+          </Box>
+        ) : (
+        <>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                    sx={{ backgroundColor: '#E2E5EB' }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {facilitiesList
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((facility) => (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={facility._id}>
+                    {columns.map((column) => {
+                      const value = formatCellValue(column, facility);
+                      if (column.id === 'actions') {
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            <IconButton
+                              onClick={(event) => handleClick(event, facility)}
+                            >
+                              <MoreHorizIcon />
+                            </IconButton>
+                            <Menu
+                              anchorEl={anchorEl}
+                              open={Boolean(anchorEl) && selectedRow?._id === facility._id}
+                              onClose={handleCloseMenu}
+                            >
+                              <MenuItem onClick={() => handleAction('View')}>
+                                <VisibilityIcon sx={{ mr: 1, color: '#00e5ff' }} />
+                                View
+                              </MenuItem>
+                              <MenuItem onClick={() => handleAction('Edit')}>
+                                <EditIcon sx={{ mr: 1, color: '#ffd600' }} />
+                                Edit
+                              </MenuItem>
+                              <MenuItem onClick={() => handleAction('Delete')}>
+                                <DeleteIcon sx={{ mr: 1, color: '#d50000' }} />
+                                Delete
+                              </MenuItem>
+                            </Menu>
+                          </TableCell>
+                        );
+                      }
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {value}
                         </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {facilitiesList
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((facility) => (
-                        <TableRow hover role="checkbox" tabIndex={-1} key={facility._id}>
-                          {columns.map((column) => {
-                            const value = formatCellValue(column, facility);
-                            if (column.id === 'actions') {
-                              return (
-                                <TableCell key={column.id} align={column.align}>
-                                  <IconButton onClick={(event) => handleClick(event, facility)}>
-                                    <MoreHorizIcon />
-                                  </IconButton>
-                                  <Menu
-                                    anchorEl={anchorEl}
-                                    open={Boolean(anchorEl) && selectedRow?._id === facility._id}
-                                    onClose={handleCloseMenu}
-                                  >
-                                    <MenuItem onClick={() => handleAction('View')}>
-                                      <VisibilityIcon sx={{ mr: 1, color: '#00e5ff' }} />
-                                      View
-                                    </MenuItem>
-                                    <MenuItem onClick={() => handleAction('Edit')}>
-                                      <EditIcon sx={{ mr: 1, color: '#ffd600' }} />
-                                      Edit
-                                    </MenuItem>
-                                    <MenuItem onClick={() => handleAction('Delete')}>
-                                      <DeleteIcon sx={{ mr: 1, color: '#d50000' }} />
-                                      Delete
-                                    </MenuItem>
-                                  </Menu>
-                                </TableCell>
-                              );
-                            }
-                            return (
-                              <TableCell key={column.id} align={column.align}>
-                                {value}
-                              </TableCell>
-                            );
-                          })}
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={facilitiesList.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                sx={{ backgroundColor: '#E2E5EB', display: 'flex', justifyContent: 'center' }}
-              />
-            </>
-          )}
+                      );
+                    })}
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={facilitiesList.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+        </>
+      )}
+          
         </Paper>
+
       </Box>
 
       {/* Add/Edit Modal */}
@@ -413,6 +416,6 @@ export default function FacilitiesList() {
           </Box>
         </Box>
       </Modal>
-    </div>
+    </>
   );
 }

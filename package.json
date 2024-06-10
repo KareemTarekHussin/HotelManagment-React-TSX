@@ -10,11 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
     "@fontsource/roboto": "^5.0.13",
     "@mui/icons-material": "^5.15.19",
     "@mui/material": "^5.15.19",
+    "@stripe/react-stripe-js": "^2.7.1",
+    "@stripe/stripe-js": "^3.5.0",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
     "generate-react-cli": "^8.4.6",
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
+    "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",

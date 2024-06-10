@@ -214,113 +214,93 @@ export default function Login() {
                 </Box>
               </Box>
 
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <Box
-                  sx={{
-                    backgroundColor: "#ff",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: { xs: 3, sm: 4, md: 4, lg: 4 },
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: "100%",
-                      height: 60,
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <TextField
-                      label="Email"
-                      variant="filled"
-                      size="small"
-                      fullWidth
-                      {...register("email", {
-                        required: "* Email is required",
-                        pattern: {
-                          value: /^[^@]+@[^@]+\.[^@.]{2,}$/,
-                          message: "Invalid Email.",
-                        },
-                      })}
-                      error={!!errors.email}
-                    />
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        marginTop: 0.5,
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          fontSize: 14,
-                          color: "#D32F2F",
-                        }}
-                      >
-                        {(errors.email as FieldError)?.message || (
-                          <span>&nbsp;</span>
-                        )}
-                      </Typography>
-                    </Box>
-                  </Box>
+                  <form onSubmit={handleSubmit(onSubmit)}>
 
-                  <Box sx={{ display: "flex", flexDirection: "column" }}>
-                    <TextField
-                      label="Password"
-                      variant="filled"
-                      size="small"
-                      fullWidth
-                      {...register("password", {
-                        required: "* Password is required",
-                        pattern: {
-                          value:
-                            /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
-                          message: "Invalid Email.",
-                        },
-                      })}
-                      error={!!errors.password}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton onClick={() => setShowPass(!showPass)}>
-                              {showPass ? (
-                                <VisibilityIcon />
-                              ) : (
-                                <VisibilityOffIcon />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                        type: showPass ? "text" : "password",
-                      }}
-                    />
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        marginTop: 0.5,
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          fontSize: 14,
-                          color: "#D32F2F",
-                        }}
-                      >
-                        {(errors.password as FieldError)?.message || (
-                          <span>&nbsp;</span>
-                        )}
-                      </Typography>
-                      <Typography
-                        sx={{ fontSize: 14, fontWeight: 300, color: "#4D4D4D" }}
-                      >
-                        Forget Password?
-                      </Typography>
-                    </Box>
-                  </Box>
+                    <Box sx={{backgroundColor: '#ff',display:'flex', flexDirection:'column', gap:{xs:3, sm:4, md:4, lg:4}}}>
+
+                        <Box sx={{ width: '100%',height:60,display:'flex', flexDirection:'column' }}>
+                          <TextField  
+                            label="Email" 
+                            variant="filled"
+                            size='small'
+                            fullWidth
+                            sx={{
+                              '& .MuiFilledInput-root': {
+                                backgroundColor: '#F5F6F8', // Remove the gray background
+                              }
+                            }}
+                            {...register('email',{
+                              required:'* Email is required',
+                              pattern:{
+                                value:/^[^@]+@[^@]+\.[^@.]{2,}$/ ,
+                                message:'Invalid Email.'
+                              }
+                            })}
+                            error={!!errors.email}
+                            />
+                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 0.5 }}>
+                              <Typography sx={{
+                                fontSize: 14,
+                                color: '#D32F2F',
+                              }}>
+                                {(errors.email as FieldError)?.message || <span>&nbsp;</span>}
+                              </Typography>
+                            </Box>
+                        </Box>
+
+                        <Box sx={{display:'flex', flexDirection:'column'}}>
+                          <TextField 
+                            label="Password" 
+                            variant="filled"
+                            size='small'
+                            fullWidth
+                            sx={{
+                              '& .MuiFilledInput-root': {
+                                backgroundColor: '#F5F6F8', // Remove the gray background
+                              }
+                            }}
+                            {...register('password',{
+                              required:'* Password is required',
+                              pattern:{
+                                value:/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/ ,
+                                message:'Invalid Email.'
+                              }
+                            })}
+                            error={!!errors.password}
+                            InputProps={{
+                              endAdornment: (
+                                <InputAdornment position="end">
+                                  <IconButton onClick={() => setShowPass(!showPass)}>
+                                  {showPass ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                  </IconButton>
+                                </InputAdornment>
+                              ),
+                              type: showPass ? 'text' : 'password'
+                            }}
+                            />
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 0.5 }}>
+                              <Typography sx={{
+                                fontSize: 14,
+                                color: '#D32F2F',
+                              }}>
+                                {(errors.password as FieldError)?.message || <span>&nbsp;</span>}
+                              </Typography>
+                              <Link
+                                underline="hover" 
+                                onClick={() => navigate('/forgetpass')}
+                                sx={{ 
+                                  fontSize: 14, 
+                                  fontWeight: 300, 
+                                  color: '#4D4D4D',
+                                  '&:hover':{
+                                    cursor:'pointer',
+                                  } 
+                                }}
+                                >
+                                Forget Password?
+                              </Link>
+                            </Box>
+                        </Box>
 
                   <Button
                     type="submit"

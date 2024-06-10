@@ -297,37 +297,27 @@ export default function ADSList() {
   }, []);
   return (
     <>
-      <Grid container spacing={1} sx={{ mt: 2, mb: 5 , p: 2.5, 
-          backgroundColor: '#E2E5EB', 
-          borderRadius: 2, 
-         
-          
-         
-         }}>
-        <Grid item md={10} sm={8} xs={12}>
-          <Typography variant="h5">ADS Table Details</Typography>
-          <Typography>You can check all details</Typography>
-        </Grid>
-        <Grid item md={2} sm={4} xs={12}>
+      <Grid
+       container
+       sx={{mt: 3, mb: 5,p:2.5 , backgroundColor:'#E2E5EB',borderRadius:2, display:'flex',justifyContent:{xs:'center',sm:'space-between'},alignItems:'center',gap:2, boxShadow: '0px 2px 1px -3px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)'}}
+       >
+
+          <Grid item>
+            <Typography variant="h5" color="initial" sx={{fontWeight:500}}>
+              Ads. Table Details
+            </Typography>
+            <Typography color="initial" sx={{textAlign:{xs:'center',sm:'left'}}}>You can check all details</Typography>
+          </Grid>
+
+        <Grid item >
           <Button onClick={() => handleOpen()} variant="contained">
             Add New Ads
           </Button>
         </Grid>
+
+
       </Grid>
-      <Box
-        padding={2}
-        marginTop={10}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          overflow: "auto",
-        }}
-      >
-
-
-        
-        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      <Paper sx={{ width: "100%", overflow: "hidden" }}>
 
         {loading ? (
           <Box sx={{ width: '100%' }}>
@@ -438,9 +428,22 @@ export default function ADSList() {
           />
           </>
 )}
-          
-        </Paper>
-      </Box>
+        
+      </Paper>
+      
+      {/* <Box
+        padding={2}
+        sx={{
+          display: "fle",
+          flexDirection: "column",
+          alignItems: "center",
+          overflow: "auto",
+        }}
+      > */}
+
+
+        
+      {/* </Box> */}
       
       <Modal
         open={open}

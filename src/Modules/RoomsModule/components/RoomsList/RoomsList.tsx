@@ -30,7 +30,8 @@ import { getErrorMessage } from "../../../../utils/error";
 import { userRequest } from "../../../../utils/request";
 import { RoomsListProps } from "../../../../interfaces/interface";
 import deleteImg from "../../../../assets/Images/deleteImg.png";
-import { Link } from "react-router-dom";
+import Loading from "../../../SharedModule/components/Loading/Loading";
+import { Link, useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -55,10 +56,16 @@ export default function RoomsList() {
   const [selectedRow, setSelectedRow] = useState<RoomsListProps | null>(null);
 
   const { showToast } = useToast();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    getAllRooms();
-  }, [page, rowsPerPage]);
+  const [openDelete, setOpenDelete] = useState(false);
+  const handleDeleteOpen = (id: string) => {
+    setRoomId(id);
+    setOpenDelete(true);
+  };
+  const handleDeleteClose = () => setOpenDelete(false);
+
+  const [roomsList, setRoomsList] = useState([]);
 
   const getAllRooms = async () => {
     setLoading(true);
@@ -154,13 +161,12 @@ export default function RoomsList() {
           </Box>
           <Box sx={{ textAlign: "center" }}>
             <img src={deleteImg} alt="" />
-            <Typography variant="h6" gutterBottom>
-              Delete This Room?
-            </Typography>
-            <Typography variant="body2">
-              Are you sure you want to delete this item? If you are sure, just
-              click on delete.
-            </Typography>
+
+            <h4>Delete This Room ?</h4>
+            <p>
+              are you sure you want to delete this item ? if you are sure just
+              click on delete it
+            </p>
           </Box>
           <Box sx={{ textAlign: "right", mt: 2 }}>
             <Button
@@ -179,131 +185,149 @@ export default function RoomsList() {
         </Box>
       </Modal>
 
-    
-        <Grid container spacing={1} sx={{ mt: 2, mb: 5 , p: 2.5, 
-          backgroundColor: '#E2E5EB', 
-          borderRadius: 2, 
-         
-          
-         
-         }}>
-          <Grid item xs={8} md={10}>
-            <Typography variant="h5" color="initial">
+      <Box>
+        <Grid 
+        container
+        sx={{mt: 3, mb: 5,p:2.5 , backgroundColor:'#E2E5EB',borderRadius:2, display:'flex',justifyContent:{xs:'center',sm:'space-between'},alignItems:'center',gap:2, boxShadow: '0px 2px 1px -3px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)'}}
+        >
+          <Grid item>
+            <Typography variant="h5" color="initial" sx={{fontWeight:500}}>
               Rooms Table Details
             </Typography>
-            <Typography color="initial">You can check all details</Typography>
+            <Typography color="initial" sx={{textAlign:{xs:'center',sm:'left'}}}>You can check all details</Typography>
           </Grid>
-          <Grid item xs={4} md={2}>
+          <Grid item textAlign="end">
             <Link to="/dashboard/roomsdata">
               <Button variant="contained">Add New Room</Button>
             </Link>
           </Grid>
         </Grid>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', overflow: 'auto' }}>
-          <Paper  sx={{ width: '100%', overflow: 'hidden' }}>
-            {loading ? (
-              <Box sx={{ width: '100%' }}>
-                <Skeleton variant="rectangular" width="100%" height={100} />
-                <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-                <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-                <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-              </Box>
+        {loading ? (
+          <Loading />
+        ) : (
+          <>
+            {roomsList.length > 0 ? (
+              <TableContainer component={Paper} sx={{ mt: 2 }}>
+                <Table  aria-label="simple table">
+                  <TableHead>
+                    <TableRow sx={{ bgcolor: "#E2E5EB" }}>
+                      <TableCell>room Number</TableCell>
+                      <TableCell align="center">Image</TableCell>
+                      <TableCell align="center">Price</TableCell>
+                      <TableCell align="center">Discount</TableCell>
+                      <TableCell align="center">Capacity</TableCell>
+                      <TableCell align="center">Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {roomsList.map((room: RoomsListProps, index: number) => (
+                      <TableRow
+                        key={index}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {room.roomNumber}
+                        </TableCell>
+
+                        <TableCell align="center">
+                          <img
+                            src={room.images[0]}
+                            alt=""
+                            style={{ width: 50, height: 50, borderRadius: 5 }}
+                          />
+                        </TableCell>
+
+                        <TableCell align="center">{room.price}</TableCell>
+                        <TableCell align="center">{room.discount}</TableCell>
+                        <TableCell align="center">{room.capacity}</TableCell>
+                        <TableCell>
+                          <div style={{ textAlign: "center" }}>
+                            <IconButton
+                              onClick={() => handleDeleteOpen(room._id)}
+                            >
+                              <DeleteIcon color="error" />
+                            </IconButton>
+
+                            {/* <IconButton>
+                              <Link
+                                to={`/dashboard/roomsedit/${room._id}`}
+                                state={{ roomData: room, state: "edit" }}
+                              >
+                                <EditNoteIcon color="warning" />
+                              </Link>
+                            </IconButton> */}
+                            <IconButton component={Link} to={`/dashboard/roomsedit/${room._id}`} state={{ roomData: room, state: "edit" }}>
+                              <EditNoteIcon color="warning" />
+                            </IconButton>
+
+                            <IconButton>
+                              <VisibilityIcon color="primary" />
+                            </IconButton>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             ) : (
-              <>
-                {roomsList.length > 0 ? (
-                  <>
-                    <TableContainer sx={{ maxHeight: 440, width: '100%' }}>
-                      <Table stickyHeader aria-label="sticky table" >
-                        <TableHead >
-                          <TableRow  sx={{ backgroundColor: '#E2E5EB' }} >
-                            <TableCell sx={{ backgroundColor: '#E2E5EB' }}>Room Number</TableCell>
-                            <TableCell sx={{ backgroundColor: '#E2E5EB' }} align="right">Image</TableCell>
-                            <TableCell sx={{ backgroundColor: '#E2E5EB' }} align="right">Price</TableCell>
-                            <TableCell  sx={{ backgroundColor: '#E2E5EB' }}align="right">Discount</TableCell>
-                            <TableCell  sx={{ backgroundColor: '#E2E5EB' }} align="right">Capacity</TableCell>
-                            <TableCell  sx={{ backgroundColor: '#E2E5EB' } }align="right">Actions</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {roomsList
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((room) => (
-                              <TableRow hover role="checkbox" tabIndex={-1} key={room._id} >
-                                <TableCell component="th" scope="row">
-                                  {room.roomNumber}
-                                </TableCell>
-                                <TableCell align="right">
-                                  <img
-                                    src={room.images[0]}
-                                    alt=""
-                                    style={{
-                                      width: 50,
-                                      height: 50,
-                                      borderRadius: 5,
-                                      objectFit: "cover",
-                                    }}
-                                  />
-                                </TableCell>
-                                <TableCell align="right">{room.price}</TableCell>
-                                <TableCell align="right">{room.discount}</TableCell>
-                                <TableCell align="right">{room.capacity}</TableCell>
-                                <TableCell align="right">
-                                  <IconButton
-                                    onClick={(event) => handleClick(event, room)}
-                                  >
-                                    <MoreHorizIcon />
-                                  </IconButton>
-                                  <Menu
-                                    anchorEl={anchorEl}
-                                    open={Boolean(anchorEl) && selectedRow?._id === room._id}
-                                    onClose={handleCloseMenu}
-                                  >
-                                    <MenuItem onClick={() => handleAction("View")}>
-                                      <VisibilityIcon sx={{ mr: 1, color: "#00e5ff" }} />
-                                      View
-                                    </MenuItem>
-                                    <MenuItem onClick={() => handleAction("Edit")}>
-                                    <Link
-                                        to={`/dashboard/roomsedit/${room._id}`}
-                                        state={{ roomData: room, state: "edit" }}
-                                          >
-                                          <EditNoteIcon color="warning" />
-                                           Edit
-                                           </Link>
-                                    </MenuItem>
-                                    <MenuItem onClick={() => handleAction("Delete")}>
-                                      <DeleteIcon sx={{ mr: 1, color: "#d50000" }} />
-                                      Delete
-                                    </MenuItem>
-                                  </Menu>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                    <TablePagination
-                      rowsPerPageOptions={[5, 10, 15]}
-                      component="div"
-                      count={roomsList.length}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                      sx={{backgroundColor:'#E2E5EB',display:'flex', justifyContent:'center'}}
-                    />
-                  </>
-                ) : (
-                  <Box sx={{ textAlign: 'center', p: 3 }}>
-                    <Typography variant="h6">No Rooms Found</Typography>
-                  </Box>
-                )}
-              </>
+              <Box sx={{ width: "100%" }}>
+                <Typography variant="h3" mt={10} textAlign="center">
+                  No Rooms Found
+                </Typography>
+              </Box>
             )}
-          </Paper>
-        </Box>
-     
+          </>
+        )}
+
+        {/* <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <TextField
+              id="outlined-basic"
+              label="Outlined"
+              variant="outlined"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-helper-label">Age</InputLabel>
+              <Select
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
+                label="Age"
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={3}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-helper-label">Age</InputLabel>
+              <Select
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
+                label="Age"
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid> */} 
+      </Box>
     </>
   );
 }
