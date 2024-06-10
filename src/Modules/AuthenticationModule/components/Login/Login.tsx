@@ -13,7 +13,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CircularProgress from "@mui/material/CircularProgress";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../Context/AuthContext";
 import { useEffect, useRef, useState } from "react";
 import { getErrorMessage } from "../../../../utils/error";
@@ -61,6 +61,7 @@ export default function Login() {
       }
     };
   }, []);
+
 
   return (
     <>
@@ -205,7 +206,10 @@ export default function Login() {
                       color: "#152c5b",
                     }}
                   >
+                    <Link to={"/register"}>
                     Register here !
+                    </Link>
+                   
                   </Typography>
                 </Box>
               </Box>

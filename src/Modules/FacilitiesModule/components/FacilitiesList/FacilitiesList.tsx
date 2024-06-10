@@ -244,7 +244,7 @@ export default function FacilitiesList() {
       setOpen(true);
     } else if (action === 'Delete') {
       console.log('Handling delete action for:', selectedRow);
-      handleOpenDeleteModal(selectedRow);
+      handleDeleteOpenModal(selectedRow!._id);
     }
     handleCloseMenu();
   };
@@ -263,7 +263,13 @@ export default function FacilitiesList() {
 
   return (
     <div>
-      <Grid container spacing={1} sx={{ mt: 2, mb: 5 }}>
+      <Grid container spacing={1} sx={{ mt: 2, mb: 5 , p: 2.5, 
+          backgroundColor: '#E2E5EB', 
+          borderRadius: 2, 
+         
+          
+         
+         }}>
         <Grid item xs={8} md={10}>
           <Typography variant="h5" color="initial">
             Facilities Table Details

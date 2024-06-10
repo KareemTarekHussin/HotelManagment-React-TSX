@@ -297,9 +297,15 @@ export default function ADSList() {
   }, []);
   return (
     <>
-      <Grid container spacing={1} sx={{ my: 3 }}>
+      <Grid container spacing={1} sx={{ mt: 2, mb: 5 , p: 2.5, 
+          backgroundColor: '#E2E5EB', 
+          borderRadius: 2, 
+         
+          
+         
+         }}>
         <Grid item md={10} sm={8} xs={12}>
-          <Typography variant="h6">ADS Table Details</Typography>
+          <Typography variant="h5">ADS Table Details</Typography>
           <Typography>You can check all details</Typography>
         </Grid>
         <Grid item md={2} sm={4} xs={12}>
