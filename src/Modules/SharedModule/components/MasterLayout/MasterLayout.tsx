@@ -30,8 +30,9 @@ const MasterLayout = () => {
       >
         <Navbar/>
         <Outlet />
-        {/* <PaymentGetaway/>
-      */}
+         {/* <PaymentGetaway/> */}
+      
+
       </Box>
         
         

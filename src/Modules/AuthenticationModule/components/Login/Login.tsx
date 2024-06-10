@@ -289,7 +289,7 @@ export default function Login() {
                               </Typography>
                               <Link
                                 underline="hover" 
-                                onClick={() => navigate('/forgetpass')}
+                                to={'/forgetpass'}
                                 sx={{ 
                                   fontSize: 14, 
                                   fontWeight: 300, 

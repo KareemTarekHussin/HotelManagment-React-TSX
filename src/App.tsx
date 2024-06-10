@@ -12,24 +12,28 @@ import RoomsData from "./Modules/RoomsModule/components/RoomsData/RoomsData";
 import FacilitiesList from "./Modules/FacilitiesModule/components/FacilitiesList/FacilitiesList";
 import UsersList from "./Modules/UsersModule/components/UsersList/UsersList";
 import ADSList from "./Modules/ADSModule/components/ADSList/ADSList";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AuthContextProvider from "./Modules/Context/AuthContext";
-import ProtectedRoute from './Modules/SharedModule/components/ProtectedRoute/ProtectedRoute';
+import ProtectedRoute from "./Modules/SharedModule/components/ProtectedRoute/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import BookingList from "./Modules/BookingModule/components/BookingList";
+import DashboardUser from "./Modules/LandingPageModule/components/DashboardUser";
+import Details from "./Modules/LandingPageModule/components/Details";
+import Explore from "./Modules/LandingPageModule/components/Explore";
+import Favourites from "./Modules/LandingPageModule/components/Favourites";
+import UserLayout from "./Modules/SharedModule/components/UserLayout/UserLayout";
 
 const theme = createTheme({
   typography: {
-    fontFamily: "Poppins, sans-serif", // Replace 'YourCustomFont' with your desired font
+    fontFamily: "Poppins, sans-serif",
   },
 });
 
 function App() {
-
   const routes = createBrowserRouter([
     {
-      path: "/",
+      path: "/login",
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
@@ -44,12 +48,11 @@ function App() {
       path: "DashBoard",
       element: (
         <ProtectedRoute>
-          <MasterLayout  />
+          <MasterLayout />
         </ProtectedRoute>
       ),
       errorElement: <NotFound />,
       children: [
-        
         { path: "", element: <Dashboard /> },
         { path: "rooms", element: <RoomsList /> },
         { path: "roomsdata", element: <RoomsData /> },
@@ -60,7 +63,20 @@ function App() {
         { path: "booking", element: <BookingList /> },
       ],
     },
+    ///user Path
+    {
+      path: "/",
+      element:<UserLayout/>,
+      errorElement: <NotFound />,
+      children: [
+     { path: "dashuser", element: <DashboardUser /> },
+     { path: "details", element: <Details /> },
+     { path: "explore", element: <Explore /> },
+     { path: "favs", element: <Favourites /> },
+      ]
+    },
   ]);
+
   return (
     <ThemeProvider theme={theme}>
       <AuthContextProvider>
