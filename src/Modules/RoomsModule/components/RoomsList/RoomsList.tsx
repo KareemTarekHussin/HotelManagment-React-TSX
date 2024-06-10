@@ -259,12 +259,12 @@ export default function RoomsList() {
                                     </MenuItem>
                                     <MenuItem onClick={() => handleAction("Edit")}>
                                     <Link
-                                to={`/dashboard/roomsedit/${room._id}`}
-                                state={{ roomData: room, state: "edit" }}
-                              >
-                                <EditNoteIcon color="warning" />
-                                Edit
-                              </Link>
+                                        to={`/dashboard/roomsedit/${room._id}`}
+                                        state={{ roomData: room, state: "edit" }}
+                                          >
+                                          <EditNoteIcon color="warning" />
+                                           Edit
+                                           </Link>
                                     </MenuItem>
                                     <MenuItem onClick={() => handleAction("Delete")}>
                                       <DeleteIcon sx={{ mr: 1, color: "#d50000" }} />

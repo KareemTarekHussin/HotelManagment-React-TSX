@@ -50,6 +50,7 @@ function App() {
       ),
       errorElement: <NotFound />,
       children: [
+        
         { path: "", element: <Dashboard /> },
         { path: "rooms", element: <RoomsList /> },
         { path: "roomsdata", element: <RoomsData /> },
