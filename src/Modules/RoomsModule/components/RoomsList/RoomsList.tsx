@@ -58,20 +58,20 @@ export default function RoomsList() {
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const [openDelete, setOpenDelete] = useState(false);
   const handleDeleteOpen = (id: string) => {
     setRoomId(id);
     setOpenDelete(true);
   };
   const handleDeleteClose = () => setOpenDelete(false);
 
-  const [roomsList, setRoomsList] = useState([]);
 
   const getAllRooms = async () => {
     setLoading(true);
     try {
       const { data } = await userRequest.get(`/admin/rooms?page=${page + 1}&size=${rowsPerPage}`);
       setRoomsList(data.data.rooms);
+      console.log(data.data.rooms);
+      
     } catch (error) {
       const err = getErrorMessage(error);
       showToast("error", err);
@@ -79,13 +79,9 @@ export default function RoomsList() {
       setLoading(false);
     }
   };
-
-  const handleDeleteOpen = (id: string) => {
-    setRoomId(id);
-    setOpenDelete(true);
-  };
-
-  const handleDeleteClose = () => setOpenDelete(false);
+useEffect(() => {
+  getAllRooms();
+}, [])
 
   const handleDelete = async () => {
     setSpinner(true);

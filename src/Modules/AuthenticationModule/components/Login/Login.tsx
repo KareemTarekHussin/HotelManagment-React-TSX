@@ -206,7 +206,9 @@ export default function Login() {
                       color: "#152c5b",
                     }}
                   >
-                    <Link to={"/register"}>
+                    <Link to={"/register"}
+                    
+                    >
                     Register here !
                     </Link>
                    
@@ -298,7 +300,7 @@ export default function Login() {
                                 }}
                                 >
                                 Forget Password?
-                              </Link>
+                              </Link>
                             </Box>
                         </Box>
 

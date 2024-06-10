@@ -49,6 +49,11 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
+  {
+    id: "roomNumber",
+    label: "Room Number",
+    minWidth: 50,
+  },
   { id: "capacity", label: "Capacity", minWidth: 50 },
   { id: "discount", label: "Discount", minWidth: 50 },
   {
@@ -69,12 +74,7 @@ const columns: readonly Column[] = [
     minWidth: 50,
     align: "right",
   },
-  {
-    id: "roomNumber",
-    label: "Room Number",
-    minWidth: 50,
-    align: "right",
-  },
+ 
 
   {
     id: "action",

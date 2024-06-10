@@ -28,10 +28,10 @@ const MasterLayout = () => {
         pb={{xs:6}} 
         overflow="auto"
       >
-        {/* <Navbar/> */}
-        {/* <Outlet /> */}
-        <PaymentGetaway/>
-     
+        <Navbar/>
+        <Outlet />
+        {/* <PaymentGetaway/>
+      */}
       </Box>
         
         
