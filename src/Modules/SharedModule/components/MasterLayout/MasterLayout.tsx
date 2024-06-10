@@ -1,13 +1,15 @@
 import Navbar from '../Navbar/Navbar'
 import { Outlet } from 'react-router-dom'
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import SideBar from '../SideBar/SideBar';
-import NewNavbar from '../Drawer/NewNavbar';
+
+import { CheckoutForm } from '../../../PaymentModule/components/CheckoutForm/CheckoutForm';
+import { PaymentGetaway } from '../../../PaymentModule/components/PaymentGetaway/PaymentGetaway';
 // import { useAuth } from '../../../Context/AuthContext'
 
 
 const MasterLayout = () => {
-
+  
   return (
     
     <>
@@ -26,10 +28,9 @@ const MasterLayout = () => {
         pb={{xs:6}} 
         overflow="auto"
       >
-        <Navbar/>
-        {/* <NewNavbar/> */}
-        <Outlet />
-        {/* <MiniDrawer/> */}
+        {/* <Navbar/> */}
+        {/* <Outlet /> */}
+        <PaymentGetaway/>
      
       </Box>
         

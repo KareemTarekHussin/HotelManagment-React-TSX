@@ -10,41 +10,19 @@ import {
   Box,
   Checkbox,
   ListItemText,
-  Alert,
-  List,
-  ListItem,
+  Alert
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { FacilitiesProps, Inputs } from "../../../../interfaces/interface";
+import { Inputs } from "../../../../interfaces/interface";
 import { userRequest } from "../../../../utils/request";
 import { useEffect, useRef, useState } from "react";
 import { getErrorMessage } from "../../../../utils/error";
 import { useToast } from "../../../Context/ToastContext";
 import { useLocation, useNavigate } from "react-router-dom";
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
-
-
-const initialItems = [
-  { id: '1', content: 'Item 1' },
-  { id: '2', content: 'Item 2' },
-  { id: '3', content: 'Item 3' },
-];
 
 export default function RoomsData() {
 
-  // *=====================================================================
-  const [items, setItems] = useState(initialItems);
-  Draggable
-  const onDragEnd = (result:any) => {
-    if (!result.destination) return;
-    const reorderedItems = Array.from(items);
-    const [movedItem] = reorderedItems.splice(result.source.index, 1);
-    reorderedItems.splice(result.destination.index, 0, movedItem);
-    setItems(reorderedItems);
-  };
-  // *=====================================================================
   const [facilitiesList, setFacilitiesList] = useState([]);
   const [facilitesEdit, setFacilitesEdit] = useState([]);
   const [images, setImages] = useState<string[] | FileList | null | []>([]);

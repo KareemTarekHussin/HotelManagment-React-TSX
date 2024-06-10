@@ -26,7 +26,7 @@ const theme = createTheme({
 });
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import BookingList from "./Modules/BookingModule/BookingList";
+import BookingList from "./Modules/BookingModule/components/BookingList";
 
 function App() {
 
