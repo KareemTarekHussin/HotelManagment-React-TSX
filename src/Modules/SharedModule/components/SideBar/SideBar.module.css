@@ -1,0 +1,23 @@
+.inputStyle{
+    border: 0;
+    border-bottom: 1px solid #DEE2E6;
+  }
+  
+  .inputContainer{
+    border-bottom: 1px #DEE2E6 solid;
+    /* background-color: red;
+    height: 60px; */
+  }
+  
+  .inputError{
+    /* border-bottom: 1px #EF9B28 solid; */
+    border-bottom: 1px #FFC107 solid;
+  }
+  /* 
+  .height{
+    height: 80px;
+  } */
+  
+  
+  
+  

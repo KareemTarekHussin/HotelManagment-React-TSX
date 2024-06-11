@@ -1,21 +1,32 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import AuthLayout from './Modules/SharedModule/components/AuthLayout/AuthLayout';
-import NotFound from './Modules/SharedModule/components/NotFound/NotFound';
-import Login from './Modules/AuthenticationModule/components/Login/Login';
-import Register from './Modules/AuthenticationModule/components/Register/Register';
-import ForgetPass from './Modules/AuthenticationModule/components/ForgetPass/ForgetPass';
-import ResetPass from './Modules/AuthenticationModule/components/ResetPass/ResetPass';
+import AuthLayout from "./Modules/SharedModule/components/AuthLayout/AuthLayout";
+import NotFound from "./Modules/SharedModule/components/NotFound/NotFound";
+import Login from "./Modules/AuthenticationModule/components/Login/Login";
+import Register from "./Modules/AuthenticationModule/components/Register/Register";
+import ForgetPass from "./Modules/AuthenticationModule/components/ForgetPass/ForgetPass";
+import ResetPass from "./Modules/AuthenticationModule/components/ResetPass/ResetPass";
 import MasterLayout from "./Modules/SharedModule/components/MasterLayout/MasterLayout";
 import Dashboard from "./Modules/DashboardModule/components/Dashboard/Dashboard";
 import RoomsList from "./Modules/RoomsModule/components/RoomsList/RoomsList";
 import RoomsData from "./Modules/RoomsModule/components/RoomsData/RoomsData";
 import FacilitiesList from "./Modules/FacilitiesModule/components/FacilitiesList/FacilitiesList";
-import FacilitiesData from "./Modules/FacilitiesModule/components/FacilitiesData/FacilitiesData";
 import UsersList from "./Modules/UsersModule/components/UsersList/UsersList";
 import ADSList from "./Modules/ADSModule/components/ADSList/ADSList";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AuthContextProvider from "./Modules/Context/AuthContext";
+import ProtectedRoute from './Modules/SharedModule/components/ProtectedRoute/ProtectedRoute';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import BookingList from "./Modules/BookingModule/components/BookingList";
 
+const theme = createTheme({
+  typography: {
+    fontFamily: "Poppins, sans-serif", // Replace 'YourCustomFont' with your desired font
+  },
+});
 
 function App() {
+
   const routes = createBrowserRouter([
     {
       path: "/",
@@ -32,26 +43,33 @@ function App() {
     {
       path: "DashBoard",
       element: (
-        // <ProtectedRoute>
-          <MasterLayout />
-        // </ProtectedRoute>
+        <ProtectedRoute>
+          <MasterLayout  />
+        </ProtectedRoute>
       ),
       errorElement: <NotFound />,
       children: [
+        
         { path: "", element: <Dashboard /> },
         { path: "rooms", element: <RoomsList /> },
         { path: "roomsdata", element: <RoomsData /> },
+        { path: "roomsedit/:id", element: <RoomsData /> },
         { path: "facilities", element: <FacilitiesList /> },
-        { path: "facilitiesdata", element: <FacilitiesData /> },
         { path: "adslist", element: <ADSList /> },
         { path: "users", element: <UsersList /> },
+        { path: "booking", element: <BookingList /> },
       ],
     },
   ]);
   return (
-    <div className="App">
-      <RouterProvider router={routes} />
-    </div>
+    <ThemeProvider theme={theme}>
+      <AuthContextProvider>
+        <div className="App">
+          <ToastContainer />
+          <RouterProvider router={routes} />
+        </div>
+      </AuthContextProvider>
+    </ThemeProvider>
   );
 }
-export default App
+export default App;
