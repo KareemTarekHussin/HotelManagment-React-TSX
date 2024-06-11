@@ -81,6 +81,12 @@ export default function RoomsList() {
       setLoading(false);
     }
   };
+  
+useEffect(() => {
+  getAllRooms();
+
+  
+}, [])
 
   const handleDeleteOpen = (id: string) => {
     setRoomId(id);
@@ -189,10 +195,18 @@ export default function RoomsList() {
           <Box sx={{ textAlign: "center" }}>
             <img src={deleteImg} alt="" />
 
-            <h4>Delete This Room ?</h4>
+            <Typography
+            fontWeight={600}
+            textAlign="center"  
+            variant="h6"
+            id="modal-modal-description"
+            sx={{ mt: 2 }}
+          >
+            Delete This Room ?
+          </Typography>
             <p>
-              are you sure you want to delete this item ? if you are sure just
-              click on delete it
+              Are you sure you want to delete this item ? if you are sure just
+              click on Delete 
             </p>
           </Box>
           <Box sx={{ textAlign: "right", mt: 2 }}>
@@ -299,8 +313,8 @@ export default function RoomsList() {
         </Box>
       </Modal>
 
-      <Container sx={{ maxWidth: "lg" }}>
-        <Grid container spacing={1} sx={{ mt: 2, mb: 5 }}>
+     
+        <Grid container spacing={1} sx={{mt: 3, mb: 5,p:2.5 , backgroundColor:'#E2E5EB',borderRadius:2, display:'flex',justifyContent:{xs:'center',sm:'space-between'},alignItems:'center',gap:2, boxShadow: '0px 2px 1px -3px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)'}}>
           <Grid item xs={8} md={10}>
             <Typography variant="h5" color="initial">
               Rooms Table Details
@@ -505,7 +519,6 @@ export default function RoomsList() {
             )}
           </Paper>
         </Box>
-      </Container>
     </>
   );
 }

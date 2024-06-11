@@ -206,11 +206,8 @@ export default function Login() {
                       color: "#152c5b",
                     }}
                   >
-                    <Link to={"/register"}
-                    
-                    >
-                    Register here !
-                    </Link>
+                    <Link style={{textDecoration:"none",color:"#152c5b",fontWeight: "600"}} to="register">Register here!</Link>
+
                    
                   </Typography>
                 </Box>
@@ -287,20 +284,9 @@ export default function Login() {
                               }}>
                                 {(errors.password as FieldError)?.message || <span>&nbsp;</span>}
                               </Typography>
-                              <Link
-                                underline="hover" 
-                                onClick={() => navigate('/forgetpass')}
-                                sx={{ 
-                                  fontSize: 14, 
-                                  fontWeight: 300, 
-                                  color: '#4D4D4D',
-                                  '&:hover':{
-                                    cursor:'pointer',
-                                  } 
-                                }}
-                                >
-                                Forget Password?
-                              </Link>
+                      
+                              <Link style={{textDecoration:"none",color:"#152c5b",fontWeight: "600"}} to="forgetpass">Forget Password ?</Link>
+
                             </Box>
                         </Box>
 

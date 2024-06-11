@@ -22,11 +22,12 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, CircularProgress } from '@mui/material';
 import { userRequest } from "../../../../utils/request";
 import Skeleton from '@mui/material/Skeleton';
 import { getErrorMessage } from "../../../../utils/error";
 import { useToast } from "../../../Context/ToastContext";
+import CloseIcon from "@mui/icons-material/Close";
 
 
 interface Column {
@@ -110,16 +111,7 @@ export default function FacilitiesList() {
     reset();  
   };
 
-  // const handleOpenDeleteModal = (facility: Facility | null) => {
-  //   if (facility) {
-  //     setSelectedRow(facility);
-  //     console.log('Opening delete modal for:', facility);  // log bta3 el open
-  //     setOpenDeleteModal(true);
-  //   } else {
-  //     console.error('No facility provided to open delete modal.');
-  //     showToast("error", "No facility provided to open delete modal."); // Add error toast
-  //   }
-  // };
+
   const handleDeleteOpenModal = (id: string) => {
     setRoomId(id);
     setOpenDeleteModal(true);
@@ -174,27 +166,7 @@ export default function FacilitiesList() {
     }
   };
 
-  // Function to handle facility deletion
-  // const handleDelete = async () => {
-  //   if (selectedRow) {
-  //     try {
-  //       console.log('Deleting facility with ID:', selectedRow._id);  // Log selected row ID
-  //       const response = await userRequest.delete(`/admin/room-facilities/${selectedRow._id}`);
-  //       console.log('Delete response:', response);
-  //       getFacilitiesList();
-  //       handleCloseDeleteModal();
-  //       setSelectedRow(null);
-  //     } catch (error) {
-  //       console.error('Delete error:', error);
-  //       const err = getErrorMessage(error);
-  //       showToast("error", `Error deleting facility: ${err}`);
-  //     }
-  //   } else {
-  //     console.error('No facility selected for deletion.');
-  //     showToast("error", "No facility selected for deletion."); // Add error toast
-  //   }
-  // };
-  /////////
+  
   const [roomId, setRoomId] = useState<string>("");
 
   const handleDelete = async () => {
@@ -246,6 +218,9 @@ export default function FacilitiesList() {
       console.log('Handling delete action for:', selectedRow);
       handleDeleteOpenModal(selectedRow!._id);
     }
+    else if (action === "View") {
+      handleViewOpen();
+    }
     handleCloseMenu();
   };
 
@@ -260,10 +235,80 @@ export default function FacilitiesList() {
     }
     return value;
   };
+  //View Modal
+  const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
+  const [openView, setOpenView] = useState<boolean>(false);
+   const handleViewClose = () => {
+    setOpenView(false);
+    setSelectedFacility(null);
+  };
+  const [spinner, setSpinner] = useState<boolean>(false);
+  const handleView = async (id: string) => {
+    setSpinner(true);
+    try {
+      const { data } = await userRequest.get(`/admin/facility/${id}`);
+      setSelectedFacility(data.data.facility);
+      setSpinner(false);
+    } catch (error) {
+      const err = getErrorMessage(error);
+      showToast("error", err);
+      setSpinner(false);
+    }
+  };
+  const handleViewOpen = () => {
+    setOpenView(true);
+  };
 
   return (
     <>
- 
+<Modal open={openView} onClose={handleViewClose}>
+  <Box sx={style}>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+      <Typography id="modal-modal-title" variant="h6" component="h2">
+        Facility Details
+      </Typography>
+      <IconButton aria-label="close" onClick={handleViewClose}>
+        <CloseIcon />
+      </IconButton>
+    </Box>
+    <Box id="modal-modal-description" sx={{ mt: 2 }}>
+      {spinner ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        selectedFacility && (
+          <>
+            {/* Extracting properties into constants */}
+            {(() => {
+              const roomName = selectedFacility.name;
+              const createdBy = selectedFacility.createdBy.userName;
+              const createdAt = new Date(selectedFacility.createdAt).toLocaleString();
+              const updatedAt = new Date(selectedFacility.updatedAt).toLocaleString();
+
+              return (
+                <>
+                  <Typography variant="body1">
+                    <strong>Room Name:</strong> {roomName}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Created By:</strong> {createdBy}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Created At:</strong> {createdAt}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Updated At:</strong> {updatedAt}
+                  </Typography>
+                </>
+              );
+            })()}
+          </>
+        )
+      )}
+    </Box>
+  </Box>
+</Modal>
       
       <Box>
 
@@ -328,7 +373,11 @@ export default function FacilitiesList() {
                               open={Boolean(anchorEl) && selectedRow?._id === facility._id}
                               onClose={handleCloseMenu}
                             >
-                              <MenuItem onClick={() => handleAction('View')}>
+                              
+                              <MenuItem  onClick={() => {
+                                        handleAction("View");
+                                        handleView(facility._id);
+                                      }}>
                                 <VisibilityIcon sx={{ mr: 1, color: '#00e5ff' }} />
                                 View
                               </MenuItem>
@@ -402,16 +451,54 @@ export default function FacilitiesList() {
       {/* Delete Confirmation Modal */}
       <Modal open={openDeleteModal} onClose={handleCloseDeleteModal}>
         <Box sx={style}>
+        <Box
+            sx={{ display: "flex", justifyContent: "end" }}
+            onClick={handleCloseDeleteModal}
+          >
+            <Box
+              sx={{
+                width: 30,
+                height: 30,
+                border: "2px solid red",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }}
+            >
+              <CloseIcon sx={{ color: "red", fontSize: "17px" }} />
+            </Box>
+          </Box>
           <img src={deleteImg} alt="" style={{ display: 'block', margin: '0 auto', paddingBottom: '16px' }} />
-          <Typography variant="h6" gutterBottom>
-            Are you sure you want to delete this facility?
+          <Typography
+            fontWeight={600}
+            textAlign="center"
+            variant="h6"
+            id="modal-modal-description"
+            sx={{ mt: 2 }}
+          >
+            Delete This Facility ?
           </Typography>
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: '16px', mt: 2 }}>
-            <Button variant="contained" color="error" onClick={handleDelete}>
-              Delete
-            </Button>
-            <Button variant="contained" onClick={handleCloseDeleteModal}>
-              Cancel
+          <Typography textAlign="center">
+            <p>
+              Are you sure you want to delete this item ? if you are sure just
+              click on Delete
+            </p>
+          </Typography>
+        
+          <Box sx={{ textAlign: "right", mt: 2 }}>           
+          <Button
+              variant="contained"
+              color="error"
+              onClick={handleDelete}
+              startIcon={<DeleteIcon />}
+            >
+              {spinner ? (
+                <CircularProgress sx={{ color: "white" }} size={20} />
+              ) : (
+                "Delete"
+              )}
             </Button>
           </Box>
         </Box>

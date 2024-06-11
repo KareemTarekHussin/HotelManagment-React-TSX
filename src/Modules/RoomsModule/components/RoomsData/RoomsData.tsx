@@ -10,11 +10,12 @@ import {
   Box,
   Checkbox,
   ListItemText,
-  Alert
+  Alert,
+  CircularProgress,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Inputs } from "../../../../interfaces/interface";
+import { FacilitiesProps, Inputs } from "../../../../interfaces/interface";
 import { userRequest } from "../../../../utils/request";
 import { useEffect, useRef, useState } from "react";
 import { getErrorMessage } from "../../../../utils/error";
@@ -22,7 +23,6 @@ import { useToast } from "../../../Context/ToastContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function RoomsData() {
-
   const [facilitiesList, setFacilitiesList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [spinner, setSpinner] = useState(false);
@@ -74,7 +74,8 @@ export default function RoomsData() {
   };
 
   // console.log(Array.from(watch("imgs")));
-
+  //this part fixes the img error
+  const isFile = (file: any): file is File => file instanceof File;
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setLoading(true);
     const addFormData = appendToFormData(data);
@@ -120,19 +121,13 @@ export default function RoomsData() {
   }, [roomData, setValue]);
 
   return (
-    <Container sx={{marginTop:8}}>
-      <Box 
-        component="form" onSubmit={handleSubmit(onSubmit)} 
-        sx={{ display:'flex',flexDirection:'column',alignItems:'center'}}>
-        <Grid lg={9} container sx={{display:'flex',flexDirection:'column',gap:3}}>
-
-
-
+    <Container sx={{ mt: 5 }}>
+      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+        <Grid container spacing={2}>
           <Grid item md={12}>
             <TextField
-              size="small"
               label="Room Number"
-              variant="filled"
+              variant="outlined"
               {...register("roomNumber", {
                 required: "Room Number is required",
               })}
@@ -145,79 +140,69 @@ export default function RoomsData() {
             )}
           </Grid>
 
-          
-          <Grid item sm={12}  sx={{display:'flex', gap:2,backgroundColor:'gol'}}>
-            <Grid item sm={12}>
-              <TextField
-              size="small"
-                label="Price"
-                variant="filled"
-                {...register("price", {
-                  required: "Price is required",
-                })}
-                defaultValue={roomData?.price}
-                fullWidth
-              />
-              {errors.price && (
-                <Alert severity="error" sx={{ mt: 1 }}>
-                  {errors.price.message}
-                </Alert>
-              )}
-            </Grid>
-
-            <Grid item sm={12}>
-              <TextField
-              size="small"
-                label="Capacity"
-                variant="filled"
-                {...register("capacity", {
-                  required: "capacity is required",
-                })}
-                defaultValue={roomData?.capacity}
-                fullWidth
-              />
-              {errors.capacity && (
-                <Alert severity="error" sx={{ mt: 1 }}>
-                  {errors.capacity.message}
-                </Alert>
-              )}
-            </Grid>
+          <Grid item md={6}>
+            <TextField
+              label="Price"
+              variant="outlined"
+              {...register("price", {
+                required: "Price is required",
+              })}
+              fullWidth
+            />
+            {errors.price && (
+              <Alert severity="error" sx={{ mt: 1 }}>
+                {errors.price.message}
+              </Alert>
+            )}
           </Grid>
-          
-          <Grid item sm={12}  sx={{display:'flex',flexDirection:{xs:'column',sm:'row'}, gap:2}}>
-            <Grid item sm={12}>
-              <TextField
-              size="small"
-                label="Discount"
-                variant="filled"
-                {...register("discount", {
-                  required: "discount is required",
+          <Grid item md={6}>
+            <TextField
+              label="Capacity"
+              variant="outlined"
+              {...register("capacity", {
+                required: "capacity is required",
+              })}
+              fullWidth
+            />
+            {errors.capacity && (
+              <Alert severity="error" sx={{ mt: 1 }}>
+                {errors.capacity.message}
+              </Alert>
+            )}
+          </Grid>
+          <Grid item md={6}>
+            <TextField
+              label="Discount"
+              variant="outlined"
+              {...register("discount", {
+                required: "discount is required",
+              })}
+              fullWidth
+            />
+            {errors.discount && (
+              <Alert severity="error" sx={{ mt: 1 }}>
+                {errors.discount.message}
+              </Alert>
+            )}
+          </Grid>
+          <Grid item md={6}>
+            <FormControl fullWidth variant="filled">
+              <InputLabel id="demo-multiple-checkbox-label">Facilities</InputLabel>
+              <Select
+              variant="outlined"
+                multiple
+                value={watch("facilities") || []}
+                {...register("facilities", {
+                  required: "facilities is required",
                 })}
-                defaultValue={roomData?.discount}
-                fullWidth
-              />
-              {errors.discount && (
-                <Alert severity="error" sx={{ mt: 1 }}>
-                  {errors.discount.message}
-                </Alert>
-              )}
-            </Grid>
-            <Grid item sm={12}>
-              <FormControl fullWidth variant="filled">
-                <InputLabel id="demo-multiple-checkbox-label">Facilities</InputLabel>
-                <Select
-                  size="small"
-                  labelId="demo-multiple-checkbox-label"
-                  id="demo-multiple-checkbox"
-                  multiple
-                  value={watch("facilities") || []}
-                  {...register("facilities", {
-                    required: "facilities is required",
-                  })}
-                  label="Facilities"
-                  renderValue={(selected) => (
-                    <div>
-                      {selected.map((id) => (
+                sx={{ width: "100%" }}
+                renderValue={(selected) => (
+                  <div>
+                    {selected.map((id: string) => {
+                      const facility = facilitiesList.find(
+                        (facility: FacilitiesProps) => facility._id === id
+                      );
+                      return (
                         <span style={{ margin: "8px" }} key={id}>
                           {spinner ? "Loading..." : facility && facility?.name}
                         </span>
@@ -246,12 +231,10 @@ export default function RoomsData() {
           <Grid item md={3}>
             <label htmlFor="imgs">
               <Button
-                size="large"
                 component="span"
                 variant="contained"
                 tabIndex={-1}
                 startIcon={<CloudUploadIcon />}
-                sx={{width:'100%',paddingBlock:{lg:1.5}}}
               >
                 Upload Images
               </Button>
@@ -272,25 +255,14 @@ export default function RoomsData() {
               </Alert>
             )}
           </Grid>
-
-
-        <Box sx={{mt: 2,alignSelf:'end' }}>
-          <Button variant="outlined" size="large"  sx={{ mr: 3 }}>
-            Cancle
-          </Button>
-          <Button variant="contained" size="large" type="submit">
-            Save
-          </Button>
-        </Box>
-          
         </Grid>
         <Grid container mt={2} spacing={1}>
-          {watch("imgs") && Array.from(watch("imgs")).map((img ,index) => (
-            <Grid item md={2} key={index}>
-              <img src={img?URL.createObjectURL(img): ""} style={{width:"100%"}} alt="" />
-            </Grid>
-          ))}
-        </Grid>
+  {watch("imgs") && Array.from(watch("imgs")).map((img, index) => (
+    <Grid item md={2} key={index}>
+      <img src={isFile(img) ? URL.createObjectURL(img) : ""} style={{width:"100%"}} alt="" />
+    </Grid>
+  ))}
+</Grid>
         <Box sx={{ mt: 2, textAlign: "right" }}>
           <Link to={"/dashboard/rooms"}>
             <Button variant="outlined" sx={{ mr: 4 }}>
@@ -303,5 +275,5 @@ export default function RoomsData() {
         </Box>
       </Box>
     </Container>
-  );
+);
 }

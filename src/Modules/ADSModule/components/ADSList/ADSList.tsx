@@ -17,6 +17,7 @@ import {
   TextField,
   Typography,
   InputLabel,
+  CircularProgress,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -33,6 +34,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import UpdateForm from "../UpdateForm";
 import { AuthContext } from "../../../Context/AuthContext";
 import { useToast } from "../../../Context/ToastContext";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface Column {
   id:
@@ -122,6 +124,7 @@ export default function ADSList() {
   const [adsList, setAdsList] = useState<ADS[]>([]);
   const [roomsList, setRoomsList] = useState<Rooms[]>([]);
   const { requestHeaders, baseUrl }: any = useContext(AuthContext);
+  const [spinner, setSpinner] = useState<boolean>(false);
 
   const { showToast } = useToast();
 
@@ -298,139 +301,170 @@ export default function ADSList() {
   return (
     <>
       <Grid
-       container
-       sx={{mt: 3, mb: 5,p:2.5 , backgroundColor:'#E2E5EB',borderRadius:2, display:'flex',justifyContent:{xs:'center',sm:'space-between'},alignItems:'center',gap:2, boxShadow: '0px 2px 1px -3px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)'}}
-       >
+        container
+        sx={{
+          mt: 3,
+          mb: 5,
+          p: 2.5,
+          backgroundColor: "#E2E5EB",
+          borderRadius: 2,
+          display: "flex",
+          justifyContent: { xs: "center", sm: "space-between" },
+          alignItems: "center",
+          gap: 2,
+          boxShadow:
+            "0px 2px 1px -3px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
+        }}
+      >
+        <Grid item>
+          <Typography variant="h5" color="initial" sx={{ fontWeight: 500 }}>
+            Ads. Table Details
+          </Typography>
+          <Typography
+            color="initial"
+            sx={{ textAlign: { xs: "center", sm: "left" } }}
+          >
+            You can check all details
+          </Typography>
+        </Grid>
 
-          <Grid item>
-            <Typography variant="h5" color="initial" sx={{fontWeight:500}}>
-              Ads. Table Details
-            </Typography>
-            <Typography color="initial" sx={{textAlign:{xs:'center',sm:'left'}}}>You can check all details</Typography>
-          </Grid>
-
-        <Grid item >
+        <Grid item>
           <Button onClick={() => handleOpen()} variant="contained">
             Add New Ads
           </Button>
         </Grid>
-
-
       </Grid>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
-
         {loading ? (
-          <Box sx={{ width: '100%' }}>
+          <Box sx={{ width: "100%" }}>
             <Skeleton variant="rectangular" width="100%" height={100} />
-            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+            <Skeleton
+              variant="rectangular"
+              width="100%"
+              height={100}
+              animation="wave"
+            />
+            <Skeleton
+              variant="rectangular"
+              width="100%"
+              height={100}
+              animation="wave"
+            />
+            <Skeleton
+              variant="rectangular"
+              width="100%"
+              height={100}
+              animation="wave"
+            />
           </Box>
         ) : (
           <>
-          <TableContainer>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      align={column.align}
-                      style={{ minWidth: column.minWidth }}
-                      sx={{ backgroundColor: "#E2E5EB" }}
-                    >
-                      {column.label}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {adsList
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((ads) => {
-                    return (
-                      <TableRow role="checkbox" tabIndex={-1} key={ads._id}>
-                        {columns.map((column) => {
-                          const value = formatCellValue(column, ads);
-                          if (column.id === "action") {
+            <TableContainer>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    {columns.map((column) => (
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        style={{ minWidth: column.minWidth }}
+                        sx={{ backgroundColor: "#E2E5EB" }}
+                      >
+                        {column.label}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {adsList
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((ads) => {
+                      return (
+                        <TableRow role="checkbox" tabIndex={-1} key={ads._id}>
+                          {columns.map((column) => {
+                            const value = formatCellValue(column, ads);
+                            if (column.id === "action") {
+                              return (
+                                <TableCell key={column.id} align={column.align}>
+                                  <IconButton
+                                    onClick={(event) => handleClick(event, ads)}
+                                  >
+                                    <MoreHorizIcon />
+                                  </IconButton>
+                                  <Menu
+                                    anchorEl={anchorEl}
+                                    open={
+                                      Boolean(anchorEl) &&
+                                      selectedRow?._id === ads._id
+                                    }
+                                    onClose={handleMenuClose}
+                                  >
+                                    <MenuItem>
+                                      <VisibilityIcon
+                                        sx={{ mx: 1, color: "#00e5ff" }}
+                                      />
+                                      View
+                                    </MenuItem>
+                                    <MenuItem
+                                      onClick={() => [
+                                        handleEdit(
+                                          ads._id,
+                                          ads.room.discount,
+                                          ads.isActive
+                                        ),
+                                        handleAction("Edit"),
+                                      ]}
+                                    >
+                                      <EditIcon
+                                        sx={{ mx: 1, color: "#ffd600" }}
+                                      />
+                                      Edit
+                                    </MenuItem>
+                                    <MenuItem
+                                      onClick={() => [
+                                        handleDeleteOpen(ads._id),
+                                        handleAction("Delete"),
+                                      ]}
+                                    >
+                                      <DeleteIcon
+                                        sx={{ mx: 1, color: "#d50000" }}
+                                      />
+                                      Delete
+                                    </MenuItem>
+                                  </Menu>
+                                </TableCell>
+                              );
+                            }
                             return (
                               <TableCell key={column.id} align={column.align}>
-                                <IconButton
-                                  onClick={(event) => handleClick(event, ads)}
-                                >
-                                  <MoreHorizIcon />
-                                </IconButton>
-                                <Menu
-                                  anchorEl={anchorEl}
-                                  open={
-                                    Boolean(anchorEl) &&
-                                    selectedRow?._id === ads._id
-                                  }
-                                  onClose={handleMenuClose}
-                                >
-                                  <MenuItem>
-                                    <VisibilityIcon
-                                      sx={{ mx: 1, color: "#00e5ff" }}
-                                    />
-                                    View
-                                  </MenuItem>
-                                  <MenuItem
-                                    onClick={() => [
-                                      handleEdit(
-                                        ads._id,
-                                        ads.room.discount,
-                                        ads.isActive
-                                      ),
-                                      handleAction("Edit"),
-                                    ]}
-                                  >
-                                    <EditIcon
-                                      sx={{ mx: 1, color: "#ffd600" }}
-                                    />
-                                    Edit
-                                  </MenuItem>
-                                  <MenuItem
-                                    onClick={() => [
-                                      handleDeleteOpen(ads._id),
-                                      handleAction("Delete"),
-                                    ]}
-                                  >
-                                    <DeleteIcon
-                                      sx={{ mx: 1, color: "#d50000" }}
-                                    />
-                                    Delete
-                                  </MenuItem>
-                                </Menu>
+                                {value}
                               </TableCell>
                             );
-                          }
-                          return (
-                            <TableCell key={column.id} align={column.align}>
-                              {value}
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 15]}
-            component="div"
-            count={adsList.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            sx={{backgroundColor:'#E2E5EB',display:'flex', justifyContent:'center'}}
-          />
+                          })}
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 15]}
+              component="div"
+              count={adsList.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              sx={{
+                backgroundColor: "#E2E5EB",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            />
           </>
-)}
-        
+        )}
       </Paper>
-      
+
       {/* <Box
         padding={2}
         sx={{
@@ -441,10 +475,8 @@ export default function ADSList() {
         }}
       > */}
 
-
-        
       {/* </Box> */}
-      
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -550,6 +582,25 @@ export default function ADSList() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
+          <Box
+            sx={{ display: "flex", justifyContent: "end" }}
+            onClick={handleDeleteClose}
+          >
+            <Box
+              sx={{
+                width: 30,
+                height: 30,
+                border: "2px solid red",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }}
+            >
+              <CloseIcon sx={{ color: "red", fontSize: "17px" }} />
+            </Box>
+          </Box>
           <img
             src={deleteImg}
             alt="deleteImg"
@@ -561,32 +612,36 @@ export default function ADSList() {
           />
           <Typography
             fontWeight={600}
-            textAlign="center"  
+            textAlign="center"
             variant="h6"
             id="modal-modal-description"
             sx={{ mt: 2 }}
           >
             Delete This Ads Room ?
           </Typography>
-          <Box display="flex" justifyContent="center" gap={2} padding={2}>
-          <Button
-              onClick={() => {
-                handleDeleteClose();
-              }}
-              variant="contained"
-            >
-              Cancel
-            </Button>
+          <Typography textAlign="center">
+            <p>
+              Are you sure you want to delete this item ? if you are sure just
+              click on Delete
+            </p>
+          </Typography>
+
+          <Box sx={{ textAlign: "right", mt: 2 }}>
+            {/*  */}
             <Button
+              variant="contained"
+              color="error"
               onClick={() => {
                 onDeleteSubmit();
               }}
-              color="error"
-              variant="contained"
+              startIcon={<DeleteIcon />}
             >
-              Delete
+              {spinner ? (
+                <CircularProgress sx={{ color: "white" }} size={20} />
+              ) : (
+                "Delete"
+              )}
             </Button>
-        
           </Box>
         </Box>
       </Modal>
