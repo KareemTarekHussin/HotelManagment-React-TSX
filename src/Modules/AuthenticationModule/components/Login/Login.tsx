@@ -63,14 +63,7 @@ export default function Login() {
           justifyContent:'center',
           gap:{xs:3,sm:5}
         }}>
-        <Box sx={{ backgroundColor:'blac', paddingTop:4, textAlign:'center',display:{md:'none'}}}>
-              <Typography  sx={{ fontSize:{xs:26, sm:30},fontWeight:500 ,display: 'inline',color:'#3252df' }}>
-                Stay
-              </Typography>
-              <Typography  sx={{ fontSize:{xs:26, sm:30},fontWeight:500 ,display: 'inline',color:'#152c5b' }}>
-                cation.
-              </Typography>
-        </Box>
+
         
         <Grid container 
           sx={{

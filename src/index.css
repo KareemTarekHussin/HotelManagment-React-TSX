@@ -121,3 +121,40 @@
 }
 
 
+[type="file"] {
+  height: 0;
+  overflow: hidden;
+  width: 0;  margin: 0;
+  position: absolute;
+}
+
+[type="file"]+label {
+  background: #617e8f;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'Rubik', sans-serif;
+  font-size: inherit;
+  outline: none;
+  padding: 1rem 50px;
+  margin-top: -10px;
+  position: relative;
+  transition: all 0.3s;
+  vertical-align: middle;
+
+  &.btn-2 {
+
+    width: 200px;
+    border-radius: 50px;
+    overflow: hidden;
+  }
+
+}
+[type="file"]+label:hover {
+  background: #4f778e;
+}
+
+
+
