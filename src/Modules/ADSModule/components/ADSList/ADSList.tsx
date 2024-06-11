@@ -60,15 +60,15 @@ const columns: readonly Column[] = [
   { id: "discount", label: "Discount", minWidth: 50 },
   {
     id: "createdBy",
-    label: "created By",
+    label: "Created By",
     minWidth: 50,
-    align: "right",
+    // align: "right",
   },
   {
     id: "isActive",
     label: "Active",
     minWidth: 50,
-    align: "right",
+    // align: "right",
   },
   {
     id: "price",
@@ -188,14 +188,15 @@ export default function ADSList() {
 
   const handleDeleteClose = () => setDeleteOpen(false);
   const style = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: {xs:350,lg:400},
+    bgcolor: 'background.paper',
+    borderRadius: 4, 
     boxShadow: 24,
-    p: 4,
+    p: { xs: 3 },
   };
   const {
     register,
@@ -298,6 +299,19 @@ export default function ADSList() {
     getAdsList();
     getRoomsList();
   }, []);
+
+  const [openView, setOpenView] = React.useState(false);
+const [selectedAdDetails, setSelectedAdDetails] = useState<ADS | null>(null);
+
+const handleViewOpen = (ad: ADS) => {
+  setSelectedAdDetails(ad);
+  setOpenView(true);
+};
+
+const handleViewClose = () => {
+  setOpenView(false);
+  setSelectedAdDetails(null);
+};
   return (
     <>
       <Grid
@@ -399,12 +413,10 @@ export default function ADSList() {
                                     }
                                     onClose={handleMenuClose}
                                   >
-                                    <MenuItem>
-                                      <VisibilityIcon
-                                        sx={{ mx: 1, color: "#00e5ff" }}
-                                      />
-                                      View
-                                    </MenuItem>
+                                    <MenuItem onClick={() => handleViewOpen(ads)}>
+  <VisibilityIcon sx={{ mx: 1, color: "#00e5ff" }} />
+  View
+</MenuItem>
                                     <MenuItem
                                       onClick={() => [
                                         handleEdit(
@@ -645,6 +657,58 @@ export default function ADSList() {
           </Box>
         </Box>
       </Modal>
+
+      {/* View Modal */}
+      <Modal
+  open={openView}
+  onClose={handleViewClose}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box sx={style}>
+  <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+      Ads. Details
+      <Button
+             onClick={handleViewClose}
+              sx={{
+                color: "red",
+                padding: 0,
+                minWidth: "auto",
+                width: 30,
+                height: 30,
+                backgroundColor: "transparent",
+                border: "2px solid red",
+              borderRadius: "50%"
+                
+          
+              }}
+            >
+              <CloseIcon />
+            </Button>
+    </Typography>
+    
+    {selectedAdDetails && (
+      <>
+        <Typography variant="body1"><strong>Room Number:</strong> {selectedAdDetails.room.roomNumber}</Typography>
+        <Typography variant="body1"><strong>Capacity:</strong> {selectedAdDetails.room.capacity}</Typography>
+        <Typography variant="body1"><strong>Price:</strong> {selectedAdDetails.room.price}</Typography>
+        <Typography variant="body1"><strong>Discount:</strong> {selectedAdDetails.room.discount}</Typography>
+        <Typography variant="body1"><strong>Created By:</strong> {selectedAdDetails.createdBy.userName}</Typography>
+        <Typography variant="body1"><strong>Active:</strong> {selectedAdDetails.isActive ? 'Yes' : 'No'}</Typography>
+      </>
+    )}
+   
+  </Box>
+</Modal>
     </>
   );
 }

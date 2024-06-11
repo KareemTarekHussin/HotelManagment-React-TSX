@@ -128,10 +128,10 @@ export default function Dashboard() {
           <Grid item xs={12} md={4}>
             <Item style={stylesItem}>
               <div>
-                <div className="title-rooms">
+                <div>
                   {roomNumber}
                 </div>
-                <div className="title-rooms">
+                <div>
                   Rooms
                 </div>
 
@@ -143,10 +143,10 @@ export default function Dashboard() {
           <Grid item xs={12} md={4}>
             <Item style={stylesItem}>
               <div>
-                <div className="title-rooms">
+                <div>
                   {facilitiesNumber}
                 </div>
-                <div className="title-rooms">
+                <div>
                   Facilities
                 </div>
 
@@ -158,10 +158,10 @@ export default function Dashboard() {
           <Grid justifyContent="center" item xs={12} md={4}>
             <Item style={stylesItem}>
               <div>
-                <div className="title-rooms">
+                <div>
                   {ADSNumber}
                 </div>
-                <div className="title-rooms">
+                <div>
                   ADS
                 </div>
 

@@ -307,8 +307,8 @@ export default function Register() {
                       })}
                         error={!!errors.profileImage}
                    />
-                     
-                  <label for="file" class="btn-2">Upload Image</label>
+                     {/* changed for to htmlfor */}
+                  <label htmlFor="file" className="btn-2">Upload Image</label>
                   
 
                   <Button

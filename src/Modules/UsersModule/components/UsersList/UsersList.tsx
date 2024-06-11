@@ -15,6 +15,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useForm } from 'react-hook-form';
 import hotelImg from '../../../../assets/Images/hotel.jpg'
 import { BorderAllRounded, RoundedCorner } from '@mui/icons-material';
+import CloseIcon from "@mui/icons-material/Close";
 
 interface Column {
   id:
@@ -58,22 +59,11 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: {xs:350,lg:400},
   bgcolor: 'background.paper',
-  // border: '2px solid #000',
   borderRadius: 4, 
   boxShadow: 24,
   p: { xs: 3 },
 };
-const styleForAdd = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: { xs: 350, sm: 700, lg: 1000 },
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: { xs: 3 },
-};
+
 // *<=== === === === === === ===>> USERS LIST <<=== === === === === === === ===>
 export default function UsersList() {
   const [usersList, setUsersList] = useState<Data[]>([]);
@@ -208,21 +198,19 @@ export default function UsersList() {
             <Button
               onClick={handleClose}
               sx={{
-                color: "black",
+                color: "red",
                 padding: 0,
                 minWidth: "auto",
-                "&:hover": {
-                  color: "red",
-                  backgroundColor: "transparent",
-                },
-                "& .MuiSvgIcon-root": {
-                  fontSize: "24px",
-                  padding: 0,
-                  margin: 0,
-                },
+                width: 30,
+                height: 30,
+                backgroundColor: "transparent",
+                border: "2px solid red",
+              borderRadius: "50%"
+                
+          
               }}
             >
-              <HighlightOffIcon />
+              <CloseIcon />
             </Button>
           </Typography>
           {selectedUser && (
@@ -317,7 +305,7 @@ export default function UsersList() {
                                 minWidth: 'auto',
                               }}
                               >
-                              <VisibilityIcon/>
+                              <VisibilityIcon  sx={{color: "#00e5ff"}}/>
                             </IconButton>
                           ): (
                             value
