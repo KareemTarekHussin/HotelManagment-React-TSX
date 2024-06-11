@@ -118,13 +118,11 @@ export default function Dashboard() {
     }]
   };
   const stylesItem = {
-    display: "flex", color: "#fff", justifyContent: "space-between", fontSize: "17px", marginBottom:
-      "50px"
-  }
+    display: "flex", color: "#fff", justifyContent: "space-between", fontSize: "17px"}
   return (
     <>
       <Box sx={{ flexGrow: 1, mt: 5 }}>
-        <Grid container spacing={7}>
+        <Grid container spacing={7}   sx={{marginBottom:{md:8,lg:8,xs:8}, backgroundColor:'greenYello'}} >
           <Grid item xs={12} md={4}>
             <Item style={stylesItem}>
               <div>
