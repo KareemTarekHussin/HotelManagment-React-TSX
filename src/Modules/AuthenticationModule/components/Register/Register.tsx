@@ -350,7 +350,7 @@ export default function Register() {
               <img src={loginImg} style={{ width: '100%' }} alt="" />
               <div style={{ position: "absolute", top: "80%", left: "55%", transform: "translate(-50%,-50%)", color: "#fff", width: "80%" }}>
                 <h1>Sign up to Roamhome</h1>
-                <h5>Hames as unique as you</h5>
+                <h5>Homes as unique as you</h5>
               </div>
             </Box>
           </Grid>

@@ -29,7 +29,7 @@ import { getErrorMessage } from "../../../../utils/error";
 import { useToast } from "../../../Context/ToastContext";
 import CloseIcon from "@mui/icons-material/Close";
 
-
+// Interface definitions
 interface Column {
   id: 'name' | 'createdBy' | 'createdAt' | 'updatedAt' | 'actions';
   label: string;
@@ -38,7 +38,6 @@ interface Column {
   format?: (value: string | Date) => string;
 }
 
-// Define the structure of a facility
 interface Facility {
   _id: string;
   name: string;
@@ -47,7 +46,6 @@ interface Facility {
   updatedAt: string;
 }
 
-// Form data structure
 interface FormData {
   name: string;
 }
@@ -101,35 +99,33 @@ export default function FacilitiesList() {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<Facility | null>(null);
   const [loading, setLoading] = useState(true);
+  const [spinner, setSpinner] = useState<boolean>(false);
   const { showToast } = useToast();
+  const [openViewModal, setOpenViewModal] = useState<boolean>(false);
 
- 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
     setEditingFacility(null);
-    reset();  
+    reset();
   };
-
 
   const handleDeleteOpenModal = (id: string) => {
     setRoomId(id);
     setOpenDeleteModal(true);
   };
-  
 
   const handleCloseDeleteModal = () => {
     setOpenDeleteModal(false);
-    setSelectedRow(null);  
+    setSelectedRow(null);
   };
 
-  
   const getFacilitiesList = async () => {
     try {
       const response = await userRequest.get(`${baseUrl}/admin/room-facilities`);
       console.log('Response data:', response.data.data.facilities);
       setFacilitiesList(response.data.data.facilities);
-      setTotalCount(response.data.totalCount);
+      setTotalCount(response.data.data.totalCount);
       setLoading(false);
     } catch (error) {
       console.error('API call error:', error);
@@ -137,24 +133,19 @@ export default function FacilitiesList() {
     }
   };
 
-  
   useEffect(() => {
     getFacilitiesList();
   }, []);
 
-  
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>();
 
- 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       if (editingFacility) {
-       
         await axios.put(`${baseUrl}/admin/room-facilities/${editingFacility._id}`, data, {
           headers: requestHeaders,
         });
       } else {
-       
         await axios.post(`${baseUrl}/admin/room-facilities`, data, {
           headers: requestHeaders,
         });
@@ -166,11 +157,10 @@ export default function FacilitiesList() {
     }
   };
 
-  
   const [roomId, setRoomId] = useState<string>("");
 
   const handleDelete = async () => {
-   
+    setSpinner(true);
     try {
       await userRequest.delete(`/admin/rooms/${roomId}`);
       getFacilitiesList();
@@ -179,7 +169,9 @@ export default function FacilitiesList() {
     } catch (error) {
       const err = getErrorMessage(error);
       showToast("error", err);
-    } 
+    } finally {
+      setSpinner(false);
+    }
   };
 
   // Pagination state
@@ -217,9 +209,8 @@ export default function FacilitiesList() {
     } else if (action === 'Delete') {
       console.log('Handling delete action for:', selectedRow);
       handleDeleteOpenModal(selectedRow!._id);
-    }
-    else if (action === "View") {
-      handleViewOpen();
+    } else if (action === 'View') {
+      setOpenViewModal(true);
     }
     handleCloseMenu();
   };
@@ -235,190 +226,116 @@ export default function FacilitiesList() {
     }
     return value;
   };
-  //View Modal
-  const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
-  const [openView, setOpenView] = useState<boolean>(false);
-   const handleViewClose = () => {
-    setOpenView(false);
-    setSelectedFacility(null);
-  };
-  const [spinner, setSpinner] = useState<boolean>(false);
-  const handleView = async (id: string) => {
-    setSpinner(true);
-    try {
-      const { data } = await userRequest.get(`/admin/facility/${id}`);
-      setSelectedFacility(data.data.facility);
-      setSpinner(false);
-    } catch (error) {
-      const err = getErrorMessage(error);
-      showToast("error", err);
-      setSpinner(false);
-    }
-  };
-  const handleViewOpen = () => {
-    setOpenView(true);
-  };
 
   return (
     <>
-<Modal open={openView} onClose={handleViewClose}>
-  <Box sx={style}>
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-      <Typography id="modal-modal-title" variant="h6" component="h2">
-        Facility Details
-      </Typography>
-      <IconButton aria-label="close" onClick={handleViewClose}>
-        <CloseIcon />
-      </IconButton>
-    </Box>
-    <Box id="modal-modal-description" sx={{ mt: 2 }}>
-      {spinner ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <CircularProgress />
-        </Box>
-      ) : (
-        selectedFacility && (
-          <>
-            {/* Extracting properties into constants */}
-            {(() => {
-              const roomName = selectedFacility.name;
-              const createdBy = selectedFacility.createdBy.userName;
-              const createdAt = new Date(selectedFacility.createdAt).toLocaleString();
-              const updatedAt = new Date(selectedFacility.updatedAt).toLocaleString();
-
-              return (
-                <>
-                  <Typography variant="body1">
-                    <strong>Room Name:</strong> {roomName}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Created By:</strong> {createdBy}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Created At:</strong> {createdAt}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Updated At:</strong> {updatedAt}
-                  </Typography>
-                </>
-              );
-            })()}
-          </>
-        )
-      )}
-    </Box>
-  </Box>
-</Modal>
-      
       <Box>
-
         <Grid
-        container
-        sx={{mt: 3, mb: 5,p:2.5 , backgroundColor:'#E2E5EB',borderRadius:2, display:'flex',justifyContent:{xs:'center',sm:'space-between'},alignItems:'center',gap:2, boxShadow: '0px 2px 1px -3px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)'}}
+          container
+          sx={{ mt: 3, mb: 5, p: 2.5, backgroundColor: '#E2E5EB', borderRadius: 2, display: 'flex', justifyContent: { xs: 'center', sm: 'space-between' }, alignItems: 'center', gap: 2, boxShadow: '0px 2px 1px -3px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)' }}
         >
           <Grid item>
-          <Typography variant="h5" color="initial" sx={{fontWeight:500}}>
-                Facilities Table Details
-              </Typography>
-              <Typography color="initial" sx={{textAlign:{xs:'center',sm:'left'}}}>You can check all details</Typography>
+            <Typography variant="h5" color="initial" sx={{ fontWeight: 500 }}>
+              Facilities Table Details
+            </Typography>
+            <Typography color="initial" sx={{ textAlign: { xs: 'center', sm: 'left' } }}>You can check all details</Typography>
           </Grid>
           <Grid item>
             <Button variant="contained" onClick={handleOpen}>Add New Facility</Button>
           </Grid>
         </Grid>
 
-        <Paper sx={{ width: '100%',  overflow: 'hidde' }}>
-        {loading ? (
-          <Box sx={{ width: '100%' }}>
-            <Skeleton variant="rectangular" width="100%" height={100} />
-            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-            <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-          </Box>
-        ) : (
-        <>
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                    sx={{ backgroundColor: '#E2E5EB' }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {facilitiesList
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((facility) => (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={facility._id}>
-                    {columns.map((column) => {
-                      const value = formatCellValue(column, facility);
-                      if (column.id === 'actions') {
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            <IconButton
-                              onClick={(event) => handleClick(event, facility)}
-                            >
-                              <MoreHorizIcon />
-                            </IconButton>
-                            <Menu
-                              anchorEl={anchorEl}
-                              open={Boolean(anchorEl) && selectedRow?._id === facility._id}
-                              onClose={handleCloseMenu}
-                            >
-                              
-                              <MenuItem  onClick={() => {
-                                        handleAction("View");
-                                        handleView(facility._id);
-                                      }}>
-                                <VisibilityIcon sx={{ mr: 1, color: '#00e5ff' }} />
-                                View
-                              </MenuItem>
-                              <MenuItem onClick={() => handleAction('Edit')}>
-                                <EditIcon sx={{ mr: 1, color: '#ffd600' }} />
-                                Edit
-                              </MenuItem>
-                              <MenuItem onClick={() => handleAction('Delete')}>
-                                <DeleteIcon sx={{ mr: 1, color: '#d50000' }} />
-                                Delete
-                              </MenuItem>
-                            </Menu>
-                          </TableCell>
-                        );
-                      }
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {value}
+        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+          {loading ? (
+            <Box sx={{ width: '100%' }}>
+              <Skeleton variant="rectangular" width="100%" height={100} />
+              <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+              <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+              <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+            </Box>
+          ) : (
+            <>
+              <TableContainer sx={{ maxHeight: 440 }}>
+                <Table stickyHeader aria-label="sticky table">
+                  <TableHead>
+                    <TableRow>
+                      {columns.map((column) => (
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          style={{ minWidth: column.minWidth }}
+                          sx={{ backgroundColor: '#E2E5EB' }}
+                        >
+                          {column.label}
                         </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={facilitiesList.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-        </>
-      )}
-          
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {facilitiesList
+                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      .map((facility) => (
+                        <TableRow hover role="checkbox" tabIndex={-1} key={facility._id}>
+                          {columns.map((column) => {
+                            const value = formatCellValue(column, facility);
+                            if (column.id === 'actions') {
+                              return (
+                                <TableCell key={column.id} align={column.align}>
+                                  <IconButton
+                                    onClick={(event) => handleClick(event, facility)}
+                                  >
+                                    <MoreHorizIcon />
+                                  </IconButton>
+                                  <Menu
+                                    anchorEl={anchorEl}
+                                    open={Boolean(anchorEl) && selectedRow?._id === facility._id}
+                                    onClose={handleCloseMenu}
+                                  >
+                                    <MenuItem onClick={() => handleAction("View")}>
+                                      <VisibilityIcon sx={{ mr: 1, color: '#00e5ff' }} />
+                                      View
+                                    </MenuItem>
+                                    <MenuItem onClick={() => handleAction('Edit')}>
+                                      <EditIcon sx={{ mr: 1, color: '#ffd600' }} />
+                                      Edit
+                                    </MenuItem>
+                                    <MenuItem onClick={() => handleAction('Delete')}>
+                                      <DeleteIcon sx={{ mr: 1, color: '#d50000' }} />
+                                      Delete
+                                    </MenuItem>
+                                  </Menu>
+                                </TableCell>
+                              );
+                            }
+                            return (
+                              <TableCell key={column.id} align={column.align}>
+                                {value}
+                              </TableCell>
+                            );
+                          })}
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+   
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={totalCount}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                sx={{
+                  backgroundColor: "#E2E5EB",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              />
+            </>
+          )}
         </Paper>
-
       </Box>
 
       {/* Add/Edit Modal */}
@@ -451,7 +368,7 @@ export default function FacilitiesList() {
       {/* Delete Confirmation Modal */}
       <Modal open={openDeleteModal} onClose={handleCloseDeleteModal}>
         <Box sx={style}>
-        <Box
+          <Box
             sx={{ display: "flex", justifyContent: "end" }}
             onClick={handleCloseDeleteModal}
           >
@@ -486,9 +403,8 @@ export default function FacilitiesList() {
               click on Delete
             </p>
           </Typography>
-        
-          <Box sx={{ textAlign: "right", mt: 2 }}>           
-          <Button
+          <Box sx={{ textAlign: "right", mt: 2 }}>
+            <Button
               variant="contained"
               color="error"
               onClick={handleDelete}
@@ -503,6 +419,28 @@ export default function FacilitiesList() {
           </Box>
         </Box>
       </Modal>
+
+      {/* View Modal */}
+      <Modal open={openViewModal} onClose={() => setOpenViewModal(false)}>
+  <Box sx={style}>
+    <Typography variant="h6" gutterBottom>
+      Facility Details
+    </Typography>
+    {selectedRow && (
+      <Box>
+        <Typography>Name: {selectedRow.name}</Typography>
+        <Typography>Created By: {selectedRow.createdBy.userName}</Typography>
+        <Typography>Created At: {new Date(selectedRow.createdAt).toLocaleString()}</Typography>
+        <Typography>Updated At: {new Date(selectedRow.updatedAt).toLocaleString()}</Typography>
+      </Box>
+    )}
+    <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+      <Button onClick={() => setOpenViewModal(false)} sx={{ mr: 2 }}>
+        Close
+      </Button>
+    </Box>
+  </Box>
+</Modal>
     </>
   );
 }
