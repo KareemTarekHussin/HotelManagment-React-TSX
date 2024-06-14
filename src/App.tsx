@@ -23,6 +23,7 @@ import Details from "./Modules/LandingPageModule/components/Details";
 import Explore from "./Modules/LandingPageModule/components/Explore";
 import Favourites from "./Modules/LandingPageModule/components/Favourites";
 import UserLayout from "./Modules/SharedModule/components/UserLayout/UserLayout";
+import Home from "./Modules/LandingPageModule/components/Home";
 
 const theme = createTheme({
   typography: {
@@ -69,8 +70,8 @@ function App() {
       element:<DashboardUser/>,
       errorElement: <NotFound />,
       children: [
-     { path: "", element: <DashboardUser /> },
-     { path: "dashuser", element: <DashboardUser /> },
+     { path: "", element: <Home /> },
+     { path: "home", element: <Home /> },
      { path: "details", element: <Details /> },
      { path: "explore", element: <Explore /> },
      { path: "favorites", element: <Favourites /> },
