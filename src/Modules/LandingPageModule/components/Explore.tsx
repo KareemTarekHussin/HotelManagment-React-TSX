@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Box, Grid, Skeleton, Typography, Pagination, Stack } from '@mui/material';
 import { userRequest } from '../../../utils/request';
-
-import { useLocation } from 'react-router-dom'
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+import Link from "@mui/material/Link";
+import HomeIcon from "@mui/icons-material/Home";
+import { useLocation, useNavigate } from 'react-router-dom'
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 export default function Explore() {
   const location = useLocation()
   console.log("data",location.state);
@@ -46,9 +49,37 @@ export default function Explore() {
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
-
+  const navigate = useNavigate();
+  const handleClick = (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    navigate("/home");
+  };
   return (
     <>
+        <Breadcrumbs aria-label="breadcrumb">
+        <Link
+          underline="hover"
+          sx={{ display: "flex", alignItems: "center" }}
+          color="inherit"
+          href="/dashuser"
+          onClick={handleClick}
+          fontSize={'large'}
+        >
+          <HomeIcon sx={{ mr: 0.5 }} fontSize="large" color="primary" />
+          Home
+        </Link>
+        <Typography
+          sx={{ display: "flex", alignItems: "center" }}
+          color="text.primary"
+          fontSize="large"
+          
+        >
+          <ManageSearchIcon sx={{ mr: 0.5 }} fontSize="large" color="primary" />
+        Explore
+        </Typography>
+      </Breadcrumbs>
       <Box sx={{ py: 3 }}>
         <Typography
           sx={{
