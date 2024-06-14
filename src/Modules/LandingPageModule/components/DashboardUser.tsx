@@ -15,7 +15,8 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { enGB } from "date-fns/locale";
 import axios from "axios";
 import { Favorite } from "@mui/icons-material";
-
+import MainNavbar from '../../SharedModule/components/Navbar/MainNavbar'
+import { Outlet } from 'react-router-dom'
 export default function DashboardUser() {
   const { baseUrl }: any = useContext(AuthContext);
   const [capacity, setCapacity] = useState(1);
@@ -68,6 +69,7 @@ export default function DashboardUser() {
   return (
     <div>
       <NavbarUser />
+      <Outlet/>
       <>
         <Grid container display="flex" justifyContent="space-evenly" p={5}>
           <Grid item md={5}>

@@ -15,15 +15,15 @@ import AdbIcon from '@mui/icons-material/Adb';
 import Login from '../../../AuthenticationModule/components/Login/Login';
 import { Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '../../../Context/ToastContext';
 
-const pages = ['Home', 'Explore', 'Reviews','Favorites'];
+const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-export default function NavbarUser() {
+
+
+
+export default function MainNavbar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-    const { showToast } = useToast();
-    const [loading, setLoading] = useState(false);
   
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
       setAnchorElNav(event.currentTarget);
@@ -37,16 +37,15 @@ export default function NavbarUser() {
     const handleCloseUserMenu = () => {
       setAnchorElUser(null);
     };
-    const logout = () => {
-      setLoading(true);
-      setTimeout(() => {
-        localStorage.removeItem('token');
-        navigate('/login');
-        showToast("success", 'Logged out successfully');
-        setLoading(false);
-      }, 1000);
-    };
     const navigate = useNavigate();
+
+    // const [activeLink, setActiveLink] = useState('');
+
+    // const handleClick = (link:any) => {
+    //   setActiveLink(link);
+    //   // Assuming you have a navigate function for navigation
+    //   navigate(link);
+    // };
   
   return (
 
@@ -57,7 +56,7 @@ export default function NavbarUser() {
           backgroundColor:'white',
           color:'black',
           boxShadow:'none',
-          outline:'2px solid #E5E5E5 '
+          outline:'2px solid #E5E5E5  '
 
         }}>
       <Container maxWidth="xl">
@@ -65,7 +64,7 @@ export default function NavbarUser() {
           disableGutters
           sx={{
             backgroundColor:'re',
-            paddingInline:{md:19}
+            paddingInline:{md:20}
           }}
           >
 
@@ -128,24 +127,11 @@ export default function NavbarUser() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {/* {pages.map((page) => ( */}
-
-                <MenuItem onClick={()=>navigate('/')}>
-                  <Link textAlign="center" sx={{textDecoration:'none'}}>Home</Link>
+              {pages.map((page) => (
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
-
-                <MenuItem onClick={()=>navigate('explore')}>
-                  <Link textAlign="center" sx={{textDecoration:'none'}}>Explore</Link>
-                </MenuItem>
-
-                <MenuItem onClick={()=>navigate('favorites')}>
-                  <Link textAlign="center" sx={{textDecoration:'none'}}>Favorites</Link>
-                </MenuItem>
-
-                <MenuItem>
-                  <Link textAlign="center" sx={{textDecoration:'none'}}>Reviews</Link>
-                </MenuItem>
-              {/* ))} */}
+              ))}
             </Menu>
           </Box>
 
@@ -184,8 +170,9 @@ export default function NavbarUser() {
             sx={{
               flexGrow: 1,
               backgroundColor:'greenyello', 
-              display: { xs: 'none', md: 'flex' },
+              display: { xs: 'non', md: 'flex' },
               justifyContent:'end',
+              alignItems:'center',
               gap:4,
               fontSize:'14px',
               }}>
@@ -202,6 +189,7 @@ export default function NavbarUser() {
                 >
                   Home
               </Link>
+
               <Link
                 onClick={() => navigate('explore')}
                 sx={{
@@ -214,72 +202,33 @@ export default function NavbarUser() {
                 >
                   Explore
               </Link>
-                <Link
-                  onClick={() => navigate('favorites')}
-                  sx={{
-                    color:'#152c5b',
-                    textDecoration:'none',
-                    '&:hover':{
-                      cursor:'pointer'
-                    }
-                  }}
-                  >
-                    Favorites
-                </Link>
-              <Link
-                // onClick={() => navigate('login')}
+
+              <Button
+                variant="contained"
+                onClick={() => navigate('/login/register')}
                 sx={{
-                  color:'#152c5b',
-                  textDecoration:'none',
-                  '&:hover':{
-                    cursor:'pointer'
-                  }
+                  fontSize:'14px',
+                  textTransform:'capitalize'
                 }}
                 >
-                  Reviews
-              </Link>
+                  Register
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => navigate('/login')}
+                  sx={{
+                    fontSize:'14px',
+                    textTransform:'capitalize'
+                  }}
+                >
+                  Login
+              </Button>
 
               
-          </Box>
-
-          {/* =================================>> ProfileImg <<============================================ */}
-          <Box sx={{ flexGrow: 0,ml:{md:8} }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar 
-                  alt="Remy Sharp" 
-                  src="/static/images/avatar/2.jpg"
-                  sx={{ width: 34, height: 34 }}
-                  />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-    
-                <MenuItem  onClick={handleCloseUserMenu}>
-                  <Button onClick={logout}>Logout</Button>
-                </MenuItem>
-    
-            </Menu>
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
-    {/* <hr/> */}
     </>
   )
 }
