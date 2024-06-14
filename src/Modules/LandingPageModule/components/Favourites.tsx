@@ -4,12 +4,8 @@ import NavbarUser from '../../SharedModule/components/Navbar/NavbarUser'
 
 export default function Favourites() {
   return (
-    <div>
-        <NavbarUser/>
-        Favourites
-
-
-<Footer/>
-    </div>
+    <>
+      Favourites
+    </>
   )
 }

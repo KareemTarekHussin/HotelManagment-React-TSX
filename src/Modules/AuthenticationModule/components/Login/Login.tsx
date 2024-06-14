@@ -7,13 +7,14 @@ import {
   InputAdornment,
   TextField,
   Typography,
+  Link
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CircularProgress from "@mui/material/CircularProgress";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../Context/AuthContext";
 import { useEffect, useRef, useState } from "react";
 import { getErrorMessage } from "../../../../utils/error";
@@ -22,11 +23,12 @@ type AuthInputs = {
   email: string;
   password: string;
 };
-
+// **===============================>>Login<<===========================================
 export default function Login() {
+
   const navigate = useNavigate();
   const { getUserData, baseUrl } = useAuth();
-  const [showPass, setShowPass] = useState(false);
+  const [showPass, setShowPass] = useState(true);
   const [loading, setLoading] = useState(false);
   const { showToast } = useToast();
   const timeoutRef = useRef<number | null>(null);
@@ -44,7 +46,7 @@ export default function Login() {
       getUserData();
       showToast("success", "Login Successful");
       timeoutRef.current = setTimeout(() => {
-        navigate("/DashBoard");
+        navigate("/");
       }, 1500);
     } catch (error) {
       const err = getErrorMessage(error);
@@ -206,8 +208,19 @@ export default function Login() {
                       color: "#152c5b",
                     }}
                   >
-                    <Link to={"/register"}
-                    
+                    {/* ===================================Register======================================== */}
+                    <Link 
+                    onClick={() => navigate('register')}
+                    underline="hover"
+                    sx={{
+                      fontSize:{md:14,lg:16}, 
+                      fontWeight:600 ,
+                      display: 'inline',
+                      color:'#152c5b',
+                      '&:hover':{
+                        cursor:'pointer',
+                      }
+                    }}
                     >
                     Register here !
                     </Link>
@@ -289,7 +302,7 @@ export default function Login() {
                               </Typography>
                               <Link
                                 underline="hover" 
-                                to={'/forgetpass'}
+                                onClick={() => navigate('forgetpass')}
                                 sx={{ 
                                   fontSize: 14, 
                                   fontWeight: 300, 

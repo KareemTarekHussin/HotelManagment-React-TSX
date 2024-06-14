@@ -66,13 +66,13 @@ function App() {
     ///user Path
     {
       path: "/",
-      element:<UserLayout/>,
+      element:<DashboardUser/>,
       errorElement: <NotFound />,
       children: [
      { path: "dashuser", element: <DashboardUser /> },
      { path: "details", element: <Details /> },
      { path: "explore", element: <Explore /> },
-     { path: "favs", element: <Favourites /> },
+     { path: "favorites", element: <Favourites /> },
       ]
     },
   ]);

@@ -19,7 +19,6 @@ export default function Details() {
 
   return (
     <>
-       <NavbarUser/>
       <Breadcrumbs aria-label="breadcrumb">
         <Link
           underline="hover"
@@ -39,8 +38,6 @@ export default function Details() {
           Details
         </Typography>
       </Breadcrumbs>
-
-      <Footer />
     </>
   );
 }
