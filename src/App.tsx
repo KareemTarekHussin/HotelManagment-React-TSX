@@ -74,8 +74,7 @@ function App() {
      { path: "home", element: <Home /> },
      { path: "details", element: <Details /> },
      { path: "explore", element: <Explore /> },
-     { path: "favorites", element: <Favourites /> },
-      ]
+     { path: "favorites", element: <Favourites /> },      ]
     },
   ]);
 
