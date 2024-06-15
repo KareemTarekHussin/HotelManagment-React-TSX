@@ -35,6 +35,7 @@
 .collapse-button.expanded {
   /* transform: scale(-1); */
   transform: rotateY(180deg);
+  /* background-position:initial; */
 }
 
 
