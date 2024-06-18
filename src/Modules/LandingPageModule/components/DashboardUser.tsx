@@ -69,8 +69,11 @@ export default function DashboardUser() {
   return (
     <div>
       <NavbarUser />
-      
-      <Outlet/>
+
+        <Box sx={{marginTop:{xs:'45px',lg:'65px'},py:{lg:2}}}>
+          <Outlet/>
+
+        </Box>
      
       <Footer />
     </div>
