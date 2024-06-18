@@ -52,8 +52,9 @@ export default function NavbarUser() {
 
 
     <>
-      <AppBar position="static" 
+      <AppBar position="fixed" 
         sx={{
+          // position:'fixed',
           backgroundColor:'white',
           color:'black',
           boxShadow:'none',
@@ -65,7 +66,7 @@ export default function NavbarUser() {
           disableGutters
           sx={{
             backgroundColor:'re',
-            paddingInline:{md:19}
+            paddingInline:{md:17}
           }}
           >
 

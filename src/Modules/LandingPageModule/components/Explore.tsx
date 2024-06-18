@@ -1,43 +1,54 @@
 import { useEffect, useState } from 'react';
 import { Box, Grid, Skeleton, Typography, Pagination, Stack } from '@mui/material';
 import { userRequest } from '../../../utils/request';
+import { useLocation } from 'react-router-dom';
+import format from 'date-fns/format';
 
-import { useLocation } from 'react-router-dom'
 export default function Explore() {
-  const location = useLocation()
-  console.log("data",location.state);
-  
+  const location = useLocation();
+  const { capacity, date } = location.state || {};
   const [roomsList, setRoomsList] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [page, setPage] = useState(4); // Manage current page
-  const [totalPages, setTotalPages] = useState(4); // Manage total pages
-  const pageSize = 8; // Set page size to 6
+  const [page, setPage] = useState(1); // Manage current page
+  const [totalPages, setTotalPages] = useState(1); // Manage total pages
+  const pageSize = 8; // Set page size to 8
 
+  const formattedStartDate = date && date[0] ? format(date[0], 'yyyy-MM-dd') : '';
+  const formattedEndDate = date && date[1] ? format(date[1], 'yyyy-MM-dd') : '';  
 
   const getAllRooms = async (page: number) => {
     setLoading(true);
     try {
-      const response = await userRequest.get(`/portal/rooms/available?page=${page}&size=${pageSize}&startDate=2023-01-20&endDate=2023-01-30`);
+      const params: any = {
+        page,
+        size: pageSize,
+      };
+
+      // Add filters only if they are defined
+      if (formattedStartDate) params.startDate = formattedStartDate;
+      if (formattedEndDate) params.endDate = formattedEndDate;
+      if (capacity) params.capacity = capacity;
+
+      const response = await userRequest.get(`/portal/rooms/available`, { params });
       const roomsData = response.data.data;
-  
+
       // Extract rooms and total count
       const rooms = roomsData.rooms;
       const totalCount = roomsData.totalCount;
-  
+
       // Calculate total pages
       const totalPages = Math.ceil(totalCount / pageSize);
-  
+
       // Update state
       setRoomsList(rooms);
       setTotalPages(totalPages);
-    } catch (error) {
+    } 
+     catch (error) {
       console.error("Error fetching rooms data:", error);
     } finally {
       setLoading(false);
     }
   };
-  
-
 
   useEffect(() => {
     getAllRooms(page);
@@ -74,7 +85,7 @@ export default function Explore() {
           }}
         >
           {loading ? (
-            Array.from(new Array(6)).map((_, index) => (
+            Array.from(new Array(8)).map((_, index) => (
               <Grid item xs={11} sm={5} md={4} lg={3} key={index}>
                 <Skeleton variant="rectangular" width="100%" height={220} sx={{ borderRadius: '15px' }} />
               </Grid>
@@ -166,7 +177,7 @@ export default function Explore() {
           )}
         </Grid>
 
-        <Stack spacing={2} sx={{ alignItems: 'center', my: 4,mb:5 }}>
+        <Stack spacing={2} sx={{ alignItems: 'center', my: 4, mb: 5 }}>
           <Pagination
             color="primary"
             count={totalPages}
