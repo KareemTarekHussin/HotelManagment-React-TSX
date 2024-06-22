@@ -103,3 +103,27 @@ export interface Inputs {
 export interface ImageFile extends File {
   name: string;
 }
+
+// Ads
+
+export interface ADS {
+  createdAt: string;
+  createdBy: { _id: string; userName: string };
+  isActive: boolean;
+  room: {
+    capacity: number;
+    createdAt: string;
+    createdBy: string;
+    discount: number;
+    facilities: string[];
+    images: string[];
+    price: number;
+    roomNumber: string;
+    updatedAt: string;
+    _id: string;
+  };
+  updatedAt: string;
+  _id: string;
+}
+
+

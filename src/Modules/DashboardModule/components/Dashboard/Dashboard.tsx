@@ -1,4 +1,4 @@
-import * as React from "react";
+
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -44,7 +44,7 @@ interface datadashboard {
 }
 
 export default function Dashboard() {
-  const { requestHeaders }: any = useContext(AuthContext);
+  const { requestHeaders } = useContext(AuthContext);
   const [dashlist, setDashList] = useState<datadashboard | null>(null);
 
   const getListOfRooms = async () => {

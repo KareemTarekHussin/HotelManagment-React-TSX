@@ -47,7 +47,7 @@ export default function DashboardUser() {
   const getAds = async () => {
     try {
       const response = await axios.get(`${baseUrl}/portal/ads`);
-      console.log(response.data.data.ads);
+
       setAds(response.data.data.ads);
     } catch (error) {
       console.log(error);

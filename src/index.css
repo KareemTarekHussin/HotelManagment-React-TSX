@@ -39,3 +39,6 @@
 
 
 
+.MuiStack-root{
+  padding-top: 5px !important;
+}
