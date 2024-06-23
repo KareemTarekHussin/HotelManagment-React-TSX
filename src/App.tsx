@@ -13,7 +13,7 @@ import FacilitiesList from "./Modules/FacilitiesModule/components/FacilitiesList
 import UsersList from "./Modules/UsersModule/components/UsersList/UsersList";
 import ADSList from "./Modules/ADSModule/components/ADSList/ADSList";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import AuthContextProvider from "./Modules/Context/AuthContext";
+import AuthContextProvider, { useAuth } from "./Modules/Context/AuthContext";
 import ProtectedRoute from "./Modules/SharedModule/components/ProtectedRoute/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,6 +32,8 @@ const theme = createTheme({
 });
 
 function App() {
+  const { loginData }: any = useAuth();
+
   const routes = createBrowserRouter([
     {
       path: "/login",
@@ -45,6 +47,7 @@ function App() {
         { path: "resetpass", element: <ResetPass /> },
       ],
     },
+    
     {
       path: "DashBoard",
       element: (

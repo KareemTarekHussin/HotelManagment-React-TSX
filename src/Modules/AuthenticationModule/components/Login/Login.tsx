@@ -27,7 +27,7 @@ type AuthInputs = {
 export default function Login() {
 
   const navigate = useNavigate();
-  const { getUserData, baseUrl } = useAuth();
+  const { getUserData, baseUrl,loginData } = useAuth();
   const [showPass, setShowPass] = useState(true);
   const [loading, setLoading] = useState(false);
   const { showToast } = useToast();
@@ -46,7 +46,13 @@ export default function Login() {
       getUserData();
       showToast("success", "Login Successful");
       timeoutRef.current = setTimeout(() => {
-        navigate("/");
+        if (loginData?.role === 'user') {
+          navigate("/DashBoard");
+        } else {
+          navigate("/");
+        }
+      
+
       }, 1500);
     } catch (error) {
       const err = getErrorMessage(error);

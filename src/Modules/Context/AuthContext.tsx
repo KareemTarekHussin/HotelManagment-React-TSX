@@ -1,4 +1,3 @@
-import React from 'react'
 import { jwtDecode } from "jwt-decode";
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react";
 import AuthInterface from "../../interfaces/interface";
