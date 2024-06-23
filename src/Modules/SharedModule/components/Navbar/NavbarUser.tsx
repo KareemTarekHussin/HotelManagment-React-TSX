@@ -16,7 +16,8 @@ import Login from '../../../AuthenticationModule/components/Login/Login';
 import { Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../../Context/ToastContext';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+
 
 const pages = ['Home', 'Explore', 'Reviews', 'Favorites'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -215,18 +216,18 @@ export default function NavbarUser() {
               >
                 Explore
               </Link>
-              <Link
-                onClick={() => navigate('favorites')}
+              <ShoppingCartOutlinedIcon onClick={() => navigate('favorites')}
                 sx={{
-                  color: '#152c5b',
-                  textDecoration: 'none',
-                  '&:hover': {
-                    cursor: 'pointer'
-                  }
+                  fontSize:"25px",
+                  color:"#ff498b",
+                  position:"relative",
+                  top:"-3px"
                 }}
+
               >
-                Favorites
-              </Link>
+
+              </ShoppingCartOutlinedIcon>
+              
               <Link
                 // onClick={() => navigate('login')}
                 sx={{
@@ -239,16 +240,7 @@ export default function NavbarUser() {
               >
                 Reviews
               </Link>
-              <ShoppingCartIcon onClick={() => navigate('favorites')}
-                sx={{
-                  border: "1px solid red",
 
-
-                }}
-
-              >
-
-              </ShoppingCartIcon>
 
 
 

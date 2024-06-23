@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
-import { Box, Grid, Skeleton, Typography, Pagination, Stack } from '@mui/material';
+import { Box, Grid, Skeleton, Typography, Pagination, Stack, Button } from '@mui/material';
 import { userRequest } from '../../../utils/request';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import { useLocation } from 'react-router-dom'
+
+import { useFav } from '../../Context/FavsContext';
 export default function Explore() {
   const location = useLocation()
-  console.log("data",location.state);
-  
+  console.log("data", location.state);
+
   const [roomsList, setRoomsList] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState(4); // Manage current page
@@ -19,14 +22,17 @@ export default function Explore() {
     try {
       const response = await userRequest.get(`/portal/rooms/available?page=${page}&size=${pageSize}&startDate=2023-01-20&endDate=2023-01-30`);
       const roomsData = response.data.data;
-  
+      console.log("this is a room data",roomsData.rooms[1]._id)
+
       // Extract rooms and total count
       const rooms = roomsData.rooms;
       const totalCount = roomsData.totalCount;
-  
+      console.log("rooms", rooms)
+
+
       // Calculate total pages
       const totalPages = Math.ceil(totalCount / pageSize);
-  
+
       // Update state
       setRoomsList(rooms);
       setTotalPages(totalPages);
@@ -36,7 +42,38 @@ export default function Explore() {
       setLoading(false);
     }
   };
-  
+  // const { addToFav } = useFav();
+  // console.log(addToFav)
+  // // const addToFav = (id)=> {
+  // //   alert(id)
+  // // }
+  const mpveOn = (id) => {
+    console.log( id)
+  }
+
+  const [roomId,setRoomId] = useState({})
+
+
+  const {requestHeaders} = useFav()
+
+   const addToFav = async (roomId) => {
+      // const { showToast } = useToast();
+    try {
+      let response = await userRequest.post('/portal/favorite-rooms',roomId, {
+        headers: requestHeaders,
+      });
+      console.log(response.data.message);
+      alert("good");
+      // console.log(fav)
+
+    } catch (error) {
+      console.log(error)
+      console.log("come from context", error);
+    } 
+  };
+useEffect(()=> {
+  addToFav()
+},[])
 
 
   useEffect(() => {
@@ -74,14 +111,17 @@ export default function Explore() {
           }}
         >
           {loading ? (
-            Array.from(new Array(6)).map((_, index) => (
-              <Grid item xs={11} sm={5} md={4} lg={3} key={index}>
+            Array.from(new Array(6)).map((idRoom, index) => (
+              
+              <Grid  item xs={11} sm={5} md={4} lg={3} key={index}>
                 <Skeleton variant="rectangular" width="100%" height={220} sx={{ borderRadius: '15px' }} />
+              
               </Grid>
             ))
           ) : roomsList && roomsList.length > 0 ? (
-            roomsList.map((room: any, index: number) => (
-              <Grid item xs={11} sm={5} md={4} lg={3} sx={{ color: 'white' }} key={index}>
+            roomsList.map((room: any, idRoom: number) => (
+              
+              <Grid item xs={11} sm={5} md={4} lg={3} sx={{ color: 'white' }} key={idRoom}>
                 <Box
                   sx={{
                     position: 'relative',
@@ -141,6 +181,7 @@ export default function Explore() {
                     >
                       <Typography variant="h6">Ocean Land</Typography>
                       <Typography>Bandung, Indonesia</Typography>
+                      <FavoriteIcon onClick={() => mpveOn(idRoom)}></FavoriteIcon>
                     </Box>
                   </Box>
                   <Box
@@ -157,6 +198,7 @@ export default function Explore() {
                     }}
                   >
                     <Typography>{room.price}$ per night</Typography>
+
                   </Box>
                 </Box>
               </Grid>
@@ -166,7 +208,7 @@ export default function Explore() {
           )}
         </Grid>
 
-        <Stack spacing={2} sx={{ alignItems: 'center', my: 4,mb:5 }}>
+        <Stack spacing={2} sx={{ alignItems: 'center', my: 4, mb: 5 }}>
           <Pagination
             color="primary"
             count={totalPages}

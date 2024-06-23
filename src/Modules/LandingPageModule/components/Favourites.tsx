@@ -12,6 +12,7 @@ import image from '../../.././assets/Images/login.png'
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import {useFav} from "../../Context/FavsContext"
 
 export default function Favourites() {
   const Item = styled(Paper)(({ theme }) => ({
@@ -23,25 +24,29 @@ export default function Favourites() {
     flexGrow: 1,
   }));
 
-  const [Favorite, setFavorite] = useState()
+  // const [Favorite, setFavorite] = useState()
+
+
+  // const { addToFav } = useFav();
+  // console.log(addToFav)
 
   // get list of favorites from API
-  const getfavorite = async () => {
+  // const getfavorite = async () => {
 
-    try {
-      const responsve = await axios.get('https://upskilling-egypt.com:3000/api/v0/portal/favorite-rooms')
-      setFavorite(responsve.success)
-      console.log(Favorite)
-    }
-    catch {
+  //   try {
+  //     const responsve = await axios.get('https://upskilling-egypt.com:3000/api/v0/portal/favorite-rooms')
+  //     setFavorite(responsve.success)
+  //     console.log(Favorite)
+  //   }
+  //   catch {
 
-    }
+  //   }
 
-  }
-  useEffect(() => {
-    getfavorite
+  // }
+  // useEffect(() => {
+  //   getfavorite
 
-  }, [])
+  // }, [])
 
 
 

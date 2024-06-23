@@ -103,3 +103,15 @@ export interface Inputs {
 export interface ImageFile extends File {
   name: string;
 }
+
+
+// ?==============>favourite <==============
+
+export  interface FavouriteInterface {
+  baseUrl?: string;
+  requestHeaders: {
+    Authorization: string;
+  };
+  addToFav: () => void;
+}
+

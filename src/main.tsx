@@ -8,12 +8,17 @@ import App from "./App.tsx";
 import ToastContextProvider from "./Modules/Context/ToastContext.tsx";
 import "./index.css";
 import { SidebarProvider } from './Modules/Context/SidebarContext';
+import FavsContextProvider from "./Modules/Context/FavsContext.tsx";
+
+
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ToastContextProvider>
       <SidebarProvider>
-        <App />
+        <FavsContextProvider>
+          <App />
+        </FavsContextProvider>
       </SidebarProvider>
     </ToastContextProvider>
   </React.StrictMode>
