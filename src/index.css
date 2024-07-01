@@ -1,12 +1,44 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+* {
+ 
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+ 
+  font-family: Poppins, sans-serif;
 }
 
+.sidebar-container .ps-sidebar-container{
+  /* background-image: linear-gradient(rgba(14, 56, 47, 0.5), rgba(0, 0, 0, 0.5)),url(./assets/Images/w2.jpg); */
+  background-color: #203FC7;
+  height: 100vh;
+  & .ps-menu-button{
+    transition: all 0.15s;
+  }
+  & .ps-menu-button:hover{
+    background-color: #243892;
+  }
+}
+.sidebar-container button{
+  color: #fff;
+  background-color: transparent;
+  border: 0;
+  &:hover{
+    cursor: pointer;
+  }
+}
+.collapse-button{
+  transition: transform 0.5s ease;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+.collapse-button.expanded {
+  /* transform: scale(-1); */
+  transform: rotateY(180deg);
+}
+
+
+
+.MuiStack-root{
+  padding-top: 5px !important;
+}

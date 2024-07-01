@@ -1,17 +1,47 @@
-import React from 'react'
 import Navbar from '../Navbar/Navbar'
-import SideBar from '../SideBar/SideBar'
 import { Outlet } from 'react-router-dom'
-export default function MasterLayout() {
+import { Box } from '@mui/material'
+import SideBar from '../SideBar/SideBar';
+
+import { CheckoutForm } from '../../../PaymentModule/components/CheckoutForm/CheckoutForm';
+import { PaymentGetaway } from '../../../PaymentModule/components/PaymentGetaway/PaymentGetaway';
+// import { useAuth } from '../../../Context/AuthContext'
+
+
+const MasterLayout = () => {
+  
   return (
-    <div className="d-flex font-main">
+    
+    <>
+    <Box display="flex" className="font-main">
+
+      <SideBar/>
+
+        
+      <Box 
+        flex="1" 
+        className='Content'
+        height="100vh" 
+        p={{xs:1,md:3}} 
+        px={{ md: 5 }} 
+        py={{ xs:2,md: 4 }}
+        pb={{xs:6}} 
+        overflow="auto"
+      >
         <Navbar/>
-        <div>
-          <SideBar/>
-        </div>
-        <div className="w-100 vh-100 p-2 px-md-5 py-md-4 overflow-y-auto">
-          <Outlet/>
-        </div>
-      </div>
+        <Outlet />
+         {/* <PaymentGetaway/> */}
+      
+
+      </Box>
+        
+        
+    </Box>
+
+
+    
+    </>
   )
-}
+};
+
+export default MasterLayout;
